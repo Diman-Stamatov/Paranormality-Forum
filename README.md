@@ -115,15 +115,15 @@ that do not follow the forum rules!
 ## Technical Requirements
 
 General
-• Follow OOP principles when coding
-• Follow KISS, SOLID, DRY principles when coding
-• Follow REST API design best practices when designing the REST API (see
+- Follow OOP principles when coding
+- Follow KISS, SOLID, DRY principles when coding
+- Follow REST API design best practices when designing the REST API (see
 Appendix)
-• Use tiered project structure (separate the application in layers)
-• The service layer (i.e., "business" functionality) must have at least 80%-unit
+- Use tiered project structure (separate the application in layers)
+- The service layer (i.e., "business" functionality) must have at least 80%-unit
 test code coverage
-• You should implement proper exception handling and propagation
-• Try to think ahead. When developing something, think – “How hard would it
+- You should implement proper exception handling and propagation
+- Try to think ahead. When developing something, think – “How hard would it
 be to change/modify this later?”
 
 ## Database
