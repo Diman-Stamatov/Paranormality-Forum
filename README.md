@@ -10,7 +10,7 @@ etc. The forum should revolve around one or two general topics.
 ## Functional Requirements
 # Entities
 
--Each **user** must have a first and last name, email, username, and password.
+- Each **user** must have a first and last name, email, username, and password.
   - First name and last name must be between 4 and 32 symbols.
   - Email must be a valid email and unique in the system.
 - Each **admin** must have a first and last name, email, and may have a phone
@@ -94,21 +94,21 @@ must use Swagger to document yours.
 
 The REST API provides the following capabilities:
 1. Users
-• CRUD operations (must)
-• Search by username, email, or first name (must)
-• Filter and sort certain users’ posts (must)
-• Filter all posts by tag/s (could)
+- CRUD operations (must)
+- Search by username, email, or first name (must)
+- Filter and sort certain users’ posts (must)
+- Filter all posts by tag/s (could)
 2. Admin
-• Make other users admin (must)
-• Delete posts (must)
-• Block/unblock user (must)
+- Make other users admin (must)
+- Delete posts (must)
+- Block/unblock user (must)
 3. Posts
-• CRUD operations (must)
-• Comment (must)
-• List and edit user’s own posts (must)
-• Comment on and like other users' posts. (must)
+- CRUD operations (must)
+- Comment (must)
+- List and edit user’s own posts (must)
+- Comment on and like other users' posts. (must)
 4. Tags – optional
-• CRUD operations (could)
+- CRUD operations (could)
 
 ## Use Cases
 
