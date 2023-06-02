@@ -145,11 +145,11 @@ scripts (database scripts, for example).
 
 Provide a link to a GitLab repository with the following information in the
 README.md file:
-• Project description
-• Link to the Swagger documentation **(must)**
-• Link to the hosted project (if hosted online)
-• Instructions on how to setup and run the project locally
-• Images of the database relations **(must)**
+- Project description
+- Link to the Swagger documentation **(must)**
+- Link to the hosted project (if hosted online)
+- Instructions on how to setup and run the project locally
+- Images of the database relations **(must)**
 
 # Optional Requirements
 - Integrate your project with a Continuous Integration server (e.g., GitLab’s
