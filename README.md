@@ -65,8 +65,7 @@ Admin **must** be able to view a list of all posts with an option to filter and 
 
 After the post is tagged, other users can find it by typing in the tag in the search bar. For example: your forum is about cars, a post is marked with the tags: “mercedes” and “tuning,” when “mercedes” is typed in the search bar, all posts that are tagged with “mercedes” should appear in the front-end.
 
-A User **must** be able to add/remove/edit tags only on its own posts. Admins must be
-able to add/remove/edit tags on all posts.
+A User **must** be able to add/remove/edit tags only on its own posts. Admins must be able to add/remove/edit tags on all posts.
 
 ## REST API
 
@@ -76,23 +75,23 @@ response payloads.
 
 A great API is nothing without great documentation. The documentation holds the
 information that is required to successfully consume and integrate with an API. You
-must use Swagger to document yours.
+**must** use Swagger to document yours.
 
 The REST API provides the following capabilities:
 1. Users
-- CRUD operations (must)
-- Search by username, email, or first name (must)
-- Filter and sort certain users’ posts (must)
+- CRUD operations **(must)**
+- Search by username, email, or first name **(must)**
+- Filter and sort certain users’ posts **(must)**
 - Filter all posts by tag/s (could)
 2. Admin
-- Make other users admin (must)
-- Delete posts (must)
-- Block/unblock user (must)
+- Make other users admin **(must)**
+- Delete posts **(must)**
+- Block/unblock user **(must)**
 3. Posts
-- CRUD operations (must)
-- Comment (must)
-- List and edit user’s own posts (must)
-- Comment on and like other users' posts. (must)
+- CRUD operations **(must)**
+- Comment **(must)**
+- List and edit user’s own posts **(must)**
+- Comment on and like other users' posts. **(must)**
 4. Tags – optional
 - CRUD operations (could)
 
@@ -140,17 +139,17 @@ Your repository **must** include two scripts – one to create the database and 
 
 Commits in the GitLab repository should give a good overview of how the project
 was developed, which features were created first and the people who contributed.
-Contributions from all team members must be evident through the git commit
-history! The repository must contain the complete application source code and any
+Contributions from all team members **must** be evident through the git commit
+history! The repository **must** contain the complete application source code and any
 scripts (database scripts, for example).
 
 Provide a link to a GitLab repository with the following information in the
 README.md file:
 • Project description
-• Link to the Swagger documentation (must)
+• Link to the Swagger documentation **(must)**
 • Link to the hosted project (if hosted online)
 • Instructions on how to setup and run the project locally
-• Images of the database relations (must)
+• Images of the database relations **(must)**
 
 # Optional Requirements
 - Integrate your project with a Continuous Integration server (e.g., GitLab’s
