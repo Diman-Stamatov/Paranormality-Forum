@@ -10,7 +10,7 @@ etc. The forum should revolve around one or two general topics.
 ## Functional Requirements
 # Entities
 
--Each **user** must have a first and last name, email, username, and password.
+- Each **user** must have a first and last name, email, username, and password.
   - First name and last name must be between 4 and 32 symbols.
   - Email must be a valid email and unique in the system.
 - Each **admin** must have a first and last name, email, and may have a phone
@@ -30,9 +30,7 @@ The public part **must** be accessible without authentication.
 On the home page, anonymous users **must** be presented with the core features of
 the platform as well as how many people are using it and how many posts have
 been created so far.
-
 Anonymous users **must** be able to register and log in.
-
 Anonymous users **should** be able to see a list of the top 10 most commented posts
 and a list of the 10 most recently created posts.
 
@@ -40,37 +38,25 @@ and a list of the 10 most recently created posts.
 Accessible only if the user is authenticated.
 
 The **user** must be able to log in and log out.
-
 Users **must** be able to browse posts created by the other users with an option to sort and filter them.
-
 Users **must** be able to view a single post including its title, content, comments, likes, etc. The details of the post and any available user actions (comment/like/edit) should be presented on the same page.
-
 Users **must** be able to update their profile information. Users should not be able to change their username once registered. Users could upload a profile photo.
-
 Users **must** be able to create a new post with at least a title and content.
-
 Each user **must** be able to edit only personal posts or comments.
-
 Each user **must** be able to view all their or any other user’s posts and comments
 (with the option to filter and sort them).
-
 Each user **must** be able to remove one or more of their own posts. Deleting a post
 should be available while reading the details of an individual post or when browsing
 the list of all posts.
-
 Each user **must** be able to comment/reply to any other forum post.
 
 # Administrative part
 
 Accessible to users with administrative privileges.
-
 Admin **must** be able to search for a user by their username, email, first name.
-
 Admin **must** be able to block or unblock individual users. A blocked user must not
 be able to create posts or comments.
-
 Admin **must** be able to delete any post.
-
 Admin **must** be able to view a list of all posts with an option to filter and sort them.
 
 # Optional feature
@@ -94,21 +80,21 @@ must use Swagger to document yours.
 
 The REST API provides the following capabilities:
 1. Users
-• CRUD operations (must)
-• Search by username, email, or first name (must)
-• Filter and sort certain users’ posts (must)
-• Filter all posts by tag/s (could)
+- CRUD operations (must)
+- Search by username, email, or first name (must)
+- Filter and sort certain users’ posts (must)
+- Filter all posts by tag/s (could)
 2. Admin
-• Make other users admin (must)
-• Delete posts (must)
-• Block/unblock user (must)
+- Make other users admin (must)
+- Delete posts (must)
+- Block/unblock user (must)
 3. Posts
-• CRUD operations (must)
-• Comment (must)
-• List and edit user’s own posts (must)
-• Comment on and like other users' posts. (must)
+- CRUD operations (must)
+- Comment (must)
+- List and edit user’s own posts (must)
+- Comment on and like other users' posts. (must)
 4. Tags – optional
-• CRUD operations (could)
+- CRUD operations (could)
 
 ## Use Cases
 
@@ -167,12 +153,12 @@ README.md file:
 • Images of the database relations (must)
 
 # Optional Requirements
-• Integrate your project with a Continuous Integration server (e.g., GitLab’s
+- Integrate your project with a Continuous Integration server (e.g., GitLab’s
 own) and configure your unit tests to run on each commit to your master
 branch
-• Host your application's backend in a public hosting provider of your choice
+- Host your application's backend in a public hosting provider of your choice
 (e.g., AWS, Azure, Heroku)
-• Use branches while working with Git
+- Use branches while working with Git
 
 ## Teamwork Guidelines
 
