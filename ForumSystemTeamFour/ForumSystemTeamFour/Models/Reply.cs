@@ -2,7 +2,7 @@
 {
     public class Reply : IReply
     {
-        public int? ParentPostId { get; set; }
+        public int ThreadId { get; set; }
         public int PostId { get; set; }
         public DateTime CreationDate { get; set; }
         public int AuthorId { get; set; }
