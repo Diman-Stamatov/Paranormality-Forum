@@ -1,4 +1,6 @@
-﻿namespace ForumSystemTeamFour.Models
+﻿using ForumSystemTeamFour.Models.Interfaces;
+
+namespace ForumSystemTeamFour.Models
 {
     public class User : IUser
     {

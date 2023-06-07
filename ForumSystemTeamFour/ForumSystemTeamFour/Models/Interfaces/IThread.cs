@@ -1,6 +1,6 @@
-﻿namespace ForumSystemTeamFour.Models
+﻿namespace ForumSystemTeamFour.Models.Interfaces
 {
-    public interface IThread :IPost
+    public interface IThread : IPost
     {
         string Title { get; set; }
         List<int> Replies { get; set; }

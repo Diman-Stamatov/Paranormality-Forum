@@ -1,4 +1,4 @@
-﻿namespace ForumSystemTeamFour.Models
+﻿namespace ForumSystemTeamFour.Models.Interfaces
 {
     public interface IPost
     {
