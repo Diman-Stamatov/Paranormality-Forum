@@ -16,32 +16,32 @@ namespace ForumSystemTeamFour.Services
 
         public User Create(User user)
         {
-            return this.repository.Create(user);
+           return this.repository.Create(user);
         }
 
         public User Delete(int id)
         {
-            throw new NotImplementedException();
+           return this.repository.Delete(id);
         }
 
         public List<User> FilterBy(UserQueryParameters filterParameters)
         {
-            throw new NotImplementedException();
+            return this.repository.FilterBy(filterParameters);
         }
 
         public List<User> GetAll()
         {
-            throw new NotImplementedException();
+            return this.repository.GetAll();
         }
 
         public User GetById(int id)
         {
-            throw new NotImplementedException();
+            return this.repository.GetById(id);
         }
 
         public User Update(int id, User user)
         {
-            throw new NotImplementedException();
+            return this.repository.Update(id, user);
         }
     }
 }
