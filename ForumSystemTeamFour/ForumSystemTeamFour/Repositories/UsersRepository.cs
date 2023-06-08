@@ -11,9 +11,10 @@ namespace ForumSystemTeamFour.Repositories
         static int NextId = 1;
         public List<User> users;
 
-        /*public EmailRepository emailRepository;
-        public UsernameRepository usernameRepository;*/
-        /*public UsersRepository(EmailRepository emailRepository, UsernameRepository usernameRepository) 
+        /*private readonly EmailRepository emailRepository;
+        private readonly UsernameRepository usernameRepository;
+        
+        public UsersRepository(EmailRepository emailRepository, UsernameRepository usernameRepository) 
         { 
             this.emailRepository = emailRepository;
             this.usernameRepository = usernameRepository;
@@ -35,12 +36,54 @@ namespace ForumSystemTeamFour.Repositories
 
         public List<User> FilterBy(UserQueryParameters filterParameters)
         {
-            throw new NotImplementedException();
+            var filteredList = this.users;
+            if (!string.IsNullOrEmpty(filterParameters.FirstName))
+            {
+                filteredList = filteredList.FindAll(user => user.FirstName == filterParameters.FirstName);
+            }
+
+            if (!string.IsNullOrEmpty(filterParameters.LastName))
+            {
+                filteredList = filteredList.FindAll(user => user.LastName == filterParameters.LastName);
+            }
+
+            /*if (!string.IsNullOrEmpty(filterParameters.Username))
+            {
+                int usernameId = this.usernameRepository.GetByName(filterParameters.Username).Id;
+                filteredList = filteredList.FindAll(user=>user.UserID == usernameId);
+            }*/                       
+
+            if (filterParameters.Blocked != null)
+            {
+                filteredList = filteredList.FindAll(user => user.Blocked == filterParameters.Blocked);
+            }
+
+            if (!string.IsNullOrEmpty(filterParameters.SortBy))
+            {
+                if (filterParameters.SortBy.Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    filteredList = filteredList.OrderBy(user => user.FirstName).ToList();
+                }
+                else if (filterParameters.SortBy.Equals("lastname", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    filteredList = filteredList.OrderBy(user => user.LastName).ToList();
+                }
+                else if (filterParameters.SortBy.Equals("username", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    /*filteredList = filteredList.OrderBy(user => user.UsernameId).ToList(); ????????????????????????????????????????????????????????*/
+                }
+
+                if (!string.IsNullOrEmpty(filterParameters.SortOrder) && filterParameters.SortOrder.Equals("desc", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    filteredList.Reverse();
+                }
+            }
+            return filteredList;
         }
 
         public List<User> GetAll()
         {
-            throw new NotImplementedException();
+            return this.users;
         }
 
         public User GetById(int id)
@@ -49,14 +92,22 @@ namespace ForumSystemTeamFour.Repositories
             return foundUser ?? throw new InvalidOperationException($"No user with ID exists on the forum!");
         }
 
-        public User GetByName(string name)
+        public User GetByUsername(string username)
         {
+            /*int usernameId = this.usernameRepository.GetByName(name).Id;
+            return this.GetById(usernameId);*/
             throw new NotImplementedException();
         }
 
         public User Update(int id, User user)
         {
-            throw new NotImplementedException();
+            var foundUser = this.GetById(id);
+            foundUser.FirstName = user.FirstName;
+            foundUser.LastName = user.LastName;
+            foundUser.EmailId = user.EmailId;
+            foundUser.UsernameId = user.UsernameId;            
+            foundUser.Password = user.Password;
+            return foundUser;
         }
     }
 }
