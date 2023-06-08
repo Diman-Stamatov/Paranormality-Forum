@@ -6,10 +6,4 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Mappers\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Services\Interfaces\" />
-  </ItemGroup>
-
 </Project>
