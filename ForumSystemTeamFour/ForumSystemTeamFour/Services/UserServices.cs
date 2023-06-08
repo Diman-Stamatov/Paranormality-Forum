@@ -5,11 +5,11 @@ using ForumSystemTeamFour.Services.Interfaces;
 
 namespace ForumSystemTeamFour.Services
 {
-    public class UserServive : IUserServices
+    public class UserServices : IUserServices
     {
         private readonly UsersRepository repository;
 
-        public UserServive(UsersRepository repository) 
+        public UserServices(UsersRepository repository) 
         {
             this.repository = repository;
         }

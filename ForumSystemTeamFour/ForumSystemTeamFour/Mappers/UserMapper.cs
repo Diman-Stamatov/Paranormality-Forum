@@ -16,8 +16,8 @@ namespace ForumSystemTeamFour.Mappers
 
         public User Map(UserDto userDto) 
         {
-            int usernameId /*= usernameService.Crate(userDto.Username)*/;
-            int emailId /*= emailService.Crate(userDto.Username)*/;
+            int usernameId /*= usernameService.Create(userDto.Username)*/;
+            int emailId /*= emailService.Create(userDto.Username)*/;
             return new User
             {
                 FirstName = userDto.FirstName,

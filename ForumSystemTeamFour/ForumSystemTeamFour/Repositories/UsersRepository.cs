@@ -20,9 +20,9 @@ namespace ForumSystemTeamFour.Repositories
             this.usernameRepository = usernameRepository;
         }*/
 
-        public User Create(User user)
-        {
-            user.UserID = NextId++;
+        public User Create(User user)        {
+            
+            user.UserID = NextId++;            
             this.users.Add(user);
             return user;
         }
@@ -89,7 +89,7 @@ namespace ForumSystemTeamFour.Repositories
         public User GetById(int id)
         {
             var foundUser =  this.users.FirstOrDefault(user=>user.UserID == id);
-            return foundUser ?? throw new InvalidOperationException($"No user with ID exists on the forum!");
+            return foundUser ?? throw new InvalidOperationException($"No user with ID exists on the forum!"); //ToDo Custom Exceptions
         }
 
         public User GetByUsername(string username)
