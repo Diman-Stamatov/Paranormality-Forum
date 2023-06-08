@@ -5,16 +5,32 @@ using ForumSystemTeamFour.Repositories.Interfaces;
 
 namespace ForumSystemTeamFour.Repositories
 {
+    
     public class UsersRepository : IUsersRepository
     {
-        public User Create(UserDto userDto)
+        static int NextId = 1;
+        public List<User> users;
+
+        /*public EmailRepository emailRepository;
+        public UsernameRepository usernameRepository;*/
+        /*public UsersRepository(EmailRepository emailRepository, UsernameRepository usernameRepository) 
+        { 
+            this.emailRepository = emailRepository;
+            this.usernameRepository = usernameRepository;
+        }*/
+
+        public User Create(User user)
         {
-            throw new NotImplementedException();
+            user.UserID = NextId++;
+            this.users.Add(user);
+            return user;
         }
 
         public User Delete(int id)
         {
-            throw new NotImplementedException();
+            var userToDelete = this.GetById(id);
+            this.users.Remove(userToDelete);
+            return userToDelete;
         }
 
         public List<User> FilterBy(UserQueryParameters filterParameters)
@@ -29,7 +45,8 @@ namespace ForumSystemTeamFour.Repositories
 
         public User GetById(int id)
         {
-            throw new NotImplementedException();
+            var foundUser =  this.users.FirstOrDefault(user=>user.UserID == id);
+            return foundUser ?? throw new InvalidOperationException($"No user with ID exists on the forum!");
         }
 
         public User GetByName(string name)
@@ -37,7 +54,7 @@ namespace ForumSystemTeamFour.Repositories
             throw new NotImplementedException();
         }
 
-        public User Update(int id, UserDto userDto)
+        public User Update(int id, User user)
         {
             throw new NotImplementedException();
         }

@@ -10,8 +10,8 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
         List<User> FilterBy(UserQueryParameters filterParameters);
         User GetById(int id);
         User GetByName(string name);
-        User Create(UserDto userDto);
-        User Update(int id, UserDto userDto);
+        User Create(User user);
+        User Update(int id, User user);
         User Delete(int id);
         
     }
