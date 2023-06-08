@@ -4,7 +4,7 @@ namespace ForumSystemTeamFour.Models.DTOs
 {
     public class UserDto
     {
-        private const string StringEmptyMessage = "Please specify a {0}!";
+        private const string StringEmptyMessage = "Please specify a valid {0}!";
         private const string StringMinLengthMessage = "The {0} must be at least {1} characters long!";
         private const string StringMaxLengthMessage = "The {0} must be at most {1} characters long!";
 
