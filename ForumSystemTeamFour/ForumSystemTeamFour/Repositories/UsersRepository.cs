@@ -11,6 +11,11 @@ namespace ForumSystemTeamFour.Repositories
         static int NextId = 1;
         private List<User> users;
 
+        public UsersRepository()
+        {
+            users = new List<User>();                
+        }
+
         public User Create(User user)        
         {
             CheckDuplicateUsername(user.Username);

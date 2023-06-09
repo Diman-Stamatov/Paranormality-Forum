@@ -7,6 +7,16 @@ namespace ForumSystemTeamFour.Repositories
     {
         static int nextId = 1;
         private  List<Tag> tags;
+
+        public TagsRepository()
+        {
+            tags = new List<Tag>()
+            {
+                new Tag{Id = nextId++, Name = "Ufo"},
+                new Tag{Id = nextId++, Name = "Skinwalker"},
+                new Tag{Id = nextId++, Name = "Bigfoot"},
+            };
+        }
         public Tag Create(string name)
         {
             var newTag = new Tag
