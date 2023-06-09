@@ -14,8 +14,10 @@ namespace ForumSystemTeamFour
             builder.Services.AddControllers();
 
             builder.Services.AddSingleton<IUsersRepository, UsersRepository>();
+            builder.Services.AddSingleton<ITagsRepository, TagsRepository>();
 
             builder.Services.AddScoped<IUserServices, UserServices>();
+            builder.Services.AddScoped<ITagsServices, TagsServices>();
 
             builder.Services.AddScoped<UserMapper>();
             

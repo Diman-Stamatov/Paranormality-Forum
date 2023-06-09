@@ -38,7 +38,14 @@ namespace ForumSystemTeamFour.Services
         {
             return this.repository.GetById(id);
         }
-
+        public User GetByUsername(string username)
+        {
+            return this.repository.GetByUsername(username);
+        }
+        public User GetByEmail(string email)
+        {
+            return this.repository.GetByEmail(email);
+        }
         public User Update(int id, User user)
         {
             return this.repository.Update(id, user);

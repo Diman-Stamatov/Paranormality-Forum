@@ -34,9 +34,39 @@ namespace ForumSystemTeamFour.Controllers
         {
             try
             {
-                var user = this.userServices.GetById(id);
+                var foundUser = this.userServices.GetById(id);
 
-                return this.StatusCode(StatusCodes.Status200OK, user);
+                return this.StatusCode(StatusCodes.Status200OK, foundUser);
+            }
+            catch (InvalidOperationException exception) //ToDo Custom Exceptions
+            {
+                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+        }
+
+        [HttpGet("{username}")]
+        public IActionResult GetByUsername(string username)
+        {
+            try
+            {
+                var foundUser = this.userServices.GetByUsername(username);
+
+                return this.StatusCode(StatusCodes.Status200OK, foundUser);
+            }
+            catch (InvalidOperationException exception) //ToDo Custom Exceptions
+            {
+                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+        }
+
+        [HttpGet("{email}")]
+        public IActionResult GetByEmail(string email)
+        {
+            try
+            {
+                var foundUser = this.userServices.GetByEmail(email);
+
+                return this.StatusCode(StatusCodes.Status200OK, foundUser);
             }
             catch (InvalidOperationException exception) //ToDo Custom Exceptions
             {

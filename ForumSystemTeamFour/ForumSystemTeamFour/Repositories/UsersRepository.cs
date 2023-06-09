@@ -9,13 +9,13 @@ namespace ForumSystemTeamFour.Repositories
     public class UsersRepository : IUsersRepository
     {
         static int NextId = 1;
-        public List<User> users;
+        private List<User> users;
 
         public User Create(User user)        
         {
             CheckDuplicateUsername(user.Username);
             CheckDuplicateEmail(user.Email);
-            user.UserID = NextId++;            
+            user.Id = NextId++;            
             this.users.Add(user);
             return user;
         }
@@ -80,7 +80,7 @@ namespace ForumSystemTeamFour.Repositories
 
         public User GetById(int id)
         {
-            var foundUser =  this.users.FirstOrDefault(user=>user.UserID == id);
+            var foundUser =  this.users.FirstOrDefault(user=>user.Id == id);
             return foundUser ?? throw new InvalidOperationException($"No user with the ID number {0} exists on the forum!"); //ToDo Custom Exceptions
         }
 
@@ -88,6 +88,11 @@ namespace ForumSystemTeamFour.Repositories
         {
             var foundUser = this.users.FirstOrDefault(user=>user.Username == username);
             return foundUser ?? throw new InvalidOperationException($"No user with the Username \"{0}\" exists on the forum!"); //ToDo Custom Exceptions
+        }
+        public User GetByEmail(string email)
+        {
+            var foundUser = this.users.FirstOrDefault(user => user.Email == email);
+            return foundUser ?? throw new InvalidOperationException($"No user with the E-mail \"{0}\" exists on the forum!"); //ToDo Custom Exceptions
         }
 
         public User Update(int id, User user)
