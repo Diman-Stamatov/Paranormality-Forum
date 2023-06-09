@@ -11,17 +11,10 @@ namespace ForumSystemTeamFour.Repositories
         static int NextId = 1;
         public List<User> users;
 
-        /*private readonly EmailRepository emailRepository;
-        private readonly UsernameRepository usernameRepository;
-        
-        public UsersRepository(EmailRepository emailRepository, UsernameRepository usernameRepository) 
-        { 
-            this.emailRepository = emailRepository;
-            this.usernameRepository = usernameRepository;
-        }*/
-
-        public User Create(User user)        {
-            
+        public User Create(User user)        
+        {
+            CheckDuplicateUsername(user.Username);
+            CheckDuplicateEmail(user.Email);
             user.UserID = NextId++;            
             this.users.Add(user);
             return user;
@@ -47,11 +40,10 @@ namespace ForumSystemTeamFour.Repositories
                 filteredList = filteredList.FindAll(user => user.LastName == filterParameters.LastName);
             }
 
-            /*if (!string.IsNullOrEmpty(filterParameters.Username))
-            {
-                int usernameId = this.usernameRepository.GetByName(filterParameters.Username).Id;
-                filteredList = filteredList.FindAll(user=>user.UserID == usernameId);
-            }*/                       
+            if (!string.IsNullOrEmpty(filterParameters.Username))
+            {                
+                filteredList = filteredList.FindAll(user => user.Username == filterParameters.Username);
+            }
 
             if (filterParameters.Blocked != null)
             {
@@ -70,7 +62,7 @@ namespace ForumSystemTeamFour.Repositories
                 }
                 else if (filterParameters.SortBy.Equals("username", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    /*filteredList = filteredList.OrderBy(user => user.UsernameId).ToList(); ????????????????????????????????????????????????????????*/
+                    filteredList = filteredList.OrderBy(user => user.Username).ToList(); 
                 }
 
                 if (!string.IsNullOrEmpty(filterParameters.SortOrder) && filterParameters.SortOrder.Equals("desc", StringComparison.InvariantCultureIgnoreCase))
@@ -89,25 +81,45 @@ namespace ForumSystemTeamFour.Repositories
         public User GetById(int id)
         {
             var foundUser =  this.users.FirstOrDefault(user=>user.UserID == id);
-            return foundUser ?? throw new InvalidOperationException($"No user with ID exists on the forum!"); //ToDo Custom Exceptions
+            return foundUser ?? throw new InvalidOperationException($"No user with the ID number {0} exists on the forum!"); //ToDo Custom Exceptions
         }
 
         public User GetByUsername(string username)
         {
-            /*int usernameId = this.usernameRepository.GetByName(name).Id;
-            return this.GetById(usernameId);*/
-            throw new NotImplementedException();
+            var foundUser = this.users.FirstOrDefault(user=>user.Username == username);
+            return foundUser ?? throw new InvalidOperationException($"No user with the Username \"{0}\" exists on the forum!"); //ToDo Custom Exceptions
         }
 
         public User Update(int id, User user)
         {
-            var foundUser = this.GetById(id);
-            foundUser.FirstName = user.FirstName;
-            foundUser.LastName = user.LastName;
-            foundUser.EmailId = user.EmailId;
-            foundUser.UsernameId = user.UsernameId;            
-            foundUser.Password = user.Password;
-            return foundUser;
+            CheckDuplicateUsername(user.Username);
+            CheckDuplicateEmail(user.Email);
+
+            var userToUpdate = this.GetById(id);
+            userToUpdate.FirstName = user.FirstName;
+            userToUpdate.LastName = user.LastName;
+            userToUpdate.Email = user.Email;
+            userToUpdate.Username = user.Username;            
+            userToUpdate.Password = user.Password;
+
+            return userToUpdate;
+        }
+
+        private void CheckDuplicateUsername(string username)
+        {
+            var foundUser = this.users.FirstOrDefault(user => user.Username == username);
+            if (foundUser != null)
+            {
+                throw new InvalidOperationException($"The username \"{username}\" is already in use!"); //ToDo Custom Exceptions
+            }
+        }
+        private void CheckDuplicateEmail(string email)
+        {
+            var foundUser = this.users.FirstOrDefault(user => user.Email == email);
+            if (foundUser != null)
+            {
+                throw new InvalidOperationException($"The email \"{email}\" is already in use!"); //ToDo Custom Exceptions
+            }
         }
     }
 }

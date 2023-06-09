@@ -5,25 +5,16 @@ namespace ForumSystemTeamFour.Mappers
 {
     public class UserMapper
     {
-        /*private readonly EmailService emailService;*/
-        /*private readonly UsernameService usernameService;*/
-
-        /*public UserMapper(EmailService emailService, UsernameService usernameService) 
-        { 
-            this.emailService = emailService;
-            this.usernameService = usernameService;
-        }*/
+        
 
         public User Map(UserDto userDto) 
-        {
-            int usernameId /*= usernameService.Create(userDto.Username)*/;
-            int emailId /*= emailService.Create(userDto.Username)*/;
+        {            
             return new User
             {
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
-                /*EmailId =emailId,*/
-                /*UsernameId = usernameId,*/
+                Email = userDto.Email,
+                Username = userDto.Username,
                 Password = userDto.Password
             };
         }

@@ -18,7 +18,7 @@ namespace ForumSystemTeamFour.Controllers
         public UsersApiController(IUserServices userServices, UserMapper userMapper)
         {
             this.userServices = userServices;
-            this.userServices = userServices;
+            this.userMapper = userMapper;
         }
 
         [HttpGet("")]
@@ -49,7 +49,7 @@ namespace ForumSystemTeamFour.Controllers
         {
             try
             {
-                var user = this.userMapper.Map(userDto); //ToDo Throw Duplicate Username exception in usernameRepository.Create?
+                var user = this.userMapper.Map(userDto); 
                 var createdUser = this.userServices.Create(user);
 
                 return this.StatusCode(StatusCodes.Status201Created, createdUser); //ToDo Custom Exceptions
