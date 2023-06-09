@@ -10,6 +10,7 @@ namespace ForumSystemTeamFour.Repositories
     {
         static int NextId = 1;
         private List<User> users;
+        
 
         public UsersRepository()
         {
@@ -113,7 +114,7 @@ namespace ForumSystemTeamFour.Repositories
             userToUpdate.Password = user.Password;
 
             return userToUpdate;
-        }
+        }        
 
         private void CheckDuplicateUsername(string username)
         {
