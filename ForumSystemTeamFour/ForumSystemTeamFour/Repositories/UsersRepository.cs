@@ -64,9 +64,10 @@ namespace ForumSystemTeamFour.Repositories
             return user;
         }
 
-        public User Delete(int id)
+        public User Delete(string username)
         {
-            var userToDelete = this.GetById(id);
+            //ToDo Validation
+            var userToDelete = this.GetByUsername(username);
             this.users.Remove(userToDelete);
             return userToDelete;
         }
@@ -125,45 +126,73 @@ namespace ForumSystemTeamFour.Repositories
         {
             return this.users;
         }
-
-        public User GetById(int id)
-        {
-            var foundUser =  this.users.FirstOrDefault(user=>user.Id == id);
-            return foundUser ?? throw new EntityNotFoundException($"No user with the ID number {0} exists on the forum!");
-        }
-
+        
         public User GetByUsername(string username)
         {
             var foundUser = this.users.FirstOrDefault(user=>user.Username == username);
             return foundUser ?? throw new EntityNotFoundException($"No user with the Username \"{0}\" exists on the forum!");
         }
-        public User GetByEmail(string email)
+
+        public User Update(string username, UserUpdateData updateData)
         {
-            var foundUser = this.users.FirstOrDefault(user => user.Email == email);
-            return foundUser ?? throw new EntityNotFoundException($"No user with the E-mail \"{0}\" exists on the forum!"); 
-        }
+            //ToDo Validation
+            CheckDuplicateUsername(updateData.Username);
+            CheckDuplicateEmail(updateData.Email);
 
-        public User Update(int id, User user)
-        {
-            CheckDuplicateUsername(user.Username);
-            CheckDuplicateEmail(user.Email);
-
-            var userToUpdate = this.GetById(id);
-            userToUpdate.FirstName = user.FirstName;
-            userToUpdate.LastName = user.LastName;
-            userToUpdate.Email = user.Email;
-            userToUpdate.Username = user.Username;            
-            userToUpdate.Password = user.Password;
-
+            var userToUpdate = this.GetByUsername(username);
+            userToUpdate.FirstName = updateData.FirstName ?? userToUpdate.FirstName;
+            userToUpdate.LastName = updateData.LastName ?? userToUpdate.LastName;
+            userToUpdate.Email = updateData.Email ?? userToUpdate.Email;
+            userToUpdate.Username = updateData.Username ?? userToUpdate.Username;            
+            userToUpdate.Password = updateData.Password ?? userToUpdate.Password;
+            
+            if (updateData.PhoneNumber!=null)
+            {
+                //ToDo Validation
+                userToUpdate.PhoneNumber = updateData.PhoneNumber;
+            }
+            
             return userToUpdate;
         }        
+
+        public User PromoteToAdmin(string username)
+        {
+            var userToPromote = this.GetByUsername(username);
+            if (userToPromote == null)
+            {
+                throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
+            }
+            if (userToPromote.IsAdmin==true)
+            {
+                throw new InvalidUserInputException($"\"{username}\" is already an Administrator!");
+            }
+            //ToDo Validation
+            userToPromote.IsAdmin = true;
+            return userToPromote;
+        }
+
+        public User DemoteFromAdmin(string username)
+        {
+            var userToDemote = this.GetByUsername(username);
+            if (userToDemote == null)
+            {
+                throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
+            }
+            if (userToDemote.IsAdmin == false)
+            {
+                throw new InvalidUserInputException($"\"{username}\" is already a basic user!");
+            }
+            //ToDo Validation
+            userToDemote.IsAdmin = false;
+            return userToDemote;
+        }
 
         private void CheckDuplicateUsername(string username)
         {
             var foundUser = this.users.FirstOrDefault(user => user.Username == username);
             if (foundUser != null)
             {
-                throw new DuplicateEntityException($"The username \"{username}\" is already in use!"); 
+                throw new DuplicateEntityException($"The username \"{username}\" is already in use!");
             }
         }
         private void CheckDuplicateEmail(string email)
@@ -171,8 +200,40 @@ namespace ForumSystemTeamFour.Repositories
             var foundUser = this.users.FirstOrDefault(user => user.Email == email);
             if (foundUser != null)
             {
-                throw new DuplicateEntityException($"The email \"{email}\" is already in use!"); 
+                throw new DuplicateEntityException($"The email \"{email}\" is already in use!");
             }
+        }        
+
+        public User Block(string username)
+        {
+            var userToBlock = this.GetByUsername(username);
+            if (userToBlock == null)
+            {
+                throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
+            }
+            if (userToBlock.Blocked == true)
+            {
+                throw new InvalidUserInputException($"\"{username}\" is already blocked!");
+            }
+            //ToDo Validation
+            userToBlock.Blocked = true;
+            return userToBlock;
+        }
+
+        public User Unblock(string username)
+        {
+            var userToUnblock = this.GetByUsername(username);
+            if (userToUnblock == null)
+            {
+                throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
+            }
+            if (userToUnblock.Blocked == false)
+            {
+                throw new InvalidUserInputException($"\"{username}\" hasn't been blocked!");
+            }
+            //ToDo Validation
+            userToUnblock.Blocked = false;
+            return userToUnblock;
         }
     }
 }

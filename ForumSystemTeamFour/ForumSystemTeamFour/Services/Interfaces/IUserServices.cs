@@ -6,12 +6,14 @@ namespace ForumSystemTeamFour.Services.Interfaces
     public interface IUserServices
     {
         List<User> GetAll();
-        List<User> FilterBy(UserQueryParameters filterParameters);
-        User GetById(int id);
-        User GetByUsername(string name);
-        User GetByEmail(string email);
+        List<User> FilterBy(UserQueryParameters filterParameters);        
+        User GetByUsername(string name);        
         User Create(User user);
-        User Update(int id, User user);
-        User Delete(int id);
+        User Update(string username, UserUpdateData updateData);
+        User Delete(string username);
+        User Block(string username);
+        User Unblock(string username);
+        User PromoteToAdmin(string username);
+        User DemoteFromAdmin(string username);
     }
 }

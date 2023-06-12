@@ -15,14 +15,24 @@ namespace ForumSystemTeamFour.Services
             this.repository = repository;
         }
 
+        public User Block(string username)
+        {
+            return this.repository.Block(username);
+        }
+
         public User Create(User user)
         {
            return this.repository.Create(user);
         }
 
-        public User Delete(int id)
+        public User Delete(string username)
         {
-           return this.repository.Delete(id);
+           return this.repository.Delete(username);
+        }
+
+        public User DemoteFromAdmin(string username)
+        {
+            return this.repository.DemoteFromAdmin(username);
         }
 
         public List<User> FilterBy(UserQueryParameters filterParameters)
@@ -34,22 +44,25 @@ namespace ForumSystemTeamFour.Services
         {
             return this.repository.GetAll();
         }
-
-        public User GetById(int id)
-        {
-            return this.repository.GetById(id);
-        }
+        
         public User GetByUsername(string username)
         {
             return this.repository.GetByUsername(username);
         }
-        public User GetByEmail(string email)
+
+        public User PromoteToAdmin(string username)
         {
-            return this.repository.GetByEmail(email);
+            return this.repository.PromoteToAdmin(username);
         }
-        public User Update(int id, User user)
+
+        public User Unblock(string username)
         {
-            return this.repository.Update(id, user);
+            return this.repository.Unblock(username);
+        }
+
+        public User Update(string username, UserUpdateData updateData)
+        {
+            return this.repository.Update(username, updateData);
         }
     }
 }

@@ -8,12 +8,14 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
     {
         List<User> GetAll();
         List<User> FilterBy(UserQueryParameters filterParameters);
-        User GetById(int id);
-        User GetByUsername(string username);
-        User GetByEmail(string email);
+        User GetByUsername(string username);        
         User Create(User user);
-        User Update(int id, User user);
-        User Delete(int id);
+        User Update(string username, UserUpdateData updateData);
+        User Block(string username);
+        User Unblock(string username);
+        User PromoteToAdmin(string username); 
+        User DemoteFromAdmin(string username);
+        User Delete(string username);
         
     }
 }

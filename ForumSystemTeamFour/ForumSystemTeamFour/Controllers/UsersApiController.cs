@@ -37,52 +37,7 @@ namespace ForumSystemTeamFour.Controllers
                 return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
             
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetUserById(int id)
-        {
-            try
-            {
-                var foundUser = this.userServices.GetById(id);
-
-                return this.StatusCode(StatusCodes.Status200OK, foundUser);
-            }
-            catch (EntityNotFoundException exception) 
-            {
-                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
-            }
-        }
-
-        [HttpGet("{username}")]
-        public IActionResult GetByUsername(string username)
-        {
-            try
-            {
-                var foundUser = this.userServices.GetByUsername(username);
-
-                return this.StatusCode(StatusCodes.Status200OK, foundUser);
-            }
-            catch (EntityNotFoundException exception) 
-            {
-                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
-            }
-        }
-
-        [HttpGet("{email}")]
-        public IActionResult GetByEmail(string email)
-        {
-            try
-            {
-                var foundUser = this.userServices.GetByEmail(email);
-
-                return this.StatusCode(StatusCodes.Status200OK, foundUser);
-            }
-            catch (EntityNotFoundException exception) 
-            {
-                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
-            }
-        }
+        }       
 
         [HttpPost("")]
         public IActionResult CreateUser([FromBody] UserDto userDto)
@@ -99,14 +54,13 @@ namespace ForumSystemTeamFour.Controllers
                 return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
             }
         }
-
-        [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] UserDto userDto)
+        [Route("update/{username}")]
+        [HttpPut("{username}")]
+        public IActionResult UpdateUser(string username, [FromQuery] UserUpdateData updateData)
         {
             try
             {
-                User user = this.userMapper.Map(userDto);
-                User updatedUser = this.userServices.Update(id, user);
+                User updatedUser = this.userServices.Update(username, updateData);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -120,12 +74,93 @@ namespace ForumSystemTeamFour.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteUser(int id)
+        [Route("promote/{username}")]
+        [HttpPut("{username}")]
+        public IActionResult PromoteToAdmin(string username)
         {
             try
             {
-                var deletedUser = this.userServices.Delete(id);
+                User updatedUser = this.userServices.PromoteToAdmin(username);
+
+                return this.StatusCode(StatusCodes.Status200OK, updatedUser);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            catch (InvalidUserInputException exception)
+            {
+                return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
+            }
+        }
+
+        [Route("demote/{username}")]
+        [HttpPut("{username}")]
+        public IActionResult DemoteFromAdmin(string username)
+        {
+            try
+            {
+                User updatedUser = this.userServices.DemoteFromAdmin(username);
+
+                return this.StatusCode(StatusCodes.Status200OK, updatedUser);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            catch (InvalidUserInputException exception)
+            {
+                return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
+            }
+        }
+
+        [Route("block/{username}")]
+        [HttpPut("{username}")]
+        public IActionResult Block(string username)
+        {
+            try
+            {
+                User updatedUser = this.userServices.Block(username);
+
+                return this.StatusCode(StatusCodes.Status200OK, updatedUser);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            catch (InvalidUserInputException exception)
+            {
+                return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
+            }
+        }
+
+        [Route("unblock/{username}")]
+        [HttpPut("{username}")]
+        public IActionResult Unblock(string username)
+        {
+            try
+            {
+                User updatedUser = this.userServices.Unblock(username);
+
+                return this.StatusCode(StatusCodes.Status200OK, updatedUser);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            catch (InvalidUserInputException exception)
+            {
+                return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
+            }
+        }
+
+        [HttpDelete("{username}")]
+        public IActionResult DeleteUser(string username)
+        {
+            //ToDo Validation
+            try
+            {
+                var deletedUser = this.userServices.Delete(username);
 
                 return this.StatusCode(StatusCodes.Status200OK, deletedUser);
             }

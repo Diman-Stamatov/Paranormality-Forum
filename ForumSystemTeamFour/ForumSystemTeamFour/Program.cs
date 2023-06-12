@@ -15,11 +15,11 @@ namespace ForumSystemTeamFour
 
             builder.Services.AddSingleton<IUsersRepository, UsersRepository>();
             builder.Services.AddSingleton<ITagsRepository, TagsRepository>();
-            builder.Services.AddSingleton<IAdminsRepository, AdminsRepository>();
+            
 
             builder.Services.AddScoped<IUserServices, UserServices>();
             builder.Services.AddScoped<ITagServices, TagServices>();
-            builder.Services.AddScoped<IAdminServices, AdminServices>();
+            
 
             builder.Services.AddScoped<UserMapper>();
             
