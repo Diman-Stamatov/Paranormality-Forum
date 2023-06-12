@@ -18,11 +18,39 @@ namespace ForumSystemTeamFour.Repositories
             users = new List<User>()
             {
                 new User{Id = NextId++,
-                FirstName = "FirstName",
-                LastName = "LastName",
-                Username = "Username",
-                Email = "Firstname@Lastname.com",
-                Password = "password"
+                FirstName = "FirstNameOne",
+                LastName = "LastNameOne",
+                Username = "UsernameOne",
+                Email = "FirstnameOne@Lastname.com",
+                Password = "passwordOne"
+                },
+                new User{Id = NextId++,
+                FirstName = "FirstNameTwo",
+                LastName = "LastNameTwo",
+                Username = "UsernameTwo",
+                Email = "FirstnameTwo@Lastname.com",
+                Password = "passwordTwo"
+                },
+                new User{Id = NextId++,
+                FirstName = "FirstNameThree",
+                LastName = "LastNameThree",
+                Username = "UsernameThree",
+                Email = "FirstnameThree@Lastname.com",
+                Password = "passwordThree"
+                },
+                new User{Id = NextId++,
+                FirstName = "FirstNameFour",
+                LastName = "LastNameFour",
+                Username = "UsernameFour",
+                Email = "FirstnameFour@Lastname.com",
+                Password = "passwordFour"
+                },
+                new User{Id = NextId++,
+                FirstName = "FirstNameFive",
+                LastName = "LastNameFive",
+                Username = "UsernameFive",
+                Email = "FirstnameFive@Lastname.com",
+                Password = "passwordFive"
                 }
             };
         }
@@ -85,6 +113,10 @@ namespace ForumSystemTeamFour.Repositories
                 {
                     filteredList.Reverse();
                 }
+            }
+            if (filteredList.Count == 0)
+            {
+                throw new EntityNotFoundException("No users correspond to the specified search parameters!");
             }
             return filteredList;
         }

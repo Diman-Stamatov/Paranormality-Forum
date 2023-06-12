@@ -25,9 +25,18 @@ namespace ForumSystemTeamFour.Controllers
         [HttpGet("")]
         public IActionResult GetUsers([FromQuery] UserQueryParameters filterParameters)
         {
-            List<User> result = this.userServices.FilterBy(filterParameters);
+            try
+            {
+                List<User> result = this.userServices.FilterBy(filterParameters);
 
-            return this.StatusCode(StatusCodes.Status200OK, result);
+                return this.StatusCode(StatusCodes.Status200OK, result);
+            }
+            catch (EntityNotFoundException exception)
+            {
+
+                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            
         }
 
         [HttpGet("{id}")]

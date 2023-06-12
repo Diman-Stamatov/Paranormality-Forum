@@ -25,7 +25,7 @@ namespace ForumSystemTeamFour.Models.DTOs
         [Required(AllowEmptyStrings = false, ErrorMessage = StringEmptyMessage)]
         [MinLength(4, ErrorMessage = StringMinLengthMessage)]
         [MaxLength(20, ErrorMessage = StringMaxLengthMessage)]
-        public string Username { get; }
+        public string Username { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = StringEmptyMessage)]
         [MinLength(10, ErrorMessage = StringMinLengthMessage)]
