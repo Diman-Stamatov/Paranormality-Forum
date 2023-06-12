@@ -1,13 +1,14 @@
 ﻿using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Repositories;
+using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
 
 namespace ForumSystemTeamFour.Services
 {
     public class TagServices : ITagServices
     {
-        private readonly TagsRepository repository;
-        public TagServices(TagsRepository repository)
+        private readonly ITagsRepository repository;
+        public TagServices(ITagsRepository repository)
         {
             this.repository = repository;
         }

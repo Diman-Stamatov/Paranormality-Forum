@@ -1,15 +1,16 @@
 ﻿using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories;
+using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
 
 namespace ForumSystemTeamFour.Services
 {
     public class UserServices : IUserServices
     {
-        private readonly UsersRepository repository;
+        private readonly IUsersRepository repository;
 
-        public UserServices(UsersRepository repository) 
+        public UserServices(IUsersRepository repository) 
         {
             this.repository = repository;
         }

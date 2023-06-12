@@ -15,7 +15,16 @@ namespace ForumSystemTeamFour.Repositories
 
         public UsersRepository()
         {
-            users = new List<User>();                
+            users = new List<User>()
+            {
+                new User{Id = NextId++,
+                FirstName = "FirstName",
+                LastName = "LastName",
+                Username = "Username",
+                Email = "Firstname@Lastname.com",
+                Password = "password"
+                }
+            };
         }
 
         public User Create(User user)        

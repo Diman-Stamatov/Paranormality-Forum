@@ -1,14 +1,15 @@
 ﻿using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Repositories;
+using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
 
 namespace ForumSystemTeamFour.Services
 {
     public class AdminServices : IAdminServices
     {
-        private readonly AdminsRepository repository;
+        private readonly IAdminsRepository repository;
 
-        public AdminServices(AdminsRepository repository)
+        public AdminServices(IAdminsRepository repository)
         {
             this.repository = repository;
         }
