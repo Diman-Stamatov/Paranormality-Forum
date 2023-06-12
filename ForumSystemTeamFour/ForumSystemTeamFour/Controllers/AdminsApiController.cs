@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ForumSystemTeamFour.Services;
 using ForumSystemTeamFour.Repositories.Interfaces;
+using ForumSystemTeamFour.Exceptions;
 
 namespace ForumSystemTeamFour.Controllers
 {
@@ -40,7 +41,7 @@ namespace ForumSystemTeamFour.Controllers
 
                 return this.StatusCode(StatusCodes.Status200OK, foundAdmin);
             }
-            catch (InvalidOperationException exception) //ToDo Custom Exceptions
+            catch (EntityNotFoundException exception) 
             {
                 return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
@@ -54,7 +55,7 @@ namespace ForumSystemTeamFour.Controllers
 
                 return this.StatusCode(StatusCodes.Status200OK, foundAdmin);
             }
-            catch (InvalidOperationException exception) //ToDo Custom Exceptions
+            catch (EntityNotFoundException exception) 
             {
                 return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
@@ -72,9 +73,9 @@ namespace ForumSystemTeamFour.Controllers
                 }
                 var newAdmin = this.adminServices.Create(userToPromote);
 
-                return this.StatusCode(StatusCodes.Status201Created, newAdmin); //ToDo Custom Exceptions
+                return this.StatusCode(StatusCodes.Status201Created, newAdmin); 
             }
-            catch (InvalidOperationException exception)
+            catch (DuplicateEntityException exception)
             {
                 return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
             }
@@ -89,7 +90,7 @@ namespace ForumSystemTeamFour.Controllers
 
                 return this.StatusCode(StatusCodes.Status200OK, demotedAdmin);
             }
-            catch (InvalidOperationException exception) //ToDo Custom Exceptions
+            catch (EntityNotFoundException exception) 
             {
                 return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }

@@ -1,4 +1,5 @@
-﻿using ForumSystemTeamFour.Models;
+﻿using ForumSystemTeamFour.Exceptions;
+using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
@@ -87,18 +88,18 @@ namespace ForumSystemTeamFour.Repositories
         public User GetById(int id)
         {
             var foundUser =  this.users.FirstOrDefault(user=>user.Id == id);
-            return foundUser ?? throw new InvalidOperationException($"No user with the ID number {0} exists on the forum!"); //ToDo Custom Exceptions
+            return foundUser ?? throw new EntityNotFoundException($"No user with the ID number {0} exists on the forum!");
         }
 
         public User GetByUsername(string username)
         {
             var foundUser = this.users.FirstOrDefault(user=>user.Username == username);
-            return foundUser ?? throw new InvalidOperationException($"No user with the Username \"{0}\" exists on the forum!"); //ToDo Custom Exceptions
+            return foundUser ?? throw new EntityNotFoundException($"No user with the Username \"{0}\" exists on the forum!");
         }
         public User GetByEmail(string email)
         {
             var foundUser = this.users.FirstOrDefault(user => user.Email == email);
-            return foundUser ?? throw new InvalidOperationException($"No user with the E-mail \"{0}\" exists on the forum!"); //ToDo Custom Exceptions
+            return foundUser ?? throw new EntityNotFoundException($"No user with the E-mail \"{0}\" exists on the forum!"); 
         }
 
         public User Update(int id, User user)
@@ -121,7 +122,7 @@ namespace ForumSystemTeamFour.Repositories
             var foundUser = this.users.FirstOrDefault(user => user.Username == username);
             if (foundUser != null)
             {
-                throw new InvalidOperationException($"The username \"{username}\" is already in use!"); //ToDo Custom Exceptions
+                throw new DuplicateEntityException($"The username \"{username}\" is already in use!"); 
             }
         }
         private void CheckDuplicateEmail(string email)
@@ -129,7 +130,7 @@ namespace ForumSystemTeamFour.Repositories
             var foundUser = this.users.FirstOrDefault(user => user.Email == email);
             if (foundUser != null)
             {
-                throw new InvalidOperationException($"The email \"{email}\" is already in use!"); //ToDo Custom Exceptions
+                throw new DuplicateEntityException($"The email \"{email}\" is already in use!"); 
             }
         }
     }

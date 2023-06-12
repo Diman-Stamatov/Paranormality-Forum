@@ -16,7 +16,7 @@ namespace ForumSystemTeamFour.Repositories
             var duplicateAdmin = this.GetById(user.Id);
             if (duplicateAdmin != null)
             {
-                throw new InvalidOperationException($"The user {user.Username} is already an Administrator!");//ToDo Custom Exceptions
+                throw new InvalidOperationException($"The user {user.Username} is already an Administrator!");
             }
             var newAdmin = new Admin()
             {
@@ -35,7 +35,7 @@ namespace ForumSystemTeamFour.Repositories
             var adminToDemote = this.GetById(id);
             if (adminToDemote == null)
             {
-                throw new InvalidOperationException($"The user with ID number {id} is not an Administrator!");//ToDo Custom Exceptions
+                throw new UnauthorizedAccessException($"The user with ID number {id} is not an Administrator!");
             }
             this.admins.Remove(adminToDemote);
             return adminToDemote;

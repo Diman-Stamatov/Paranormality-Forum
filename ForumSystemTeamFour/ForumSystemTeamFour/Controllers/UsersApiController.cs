@@ -1,4 +1,5 @@
-﻿using ForumSystemTeamFour.Mappers;
+﻿using ForumSystemTeamFour.Exceptions;
+using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
@@ -38,7 +39,7 @@ namespace ForumSystemTeamFour.Controllers
 
                 return this.StatusCode(StatusCodes.Status200OK, foundUser);
             }
-            catch (InvalidOperationException exception) //ToDo Custom Exceptions
+            catch (EntityNotFoundException exception) 
             {
                 return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
@@ -53,7 +54,7 @@ namespace ForumSystemTeamFour.Controllers
 
                 return this.StatusCode(StatusCodes.Status200OK, foundUser);
             }
-            catch (InvalidOperationException exception) //ToDo Custom Exceptions
+            catch (EntityNotFoundException exception) 
             {
                 return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
@@ -68,7 +69,7 @@ namespace ForumSystemTeamFour.Controllers
 
                 return this.StatusCode(StatusCodes.Status200OK, foundUser);
             }
-            catch (InvalidOperationException exception) //ToDo Custom Exceptions
+            catch (EntityNotFoundException exception) 
             {
                 return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
@@ -82,9 +83,9 @@ namespace ForumSystemTeamFour.Controllers
                 var user = this.userMapper.Map(userDto); 
                 var createdUser = this.userServices.Create(user);
 
-                return this.StatusCode(StatusCodes.Status201Created, createdUser); //ToDo Custom Exceptions
+                return this.StatusCode(StatusCodes.Status201Created, createdUser); 
             }
-            catch (InvalidOperationException exception)
+            catch (DuplicateEntityException exception)
             {
                 return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
             }
@@ -100,14 +101,14 @@ namespace ForumSystemTeamFour.Controllers
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
-            catch (InvalidOperationException exception)
+            catch (EntityNotFoundException exception)
             {
-                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message); //ToDo Custom Exceptions
+                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message); 
             }
-            /*catch (InvalidOperationException exception)
+            catch (DuplicateEntityException exception)
             {
-                return this.StatusCode(StatusCodes.Status409Conflict, exception.Message); //ToDo Custom Exceptions
-            }*/
+                return this.StatusCode(StatusCodes.Status409Conflict, exception.Message); 
+            }
         }
 
         [HttpDelete("{id}")]
@@ -119,7 +120,7 @@ namespace ForumSystemTeamFour.Controllers
 
                 return this.StatusCode(StatusCodes.Status200OK, deletedUser);
             }
-            catch (InvalidOperationException exception) //ToDo Custom Exceptions
+            catch (EntityNotFoundException exception) 
             {
                 return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
