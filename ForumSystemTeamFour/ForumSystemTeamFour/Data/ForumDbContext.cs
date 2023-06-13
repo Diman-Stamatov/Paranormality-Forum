@@ -28,7 +28,8 @@ namespace ForumSystemTeamFour.Data
                 LastName = "LastNameOne",
                 Username = "UsernameOne",
                 Email = "FirstnameOne@Lastname.com",
-                Password = "passwordOne"
+                Password = "passwordOne",
+                IsAdmin = true
                 },
                 new User{Id = 2,
                 FirstName = "FirstNameTwo",

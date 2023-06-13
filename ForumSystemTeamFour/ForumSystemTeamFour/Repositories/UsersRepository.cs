@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ForumSystemTeamFour.Data;
 using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
@@ -12,58 +13,20 @@ namespace ForumSystemTeamFour.Repositories
     
     public class UsersRepository : IUsersRepository
     {
-        static int NextId = 1;
-        private List<User> users;
+        private readonly ForumDbContext context;
         
-
-        public UsersRepository()
+        public UsersRepository(ForumDbContext context)
         {
-            users = new List<User>()
-            {
-                new User{Id = NextId++,
-                FirstName = "FirstNameOne",
-                LastName = "LastNameOne",
-                Username = "UsernameOne",
-                Email = "FirstnameOne@Lastname.com",
-                Password = "passwordOne"
-                },
-                new User{Id = NextId++,
-                FirstName = "FirstNameTwo",
-                LastName = "LastNameTwo",
-                Username = "UsernameTwo",
-                Email = "FirstnameTwo@Lastname.com",
-                Password = "passwordTwo"
-                },
-                new User{Id = NextId++,
-                FirstName = "FirstNameThree",
-                LastName = "LastNameThree",
-                Username = "UsernameThree",
-                Email = "FirstnameThree@Lastname.com",
-                Password = "passwordThree"
-                },
-                new User{Id = NextId++,
-                FirstName = "FirstNameFour",
-                LastName = "LastNameFour",
-                Username = "UsernameFour",
-                Email = "FirstnameFour@Lastname.com",
-                Password = "passwordFour"
-                },
-                new User{Id = NextId++,
-                FirstName = "FirstNameFive",
-                LastName = "LastNameFive",
-                Username = "UsernameFive",
-                Email = "FirstnameFive@Lastname.com",
-                Password = "passwordFive"
-                }
-            };
+            this.context = context;
         }
 
         public User Create(User user)        
         {
             CheckDuplicateUsername(user.Username);
             CheckDuplicateEmail(user.Email);
-            user.Id = NextId++;            
-            this.users.Add(user);
+                        
+            context.Users.Add(user);
+            context.SaveChanges();
             return user;
         }
 
@@ -71,13 +34,15 @@ namespace ForumSystemTeamFour.Repositories
         {
             //ToDo Validation
             var userToDelete = this.GetByUsername(username);
-            this.users.Remove(userToDelete);
+            context.Users.Remove(userToDelete);
+            context.SaveChanges();
+
             return userToDelete;
         }
 
         public List<User> FilterBy(UserQueryParameters filterParameters)
         {
-            var filteredList = this.users;
+            var filteredList = context.Users.ToList();
             if (!string.IsNullOrEmpty(filterParameters.FirstName))
             {
                 filteredList = filteredList.FindAll(user => user.FirstName == filterParameters.FirstName);
@@ -91,6 +56,12 @@ namespace ForumSystemTeamFour.Repositories
             if (!string.IsNullOrEmpty(filterParameters.Username))
             {                
                 filteredList = filteredList.FindAll(user => user.Username == filterParameters.Username);
+            }
+
+            if (!string.IsNullOrEmpty(filterParameters.Email))
+            {
+                //ToDo Validation
+                filteredList = filteredList.FindAll(user => user.Email == filterParameters.Email);
             }
 
             if (filterParameters.Blocked != null)
@@ -127,22 +98,23 @@ namespace ForumSystemTeamFour.Repositories
 
         public List<User> GetAll()
         {
-            return this.users;
+            return context.Users.ToList();
         }
         
         public User GetByUsername(string username)
         {
-            var foundUser = this.users.FirstOrDefault(user=>user.Username == username);
-            return foundUser ?? throw new EntityNotFoundException($"No user with the Username \"{0}\" exists on the forum!");
+            var foundUser = context.Users.FirstOrDefault(user=>user.Username == username);
+            return foundUser ?? throw new EntityNotFoundException($"No user with the Username \"{username}\" exists on the forum!");
         }
 
         public User Update(string username, UserUpdateData updateData)
         {
             //ToDo Validation
+            var userToUpdate = this.GetByUsername(username);
+            
             CheckDuplicateUsername(updateData.Username);
             CheckDuplicateEmail(updateData.Email);
 
-            var userToUpdate = this.GetByUsername(username);
             userToUpdate.FirstName = updateData.FirstName ?? userToUpdate.FirstName;
             userToUpdate.LastName = updateData.LastName ?? userToUpdate.LastName;
             userToUpdate.Email = updateData.Email ?? userToUpdate.Email;
@@ -154,13 +126,16 @@ namespace ForumSystemTeamFour.Repositories
                 //ToDo Validation
                 userToUpdate.PhoneNumber = updateData.PhoneNumber;
             }
-            
+
+            context.SaveChanges();
             return userToUpdate;
         }        
 
         public User PromoteToAdmin(string username)
         {
             var userToPromote = this.GetByUsername(username);
+            //ToDo Validation
+
             if (userToPromote == null)
             {
                 throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
@@ -168,15 +143,18 @@ namespace ForumSystemTeamFour.Repositories
             if (userToPromote.IsAdmin==true)
             {
                 throw new InvalidUserInputException($"\"{username}\" is already an Administrator!");
-            }
-            //ToDo Validation
+            }            
             userToPromote.IsAdmin = true;
+
+            context.SaveChanges();
             return userToPromote;
         }
 
         public User DemoteFromAdmin(string username)
         {
             var userToDemote = this.GetByUsername(username);
+            //ToDo Validation
+
             if (userToDemote == null)
             {
                 throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
@@ -184,32 +162,17 @@ namespace ForumSystemTeamFour.Repositories
             if (userToDemote.IsAdmin == false)
             {
                 throw new InvalidUserInputException($"\"{username}\" is already a basic user!");
-            }
-            //ToDo Validation
+            }            
             userToDemote.IsAdmin = false;
+
+            context.SaveChanges();
             return userToDemote;
         }
-
-        private void CheckDuplicateUsername(string username)
-        {
-            var foundUser = this.users.FirstOrDefault(user => user.Username == username);
-            if (foundUser != null)
-            {
-                throw new DuplicateEntityException($"The username \"{username}\" is already in use!");
-            }
-        }
-        private void CheckDuplicateEmail(string email)
-        {
-            var foundUser = this.users.FirstOrDefault(user => user.Email == email);
-            if (foundUser != null)
-            {
-                throw new DuplicateEntityException($"The email \"{email}\" is already in use!");
-            }
-        }        
 
         public User Block(string username)
         {
             var userToBlock = this.GetByUsername(username);
+            //ToDo Validation
             if (userToBlock == null)
             {
                 throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
@@ -217,15 +180,17 @@ namespace ForumSystemTeamFour.Repositories
             if (userToBlock.Blocked == true)
             {
                 throw new InvalidUserInputException($"\"{username}\" is already blocked!");
-            }
-            //ToDo Validation
+            }            
             userToBlock.Blocked = true;
+
+            context.SaveChanges();
             return userToBlock;
         }
 
         public User Unblock(string username)
         {
             var userToUnblock = this.GetByUsername(username);
+            //ToDo Validation
             if (userToUnblock == null)
             {
                 throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
@@ -233,10 +198,27 @@ namespace ForumSystemTeamFour.Repositories
             if (userToUnblock.Blocked == false)
             {
                 throw new InvalidUserInputException($"\"{username}\" hasn't been blocked!");
-            }
-            //ToDo Validation
+            }            
             userToUnblock.Blocked = false;
+
+            context.SaveChanges();
             return userToUnblock;
+        }
+        private void CheckDuplicateUsername(string username)
+        {
+            var foundUser = context.Users.FirstOrDefault(user => user.Username == username);
+            if (foundUser != null)
+            {
+                throw new DuplicateEntityException($"The username \"{username}\" is already in use!");
+            }
+        }
+        private void CheckDuplicateEmail(string email)
+        {
+            var foundUser = context.Users.FirstOrDefault(user => user.Email == email);
+            if (foundUser != null)
+            {
+                throw new DuplicateEntityException($"The email \"{email}\" is already in use!");
+            }
         }
     }
 }

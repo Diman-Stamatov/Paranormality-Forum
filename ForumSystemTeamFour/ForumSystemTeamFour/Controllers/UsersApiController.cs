@@ -6,6 +6,7 @@ using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 
 namespace ForumSystemTeamFour.Controllers
@@ -29,15 +30,17 @@ namespace ForumSystemTeamFour.Controllers
             try
             {
                 List<User> result = this.userServices.FilterBy(filterParameters);
-
                 return this.StatusCode(StatusCodes.Status200OK, result);
             }
             catch (EntityNotFoundException exception)
             {
-
                 return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
-            
+            catch (UnauthorizedAccessException exception)
+            {
+                return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
+
         }       
 
         [HttpPost("")]
@@ -55,8 +58,9 @@ namespace ForumSystemTeamFour.Controllers
                 return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
             }
         }
+
         [Route("update/{username}")]
-        [HttpPut("{username}")]
+        [HttpPatch("{username}")]
         public IActionResult UpdateUser(string username, [FromQuery] UserUpdateData updateData)
         {
             try
@@ -76,7 +80,7 @@ namespace ForumSystemTeamFour.Controllers
         }
 
         [Route("promote/{username}")]
-        [HttpPut("{username}")]
+        [HttpPatch("{username}")]
         public IActionResult PromoteToAdmin(string username)
         {
             try
@@ -96,7 +100,7 @@ namespace ForumSystemTeamFour.Controllers
         }
 
         [Route("demote/{username}")]
-        [HttpPut("{username}")]
+        [HttpPatch("{username}")]
         public IActionResult DemoteFromAdmin(string username)
         {
             try
@@ -116,7 +120,7 @@ namespace ForumSystemTeamFour.Controllers
         }
 
         [Route("block/{username}")]
-        [HttpPut("{username}")]
+        [HttpPatch("{username}")]
         public IActionResult Block(string username)
         {
             try
@@ -136,7 +140,7 @@ namespace ForumSystemTeamFour.Controllers
         }
 
         [Route("unblock/{username}")]
-        [HttpPut("{username}")]
+        [HttpPatch("{username}")]
         public IActionResult Unblock(string username)
         {
             try
