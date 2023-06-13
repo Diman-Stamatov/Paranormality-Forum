@@ -5,7 +5,7 @@ namespace ForumSystemTeamFour.Models
 {
     public abstract class Post : IPost
     {
-        public int PostId { get; set; }
+        public int Id { get; set; }
         public DateTime CreationDate { get; set; }
         public int AuthorId { get; set; }
         public User Author { get; set; }
