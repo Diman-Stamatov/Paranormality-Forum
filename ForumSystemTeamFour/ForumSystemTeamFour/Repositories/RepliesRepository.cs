@@ -38,7 +38,7 @@ namespace ForumSystemTeamFour.Repositories
             IEnumerable<Reply> replies = context.Replies;
             List<Reply> result = new List<Reply>();
 
-            if (!string.IsNullOrEmpty(filterParameters.UserName))
+            if (!string.IsNullOrWhiteSpace(filterParameters.UserName))
             {
                 result.AddRange(FilterByUserName(replies, filterParameters.UserName));
             }
@@ -54,11 +54,11 @@ namespace ForumSystemTeamFour.Repositories
 
             return result;
         }
-        private IEnumerable<Reply> FilterByUserName(IEnumerable<Reply> replies, string? userName)
+        private IEnumerable<Reply> FilterByUserName(IEnumerable<Reply> replies, string userName)
         {
             return replies.Where(r => r.Author.Username == userName);
         }
-        private IEnumerable<Reply> FilterByEmail(IEnumerable<Reply> replies, string? email)
+        private IEnumerable<Reply> FilterByEmail(IEnumerable<Reply> replies, string email)
         {
             return replies.Where(r => r.Author.Email == email);
         }
