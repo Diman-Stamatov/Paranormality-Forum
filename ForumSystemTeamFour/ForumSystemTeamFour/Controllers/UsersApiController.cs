@@ -6,6 +6,7 @@ using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace ForumSystemTeamFour.Controllers
 {

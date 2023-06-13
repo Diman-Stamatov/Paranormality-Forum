@@ -1,4 +1,5 @@
-﻿using ForumSystemTeamFour.Models.Interfaces;
+﻿using System;
+using ForumSystemTeamFour.Models.Interfaces;
 
 namespace ForumSystemTeamFour.Models
 {

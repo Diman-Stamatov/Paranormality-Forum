@@ -1,4 +1,5 @@
-﻿using ForumSystemTeamFour.Models;
+﻿using System.Collections.Generic;
+using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Repositories;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;

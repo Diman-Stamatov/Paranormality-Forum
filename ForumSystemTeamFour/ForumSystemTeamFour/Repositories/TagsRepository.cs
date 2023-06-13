@@ -1,4 +1,6 @@
-﻿using ForumSystemTeamFour.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Repositories.Interfaces;
 
 namespace ForumSystemTeamFour.Repositories

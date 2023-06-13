@@ -1,4 +1,6 @@
-﻿namespace ForumSystemTeamFour.Models.Interfaces
+﻿using System.Collections.Generic;
+
+namespace ForumSystemTeamFour.Models.Interfaces
 {
     public interface IThread : IPost
     {

@@ -1,4 +1,5 @@
-﻿using ForumSystemTeamFour.Models;
+﻿using System.Collections.Generic;
+using ForumSystemTeamFour.Models;
 
 namespace ForumSystemTeamFour.Services.Interfaces
 {

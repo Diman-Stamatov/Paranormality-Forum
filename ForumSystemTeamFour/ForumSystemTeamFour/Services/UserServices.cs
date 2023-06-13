@@ -1,4 +1,5 @@
-﻿using ForumSystemTeamFour.Models;
+﻿using System.Collections.Generic;
+using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories;
 using ForumSystemTeamFour.Repositories.Interfaces;

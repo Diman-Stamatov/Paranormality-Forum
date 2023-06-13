@@ -1,4 +1,5 @@
 ﻿using ForumSystemTeamFour.Models.Interfaces;
+using System.Collections.Generic;
 
 namespace ForumSystemTeamFour.Models
 {

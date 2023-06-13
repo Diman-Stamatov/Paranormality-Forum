@@ -1,4 +1,6 @@
-﻿namespace ForumSystemTeamFour.Exceptions
+﻿using System;
+
+namespace ForumSystemTeamFour.Exceptions
 {
     public class InvalidUserInputException : ApplicationException
     {
