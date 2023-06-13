@@ -52,6 +52,8 @@ namespace ForumSystemTeamFour.Repositories
                 result.AddRange(FilterByCreationDate(replies, filterParameters.CreationDate.Value));
             }
 
+            if (result.Count == 0) { throw new EntityNotFoundException("No replies with the specified filter parameters were found."); }
+
             return result;
         }
         private IEnumerable<Reply> FilterByUserName(IEnumerable<Reply> replies, string userName)
@@ -100,7 +102,7 @@ namespace ForumSystemTeamFour.Repositories
         public Reply DownVote(int id)
         {
             var replyToDownVote = GetById(id);
-            replyToDownVote.Likes -= 1;
+            replyToDownVote.Dislikes += 1;
 
             context.Replies.Update(replyToDownVote);
             context.SaveChanges();
