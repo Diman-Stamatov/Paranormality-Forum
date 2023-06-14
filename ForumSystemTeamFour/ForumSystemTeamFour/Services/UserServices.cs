@@ -4,22 +4,29 @@ using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories;
 using ForumSystemTeamFour.Repositories.Interfaces;
+using ForumSystemTeamFour.Security;
 using ForumSystemTeamFour.Services.Interfaces;
+
 
 namespace ForumSystemTeamFour.Services
 {
     public class UserServices : IUserServices
     {
         private readonly IUsersRepository repository;
+        private readonly ForumSecurity forumSecurity;
 
-        public UserServices(IUsersRepository repository) 
+        public UserServices(IUsersRepository repository, ForumSecurity forumSecurity) 
         {
             this.repository = repository;
+            this.forumSecurity = forumSecurity;
         }
 
-        public User Block(string username)
+        public User Block(string login, string usernameToBlock)
         {
-            return this.repository.Block(username);
+            var loggedUser = forumSecurity.Authenticate(login);
+            forumSecurity.AuthorizeAdmin(loggedUser);
+
+            return this.repository.Block(usernameToBlock);
         }
 
         public User Create(User user)
@@ -27,44 +34,58 @@ namespace ForumSystemTeamFour.Services
            return this.repository.Create(user);
         }
 
-        public User Delete(string username)
+        public User Delete(string login, string usernameToDelete)
         {
-           return this.repository.Delete(username);
+            var loggedUser = forumSecurity.Authenticate(login);
+            var userToDelete = this.GetByUsername(usernameToDelete);
+            forumSecurity.AuthorizeUser(loggedUser, userToDelete);
+
+            return this.repository.Delete(usernameToDelete);
         }
 
-        public User DemoteFromAdmin(string username)
+        public User DemoteFromAdmin(string login, string usernameToDemote)
         {
-            return this.repository.DemoteFromAdmin(username);
+            var loggedUser = forumSecurity.Authenticate(login);
+            forumSecurity.AuthorizeAdmin(loggedUser);
+
+            return this.repository.DemoteFromAdmin(usernameToDemote);
         }
 
-        public List<UserResponseDto> FilterBy(UserQueryParameters filterParameters)
+        public List<UserResponseDto> FilterBy(string login, UserQueryParameters filterParameters)
         {
-            return this.repository.FilterBy(filterParameters);
-        }
+            var loggedUser = forumSecurity.Authenticate(login);
 
-        public List<UserResponseDto> GetAll()
-        {
-            return this.repository.GetAll();
-        }
-        
+            return this.repository.FilterBy(loggedUser, filterParameters);
+        }   
+
         public User GetByUsername(string username)
         {
             return this.repository.GetByUsername(username);
         }
 
-        public User PromoteToAdmin(string username)
+        public User PromoteToAdmin(string login, string usernameToPromote)
         {
-            return this.repository.PromoteToAdmin(username);
+            var loggedUser = forumSecurity.Authenticate(login);
+            forumSecurity.AuthorizeAdmin(loggedUser);
+
+            return this.repository.PromoteToAdmin(usernameToPromote);
         }
 
-        public User Unblock(string username)
+        public User Unblock(string login, string usernameToUnblock)
         {
-            return this.repository.Unblock(username);
+            var loggedUser = forumSecurity.Authenticate(login);
+            forumSecurity.AuthorizeAdmin(loggedUser);
+
+            return this.repository.Unblock(usernameToUnblock);
         }
 
-        public User Update(string username, UserUpdateData updateData)
+        public User Update(string login, string usernameToUpdate, UserUpdateData updateData)
         {
-            return this.repository.Update(username, updateData);
+            var loggedUser = forumSecurity.Authenticate(login);
+            var userToUpdate = this.GetByUsername(usernameToUpdate);
+            forumSecurity.AuthorizeUser(loggedUser, userToUpdate);
+
+            return this.repository.Update(usernameToUpdate, updateData);
         }
     }
 }
