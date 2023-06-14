@@ -1,5 +1,6 @@
 ﻿using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
+using System.Collections.Generic;
 
 namespace ForumSystemTeamFour.Mappers
 {
@@ -7,7 +8,7 @@ namespace ForumSystemTeamFour.Mappers
     {
         
 
-        public User Map(UserDto userDto) 
+        public User Map(UserCreateDto userDto) 
         {            
             return new User
             {
@@ -17,6 +18,27 @@ namespace ForumSystemTeamFour.Mappers
                 Username = userDto.Username,
                 Password = userDto.Password
             };
+        }
+        public UserResponseDto Map(User user)
+        {
+            return new UserResponseDto
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Username = user.Username,
+                Blocked = user.Blocked,
+            };
+        }
+        public List<UserResponseDto> Map(List<User> users)
+        {
+            var mappedUsers = new List<UserResponseDto>();
+            foreach (var user in users)
+            {
+                var mappedUser = this.Map(user);
+                mappedUsers.Add(mappedUser);
+            }
+            return mappedUsers;
         }
     }
 }

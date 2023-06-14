@@ -2,7 +2,7 @@
 
 namespace ForumSystemTeamFour.Models.DTOs
 {
-    public class UserDto
+    public class UserCreateDto
     {
         private const string StringEmptyMessage = "Please specify a valid {0}!";
         private const string StringMinLengthMessage = "The {0} must be at least {1} characters long!";

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ForumSystemTeamFour.Models;
+using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories;
 using ForumSystemTeamFour.Repositories.Interfaces;
@@ -36,12 +37,12 @@ namespace ForumSystemTeamFour.Services
             return this.repository.DemoteFromAdmin(username);
         }
 
-        public List<User> FilterBy(UserQueryParameters filterParameters)
+        public List<UserResponseDto> FilterBy(UserQueryParameters filterParameters)
         {
             return this.repository.FilterBy(filterParameters);
         }
 
-        public List<User> GetAll()
+        public List<UserResponseDto> GetAll()
         {
             return this.repository.GetAll();
         }

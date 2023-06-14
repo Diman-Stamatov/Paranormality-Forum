@@ -29,7 +29,7 @@ namespace ForumSystemTeamFour.Controllers
         {
             try
             {
-                List<User> result = this.userServices.FilterBy(filterParameters);
+                List<UserResponseDto> result = this.userServices.FilterBy(filterParameters);
                 return this.StatusCode(StatusCodes.Status200OK, result);
             }
             catch (EntityNotFoundException exception)
@@ -44,7 +44,7 @@ namespace ForumSystemTeamFour.Controllers
         }       
 
         [HttpPost("")]
-        public IActionResult CreateUser([FromBody] UserDto userDto)
+        public IActionResult CreateUser([FromBody] UserCreateDto userDto)
         {
             try
             {

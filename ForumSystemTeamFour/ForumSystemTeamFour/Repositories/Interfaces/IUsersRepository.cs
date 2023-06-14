@@ -7,8 +7,8 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
 {
     public interface IUsersRepository
     {
-        List<User> GetAll();
-        List<User> FilterBy(UserQueryParameters filterParameters);
+        List<UserResponseDto> GetAll();
+        List<UserResponseDto> FilterBy(UserQueryParameters filterParameters);
         User GetByUsername(string username);        
         User Create(User user);
         User Update(string username, UserUpdateData updateData);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ForumSystemTeamFour.Data;
 using ForumSystemTeamFour.Exceptions;
+using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
@@ -14,10 +15,12 @@ namespace ForumSystemTeamFour.Repositories
     public class UsersRepository : IUsersRepository
     {
         private readonly ForumDbContext context;
-        
-        public UsersRepository(ForumDbContext context)
+        private readonly UserMapper userMapper;
+
+        public UsersRepository(ForumDbContext context, UserMapper userMapper)
         {
             this.context = context;
+            this.userMapper = userMapper;
         }
 
         public User Create(User user)        
@@ -40,65 +43,67 @@ namespace ForumSystemTeamFour.Repositories
             return userToDelete;
         }
 
-        public List<User> FilterBy(UserQueryParameters filterParameters)
+        public List<UserResponseDto> FilterBy(UserQueryParameters filterParameters)
         {
-            var filteredList = context.Users.ToList();
+            var filteredUsers = context.Users.ToList();
             if (!string.IsNullOrEmpty(filterParameters.FirstName))
             {
-                filteredList = filteredList.FindAll(user => user.FirstName == filterParameters.FirstName);
+                filteredUsers = filteredUsers.FindAll(user => user.FirstName == filterParameters.FirstName);
             }
 
             if (!string.IsNullOrEmpty(filterParameters.LastName))
             {
-                filteredList = filteredList.FindAll(user => user.LastName == filterParameters.LastName);
+                filteredUsers = filteredUsers.FindAll(user => user.LastName == filterParameters.LastName);
             }
 
             if (!string.IsNullOrEmpty(filterParameters.Username))
             {                
-                filteredList = filteredList.FindAll(user => user.Username == filterParameters.Username);
+                filteredUsers = filteredUsers.FindAll(user => user.Username == filterParameters.Username);
             }
 
             if (!string.IsNullOrEmpty(filterParameters.Email))
             {
                 //ToDo Validation
-                filteredList = filteredList.FindAll(user => user.Email == filterParameters.Email);
+                filteredUsers = filteredUsers.FindAll(user => user.Email == filterParameters.Email);
             }
 
             if (filterParameters.Blocked != null)
             {
-                filteredList = filteredList.FindAll(user => user.Blocked == filterParameters.Blocked);
+                filteredUsers = filteredUsers.FindAll(user => user.Blocked == filterParameters.Blocked);
             }
 
             if (!string.IsNullOrEmpty(filterParameters.SortBy))
             {
                 if (filterParameters.SortBy.Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    filteredList = filteredList.OrderBy(user => user.FirstName).ToList();
+                    filteredUsers = filteredUsers.OrderBy(user => user.FirstName).ToList();
                 }
                 else if (filterParameters.SortBy.Equals("lastname", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    filteredList = filteredList.OrderBy(user => user.LastName).ToList();
+                    filteredUsers = filteredUsers.OrderBy(user => user.LastName).ToList();
                 }
                 else if (filterParameters.SortBy.Equals("username", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    filteredList = filteredList.OrderBy(user => user.Username).ToList(); 
+                    filteredUsers = filteredUsers.OrderBy(user => user.Username).ToList(); 
                 }
 
                 if (!string.IsNullOrEmpty(filterParameters.SortOrder) && filterParameters.SortOrder.Equals("desc", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    filteredList.Reverse();
+                    filteredUsers.Reverse();
                 }
             }
-            if (filteredList.Count == 0)
+            if (filteredUsers.Count == 0)
             {
                 throw new EntityNotFoundException("No users correspond to the specified search parameters!");
             }
-            return filteredList;
+            
+            return userMapper.Map(filteredUsers);
         }
 
-        public List<User> GetAll()
+        public List<UserResponseDto> GetAll()
         {
-            return context.Users.ToList();
+            var allUsers = context.Users.ToList();
+            return userMapper.Map(allUsers);
         }
         
         public User GetByUsername(string username)
