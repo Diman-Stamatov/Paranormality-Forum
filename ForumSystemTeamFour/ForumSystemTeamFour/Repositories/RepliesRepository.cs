@@ -4,6 +4,7 @@ using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,26 +36,37 @@ namespace ForumSystemTeamFour.Repositories
 
         public List<Reply> FilterBy(ReplyQueryParameters filterParameters)
         {
-            IEnumerable<Reply> replies = context.Replies;
-            List<Reply> result = new List<Reply>();
+            IEnumerable<Reply> result = context.Replies.ToList();
 
-            if (!string.IsNullOrWhiteSpace(filterParameters.UserName))
-            {
-                result.AddRange(FilterByUserName(replies, filterParameters.UserName));
+            // Filter
+            result = FilterByUserAttribute(result, filterParameters.UserName, filterParameters.Email);
+            result = FilterByCreationDate(result, filterParameters.CreationDate);
+
+            // Sort and order
+            if (result.Count() == 0)
+            { 
+                throw new EntityNotFoundException("No replies with the specified filter parameters were found.");
             }
-            else if (!string.IsNullOrWhiteSpace(filterParameters.Email))
+            else
             {
-                result.AddRange(FilterByEmail(replies, filterParameters.Email));
+                result = SortBy(result, filterParameters.SortBy);
+                result = SortOrder(result, filterParameters.SortOrder);
             }
 
-            if (filterParameters.CreationDate.HasValue)
+            return result.ToList();
+        }
+
+        private IEnumerable<Reply> FilterByUserAttribute(IEnumerable<Reply> replies, string userName, string email)
+        {
+            if (!string.IsNullOrWhiteSpace(userName))
             {
-                result.AddRange(FilterByCreationDate(replies, filterParameters.CreationDate.Value));
+                return FilterByUserName(replies, userName);
             }
-
-            if (result.Count == 0) { throw new EntityNotFoundException("No replies with the specified filter parameters were found."); }
-
-            return result;
+            else if (!string.IsNullOrWhiteSpace(email))
+            {
+                return FilterByEmail(replies, email);
+            }
+            return replies;
         }
         private IEnumerable<Reply> FilterByUserName(IEnumerable<Reply> replies, string userName)
         {
@@ -64,10 +76,32 @@ namespace ForumSystemTeamFour.Repositories
         {
             return replies.Where(r => r.Author.Email == email);
         }
-        private IEnumerable<Reply> FilterByCreationDate(IEnumerable<Reply> replies, DateTime date)
+        private IEnumerable<Reply> FilterByCreationDate(IEnumerable<Reply> replies, DateTime? date)
         {
-            string datePattern = "yyyy-MM-dd";
-            return replies.Where(r => r.CreationDate.ToString(datePattern) == date.ToString(datePattern));
+            if (date.HasValue)
+            {
+                DateTime dateToCompare = (DateTime)date;
+                string datePattern = "yyyy-MM-dd";
+                return replies.Where(r => r.CreationDate.ToString(datePattern) == dateToCompare.ToString(datePattern));
+            }
+            return replies;
+        }
+        private IEnumerable<Reply> SortBy(IEnumerable<Reply> replies, string sortCriteria)
+        {
+            switch (sortCriteria.ToLower())
+            {
+                case "username":
+                    return replies.OrderBy(reply => reply.Author.Username);
+                case "email":
+                    return replies.OrderBy(reply => reply.Author.Email);
+                // The following handles null or empty strings
+                default:
+                    return replies;
+            }
+        }
+        private IEnumerable<Reply> SortOrder(IEnumerable<Reply> replies, string sortOrder)
+        {
+            return (sortOrder.ToLower() == "desc") ? replies.Reverse() : replies;
         }
         public Reply Update(int id, Reply reply)
         {
@@ -110,6 +144,5 @@ namespace ForumSystemTeamFour.Repositories
             return replyToDownVote;
         }
 
-        // TODO: Add soting and ordering
     }
 }
