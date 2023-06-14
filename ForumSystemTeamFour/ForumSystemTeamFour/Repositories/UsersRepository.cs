@@ -43,7 +43,7 @@ namespace ForumSystemTeamFour.Repositories
             return userToDelete;
         }
 
-        public List<UserResponseDto> FilterBy(UserQueryParameters filterParameters)
+        public List<UserResponseDto> FilterBy(User loggedUser, UserQueryParameters filterParameters)
         {
             var filteredUsers = context.Users.ToList();
             if (!string.IsNullOrEmpty(filterParameters.FirstName))
@@ -63,7 +63,10 @@ namespace ForumSystemTeamFour.Repositories
 
             if (!string.IsNullOrEmpty(filterParameters.Email))
             {
-                //ToDo Validation
+                if (!loggedUser.IsAdmin)
+                {
+                    throw new UnauthorizedAccessException("Only an administrator can search by E-mail!");
+                }
                 filteredUsers = filteredUsers.FindAll(user => user.Email == filterParameters.Email);
             }
 
@@ -114,7 +117,7 @@ namespace ForumSystemTeamFour.Repositories
 
         public User Update(string username, UserUpdateData updateData)
         {
-            //ToDo Validation
+            
             var userToUpdate = this.GetByUsername(username);
             
             CheckDuplicateUsername(updateData.Username);
@@ -128,7 +131,10 @@ namespace ForumSystemTeamFour.Repositories
             
             if (updateData.PhoneNumber!=null)
             {
-                //ToDo Validation
+                if (!userToUpdate.IsAdmin)
+                {
+                    throw new UnauthorizedAccessException("Only administrators can specify a Phone Number!");
+                }
                 userToUpdate.PhoneNumber = updateData.PhoneNumber;
             }
 
@@ -139,8 +145,7 @@ namespace ForumSystemTeamFour.Repositories
         public User PromoteToAdmin(string username)
         {
             var userToPromote = this.GetByUsername(username);
-            //ToDo Validation
-
+            
             if (userToPromote == null)
             {
                 throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
@@ -158,8 +163,7 @@ namespace ForumSystemTeamFour.Repositories
         public User DemoteFromAdmin(string username)
         {
             var userToDemote = this.GetByUsername(username);
-            //ToDo Validation
-
+            
             if (userToDemote == null)
             {
                 throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
@@ -177,7 +181,7 @@ namespace ForumSystemTeamFour.Repositories
         public User Block(string username)
         {
             var userToBlock = this.GetByUsername(username);
-            //ToDo Validation
+            
             if (userToBlock == null)
             {
                 throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
@@ -195,7 +199,7 @@ namespace ForumSystemTeamFour.Repositories
         public User Unblock(string username)
         {
             var userToUnblock = this.GetByUsername(username);
-            //ToDo Validation
+            
             if (userToUnblock == null)
             {
                 throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");

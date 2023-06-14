@@ -1,6 +1,7 @@
 ﻿using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.Interfaces;
+using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
 using System;
 
@@ -8,10 +9,10 @@ namespace ForumSystemTeamFour.Security
 {
     public class ForumSecurity
     {
-        private readonly IUserServices userServices;
-        public ForumSecurity(IUserServices userServices)
+        private readonly IUsersRepository usersRepository;
+        public ForumSecurity(IUsersRepository usersRepository)
         {
-            this.userServices = userServices;
+            this.usersRepository = usersRepository;
         }
 
         public User Authenticate(string login)
@@ -19,7 +20,7 @@ namespace ForumSystemTeamFour.Security
             var loginData = login.Split(":");
             string loginUsername = loginData[0];
             string loginPassword = loginData[1];
-            var authenticatedUser = this.userServices.GetByUsername(loginUsername);
+            var authenticatedUser = this.usersRepository.GetByUsername(loginUsername);
             if (authenticatedUser.Password != loginPassword)
             {
                 throw new InvalidUserInputException("The provided password is invalid!");

@@ -3,6 +3,7 @@ using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
+using ForumSystemTeamFour.Security;
 using ForumSystemTeamFour.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,19 +18,21 @@ namespace ForumSystemTeamFour.Controllers
     {
         private readonly IUserServices userServices;
         private readonly UserMapper userMapper;
+        private readonly ForumSecurity forumSecurity;
 
-        public UsersApiController(IUserServices userServices, UserMapper userMapper)
+        public UsersApiController(IUserServices userServices, UserMapper userMapper, ForumSecurity forumSecurity)
         {
             this.userServices = userServices;
             this.userMapper = userMapper;
+            this.forumSecurity = forumSecurity;
         }
 
         [HttpGet("")]
-        public IActionResult GetUsers([FromQuery] UserQueryParameters filterParameters)
+        public IActionResult GetUsers([FromHeader] string login, [FromQuery] UserQueryParameters filterParameters)
         {
             try
             {
-                List<UserResponseDto> result = this.userServices.FilterBy(filterParameters);
+                List<UserResponseDto> result = this.userServices.FilterBy(login, filterParameters);
                 return this.StatusCode(StatusCodes.Status200OK, result);
             }
             catch (EntityNotFoundException exception)
@@ -49,7 +52,7 @@ namespace ForumSystemTeamFour.Controllers
             try
             {
                 var user = this.userMapper.Map(userDto); 
-                var createdUser = this.userServices.Create(user);
+                var createdUser = this.userServices.Create( user);
 
                 return this.StatusCode(StatusCodes.Status201Created, createdUser); 
             }
@@ -61,11 +64,12 @@ namespace ForumSystemTeamFour.Controllers
 
         [Route("update/{username}")]
         [HttpPut("{username}")]
-        public IActionResult UpdateUser(string username, [FromQuery] UserUpdateData updateData)
+        public IActionResult UpdateUser([FromHeader] string login, string username, [FromQuery] UserUpdateData updateData)
         {
+            
             try
             {
-                User updatedUser = this.userServices.Update(username, updateData);
+                User updatedUser = this.userServices.Update(login, username, updateData);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -81,11 +85,12 @@ namespace ForumSystemTeamFour.Controllers
 
         [Route("promote/{username}")]
         [HttpPut("{username}")]
-        public IActionResult PromoteToAdmin(string username)
+        public IActionResult PromoteToAdmin([FromHeader] string login, string username)
         {
+           
             try
             {
-                User updatedUser = this.userServices.PromoteToAdmin(username);
+                User updatedUser = this.userServices.PromoteToAdmin(login, username);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -101,11 +106,12 @@ namespace ForumSystemTeamFour.Controllers
 
         [Route("demote/{username}")]
         [HttpPut("{username}")]
-        public IActionResult DemoteFromAdmin(string username)
+        public IActionResult DemoteFromAdmin([FromHeader] string login, string username)
         {
+            
             try
             {
-                User updatedUser = this.userServices.DemoteFromAdmin(username);
+                User updatedUser = this.userServices.DemoteFromAdmin(login, username);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -121,11 +127,12 @@ namespace ForumSystemTeamFour.Controllers
 
         [Route("block/{username}")]
         [HttpPut("{username}")]
-        public IActionResult Block(string username)
+        public IActionResult Block([FromHeader] string login, string username)
         {
+           
             try
             {
-                User updatedUser = this.userServices.Block(username);
+                User updatedUser = this.userServices.Block(login, username);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -141,11 +148,12 @@ namespace ForumSystemTeamFour.Controllers
 
         [Route("unblock/{username}")]
         [HttpPut("{username}")]
-        public IActionResult Unblock(string username)
+        public IActionResult Unblock([FromHeader] string login, string username)
         {
+            
             try
             {
-                User updatedUser = this.userServices.Unblock(username);
+                User updatedUser = this.userServices.Unblock(login, username);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -160,12 +168,12 @@ namespace ForumSystemTeamFour.Controllers
         }
 
         [HttpDelete("{username}")]
-        public IActionResult DeleteUser(string username)
+        public IActionResult DeleteUser([FromHeader] string login, string username)
         {
-            //ToDo Validation
+            
             try
             {
-                var deletedUser = this.userServices.Delete(username);
+                var deletedUser = this.userServices.Delete(login, username);
 
                 return this.StatusCode(StatusCodes.Status200OK, deletedUser);
             }
