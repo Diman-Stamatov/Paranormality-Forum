@@ -2,6 +2,6 @@
 {
     public interface IReply : IPost
     {
-        int ThreadId { get; set; }
+        int? ThreadId { get; set; }
     }
 }

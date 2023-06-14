@@ -6,7 +6,8 @@ namespace ForumSystemTeamFour.Models.Interfaces
     {
         int Id { get; set; }
         DateTime CreationDate { get; set; }
-        int AuthorId { get; set; }
+        int? AuthorId { get; set; }
+        User Author { get; set; }
         string Content { get; set; }
         int Likes { get; set; }
         int Dislikes { get; set; }

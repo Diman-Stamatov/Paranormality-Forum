@@ -60,7 +60,7 @@ namespace ForumSystemTeamFour.Controllers
         }
 
         [Route("update/{username}")]
-        [HttpPatch("{username}")]
+        [HttpPut("{username}")]
         public IActionResult UpdateUser(string username, [FromQuery] UserUpdateData updateData)
         {
             try
@@ -80,7 +80,7 @@ namespace ForumSystemTeamFour.Controllers
         }
 
         [Route("promote/{username}")]
-        [HttpPatch("{username}")]
+        [HttpPut("{username}")]
         public IActionResult PromoteToAdmin(string username)
         {
             try
@@ -100,7 +100,7 @@ namespace ForumSystemTeamFour.Controllers
         }
 
         [Route("demote/{username}")]
-        [HttpPatch("{username}")]
+        [HttpPut("{username}")]
         public IActionResult DemoteFromAdmin(string username)
         {
             try
@@ -120,7 +120,7 @@ namespace ForumSystemTeamFour.Controllers
         }
 
         [Route("block/{username}")]
-        [HttpPatch("{username}")]
+        [HttpPut("{username}")]
         public IActionResult Block(string username)
         {
             try
@@ -140,7 +140,7 @@ namespace ForumSystemTeamFour.Controllers
         }
 
         [Route("unblock/{username}")]
-        [HttpPatch("{username}")]
+        [HttpPut("{username}")]
         public IActionResult Unblock(string username)
         {
             try
