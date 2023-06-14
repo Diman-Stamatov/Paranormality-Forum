@@ -27,6 +27,7 @@ namespace ForumSystemTeamFour.Repositories
 
         public Tag Delete(int id)
         {
+
             var tagToDelete = this.GetById(id);
 
             context.Tags.Remove(tagToDelete);
