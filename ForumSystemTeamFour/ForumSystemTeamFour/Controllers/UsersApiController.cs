@@ -17,23 +17,19 @@ namespace ForumSystemTeamFour.Controllers
     public class UsersApiController : ControllerBase
     {
         private readonly IUserServices userServices;
-        private readonly UserMapper userMapper;
-        private readonly ForumSecurity forumSecurity;
 
-        public UsersApiController(IUserServices userServices, UserMapper userMapper, ForumSecurity forumSecurity)
+        public UsersApiController(IUserServices userServices)
         {
             this.userServices = userServices;
-            this.userMapper = userMapper;
-            this.forumSecurity = forumSecurity;
         }
 
         [HttpGet("")]
-        public IActionResult GetUsers([FromHeader] string login, [FromQuery] UserQueryParameters filterParameters)
+        public IActionResult FilterUsers([FromHeader] string login, [FromQuery] UserQueryParameters filterParameters)
         {
             try
             {
-                List<UserResponseDto> result = this.userServices.FilterBy(login, filterParameters);
-                return this.StatusCode(StatusCodes.Status200OK, result);
+                List<UserResponseDto> filterResult = this.userServices.FilterBy(login, filterParameters);
+                return this.StatusCode(StatusCodes.Status200OK, filterResult);
             }
             catch (EntityNotFoundException exception)
             {
@@ -43,6 +39,10 @@ namespace ForumSystemTeamFour.Controllers
             {
                 return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
             }
+            catch (BadHttpRequestException exception)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }
 
         }       
 
@@ -51,8 +51,7 @@ namespace ForumSystemTeamFour.Controllers
         {
             try
             {
-                var user = this.userMapper.Map(userDto); 
-                var createdUser = this.userServices.Create( user);
+                var createdUser = this.userServices.Create(userDto);
 
                 return this.StatusCode(StatusCodes.Status201Created, createdUser); 
             }
@@ -60,13 +59,13 @@ namespace ForumSystemTeamFour.Controllers
             {
                 return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
             }
+
         }
 
         [Route("update/{username}")]
         [HttpPut("{username}")]
         public IActionResult UpdateUser([FromHeader] string login, string username, [FromQuery] UserUpdateData updateData)
         {
-            
             try
             {
                 User updatedUser = this.userServices.Update(login, username, updateData);
@@ -81,13 +80,20 @@ namespace ForumSystemTeamFour.Controllers
             {
                 return this.StatusCode(StatusCodes.Status409Conflict, exception.Message); 
             }
+            catch (BadHttpRequestException exception)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
         }
 
         [Route("promote/{username}")]
         [HttpPut("{username}")]
         public IActionResult PromoteToAdmin([FromHeader] string login, string username)
         {
-           
             try
             {
                 User updatedUser = this.userServices.PromoteToAdmin(login, username);
@@ -102,13 +108,20 @@ namespace ForumSystemTeamFour.Controllers
             {
                 return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
             }
+            catch (BadHttpRequestException exception)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
         }
 
         [Route("demote/{username}")]
         [HttpPut("{username}")]
         public IActionResult DemoteFromAdmin([FromHeader] string login, string username)
         {
-            
             try
             {
                 User updatedUser = this.userServices.DemoteFromAdmin(login, username);
@@ -123,13 +136,20 @@ namespace ForumSystemTeamFour.Controllers
             {
                 return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
             }
+            catch (BadHttpRequestException exception)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
         }
 
         [Route("block/{username}")]
         [HttpPut("{username}")]
         public IActionResult Block([FromHeader] string login, string username)
         {
-           
             try
             {
                 User updatedUser = this.userServices.Block(login, username);
@@ -144,13 +164,20 @@ namespace ForumSystemTeamFour.Controllers
             {
                 return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
             }
+            catch (BadHttpRequestException exception)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
         }
 
         [Route("unblock/{username}")]
         [HttpPut("{username}")]
         public IActionResult Unblock([FromHeader] string login, string username)
         {
-            
             try
             {
                 User updatedUser = this.userServices.Unblock(login, username);
@@ -165,12 +192,19 @@ namespace ForumSystemTeamFour.Controllers
             {
                 return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
             }
+            catch (BadHttpRequestException exception)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
         }
 
         [HttpDelete("{username}")]
         public IActionResult DeleteUser([FromHeader] string login, string username)
         {
-            
             try
             {
                 var deletedUser = this.userServices.Delete(login, username);
@@ -180,6 +214,14 @@ namespace ForumSystemTeamFour.Controllers
             catch (EntityNotFoundException exception) 
             {
                 return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            catch (BadHttpRequestException exception)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
             }
         }
     }

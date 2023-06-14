@@ -9,7 +9,7 @@ namespace ForumSystemTeamFour.Services.Interfaces
     {
         List<UserResponseDto> FilterBy(string login, UserQueryParameters filterParameters);
         User GetByUsername(string username);
-        User Create(User user);
+        User Create(UserCreateDto userDto);
         User Update(string login, string usernameToUpdate, UserUpdateData updateData);
         User Delete(string login, string usernameToDelete);
         User Block(string login, string usernameToBlock);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
@@ -14,31 +15,33 @@ namespace ForumSystemTeamFour.Services
     {
         private readonly IUsersRepository repository;
         private readonly ForumSecurity forumSecurity;
-
-        public UserServices(IUsersRepository repository, ForumSecurity forumSecurity) 
+        private readonly UserMapper userMapper;
+        public UserServices(IUsersRepository repository, ForumSecurity forumSecurity, UserMapper userMapper) 
         {
             this.repository = repository;
             this.forumSecurity = forumSecurity;
+            this.userMapper = userMapper;   
         }
 
         public User Block(string login, string usernameToBlock)
         {
             var loggedUser = forumSecurity.Authenticate(login);
-            forumSecurity.AuthorizeAdmin(loggedUser);
+            forumSecurity.CheckAdminAuthorization(loggedUser);
 
             return this.repository.Block(usernameToBlock);
         }
 
-        public User Create(User user)
+        public User Create(UserCreateDto userDto)
         {
-           return this.repository.Create(user);
+            var user = this.userMapper.Map(userDto);
+            return this.repository.Create(user);
         }
 
         public User Delete(string login, string usernameToDelete)
         {
             var loggedUser = forumSecurity.Authenticate(login);
             var userToDelete = this.GetByUsername(usernameToDelete);
-            forumSecurity.AuthorizeUser(loggedUser, userToDelete);
+            forumSecurity.CheckUserAuthorization(loggedUser, userToDelete);
 
             return this.repository.Delete(usernameToDelete);
         }
@@ -46,7 +49,7 @@ namespace ForumSystemTeamFour.Services
         public User DemoteFromAdmin(string login, string usernameToDemote)
         {
             var loggedUser = forumSecurity.Authenticate(login);
-            forumSecurity.AuthorizeAdmin(loggedUser);
+            forumSecurity.CheckAdminAuthorization(loggedUser);
 
             return this.repository.DemoteFromAdmin(usernameToDemote);
         }
@@ -66,7 +69,7 @@ namespace ForumSystemTeamFour.Services
         public User PromoteToAdmin(string login, string usernameToPromote)
         {
             var loggedUser = forumSecurity.Authenticate(login);
-            forumSecurity.AuthorizeAdmin(loggedUser);
+            forumSecurity.CheckAdminAuthorization(loggedUser);
 
             return this.repository.PromoteToAdmin(usernameToPromote);
         }
@@ -74,7 +77,7 @@ namespace ForumSystemTeamFour.Services
         public User Unblock(string login, string usernameToUnblock)
         {
             var loggedUser = forumSecurity.Authenticate(login);
-            forumSecurity.AuthorizeAdmin(loggedUser);
+            forumSecurity.CheckAdminAuthorization(loggedUser);
 
             return this.repository.Unblock(usernameToUnblock);
         }
@@ -83,7 +86,7 @@ namespace ForumSystemTeamFour.Services
         {
             var loggedUser = forumSecurity.Authenticate(login);
             var userToUpdate = this.GetByUsername(usernameToUpdate);
-            forumSecurity.AuthorizeUser(loggedUser, userToUpdate);
+            forumSecurity.CheckUserAuthorization(loggedUser, userToUpdate);
 
             return this.repository.Update(usernameToUpdate, updateData);
         }
