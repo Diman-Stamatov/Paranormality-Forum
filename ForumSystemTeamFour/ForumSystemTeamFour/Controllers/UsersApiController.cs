@@ -1,5 +1,4 @@
 ﻿using ForumSystemTeamFour.Exceptions;
-using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
@@ -172,7 +171,7 @@ namespace ForumSystemTeamFour.Controllers
             }
         }
 
-        [Route("")]
+        
         [HttpPut("unblock/{id}")]
         public IActionResult Unblock([FromHeader] string login, int id)
         {

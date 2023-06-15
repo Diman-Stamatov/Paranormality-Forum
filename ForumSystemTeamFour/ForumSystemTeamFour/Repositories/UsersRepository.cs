@@ -206,7 +206,11 @@ namespace ForumSystemTeamFour.Repositories
             if (userToBlock.Blocked == true)
             {
                 throw new InvalidUserInputException($"\"{userToBlock.Username}\" is already blocked!");
-            }            
+            }
+            if (userToBlock.IsAdmin == true)
+            {
+                throw new InvalidUserInputException($"\"{userToBlock.Username}\" is an Administrator and cannot be blocked!");
+            }
             userToBlock.Blocked = true;
 
             context.SaveChanges();
