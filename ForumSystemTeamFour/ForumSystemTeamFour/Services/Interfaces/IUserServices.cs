@@ -9,12 +9,13 @@ namespace ForumSystemTeamFour.Services.Interfaces
     {
         List<UserResponseDto> FilterBy(string login, UserQueryParameters filterParameters);
         User GetByUsername(string username);
+        User GetById(int id);
         User Create(UserCreateDto userDto);
-        User Update(string login, string usernameToUpdate, UserUpdateData updateData);
-        User Delete(string login, string usernameToDelete);
-        User Block(string login, string usernameToBlock);
-        User Unblock(string login, string usernameToUnblock);
-        User PromoteToAdmin(string login, string usernameToPromote);
-        User DemoteFromAdmin(string login, string usernameToDemote);
+        User Update(string login, int idToUpdate, UserUpdateDto updateData);
+        User Delete(string login, int idToDelete);
+        User Block(string login, int idToBlock);
+        User Unblock(string login, int idToUnblock);
+        User PromoteToAdmin(string login, int idToPromote);
+        User DemoteFromAdmin(string login, int idToDemote);
     }
 }

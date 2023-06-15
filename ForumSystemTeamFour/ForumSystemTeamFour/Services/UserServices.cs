@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using ForumSystemTeamFour.Mappers;
+﻿using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
-using ForumSystemTeamFour.Repositories;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Security;
 using ForumSystemTeamFour.Services.Interfaces;
+using System.Collections.Generic;
 
 
 namespace ForumSystemTeamFour.Services
@@ -16,19 +15,19 @@ namespace ForumSystemTeamFour.Services
         private readonly IUsersRepository repository;
         private readonly ForumSecurity forumSecurity;
         private readonly UserMapper userMapper;
-        public UserServices(IUsersRepository repository, ForumSecurity forumSecurity, UserMapper userMapper) 
+        public UserServices(IUsersRepository repository, ForumSecurity forumSecurity, UserMapper userMapper)
         {
             this.repository = repository;
             this.forumSecurity = forumSecurity;
-            this.userMapper = userMapper;   
+            this.userMapper = userMapper;
         }
 
-        public User Block(string login, string usernameToBlock)
+        public User Block(string login, int idToBlock)
         {
             var loggedUser = forumSecurity.Authenticate(login);
             forumSecurity.CheckAdminAuthorization(loggedUser);
 
-            return this.repository.Block(usernameToBlock);
+            return this.repository.Block(idToBlock);
         }
 
         public User Create(UserCreateDto userDto)
@@ -37,21 +36,21 @@ namespace ForumSystemTeamFour.Services
             return this.repository.Create(user);
         }
 
-        public User Delete(string login, string usernameToDelete)
+        public User Delete(string login, int idToDelete)
         {
             var loggedUser = forumSecurity.Authenticate(login);
-            var userToDelete = this.GetByUsername(usernameToDelete);
+            var userToDelete = this.GetById(idToDelete);
             forumSecurity.CheckUserAuthorization(loggedUser, userToDelete);
 
-            return this.repository.Delete(usernameToDelete);
+            return this.repository.Delete(userToDelete);
         }
 
-        public User DemoteFromAdmin(string login, string usernameToDemote)
+        public User DemoteFromAdmin(string login, int idToDemote)
         {
             var loggedUser = forumSecurity.Authenticate(login);
             forumSecurity.CheckAdminAuthorization(loggedUser);
 
-            return this.repository.DemoteFromAdmin(usernameToDemote);
+            return this.repository.DemoteFromAdmin(idToDemote);
         }
 
         public List<UserResponseDto> FilterBy(string login, UserQueryParameters filterParameters)
@@ -59,36 +58,41 @@ namespace ForumSystemTeamFour.Services
             var loggedUser = forumSecurity.Authenticate(login);
 
             return this.repository.FilterBy(loggedUser, filterParameters);
-        }   
+        }
 
         public User GetByUsername(string username)
         {
             return this.repository.GetByUsername(username);
         }
 
-        public User PromoteToAdmin(string login, string usernameToPromote)
+        public User GetById(int id)
+        {
+            return this.repository.GetById(id);
+        }
+
+        public User PromoteToAdmin(string login, int idToPromote)
         {
             var loggedUser = forumSecurity.Authenticate(login);
             forumSecurity.CheckAdminAuthorization(loggedUser);
 
-            return this.repository.PromoteToAdmin(usernameToPromote);
+            return this.repository.PromoteToAdmin(idToPromote);
         }
 
-        public User Unblock(string login, string usernameToUnblock)
+        public User Unblock(string login, int idToUnblock)
         {
             var loggedUser = forumSecurity.Authenticate(login);
             forumSecurity.CheckAdminAuthorization(loggedUser);
 
-            return this.repository.Unblock(usernameToUnblock);
+            return this.repository.Unblock(idToUnblock);
         }
 
-        public User Update(string login, string usernameToUpdate, UserUpdateData updateData)
+        public User Update(string login, int idToUpdate, UserUpdateDto updateData)
         {
             var loggedUser = forumSecurity.Authenticate(login);
-            var userToUpdate = this.GetByUsername(usernameToUpdate);
+            var userToUpdate = this.GetById(idToUpdate);
             forumSecurity.CheckUserAuthorization(loggedUser, userToUpdate);
 
-            return this.repository.Update(usernameToUpdate, updateData);
+            return this.repository.Update(userToUpdate, updateData);
         }
     }
 }

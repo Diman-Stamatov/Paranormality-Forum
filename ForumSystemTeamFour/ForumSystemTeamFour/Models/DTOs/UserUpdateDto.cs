@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ForumSystemTeamFour.Models.QueryParameters
+namespace ForumSystemTeamFour.Models.DTOs
 {
-    public class UserUpdateData
+    public class UserUpdateDto
     {
-        
+
         private const string StringMinLengthMessage = "The {0} must be at least {1} characters long!";
         private const string StringMaxLengthMessage = "The {0} must be at most {1} characters long!";
 
@@ -29,6 +29,6 @@ namespace ForumSystemTeamFour.Models.QueryParameters
 
         [MinLength(9, ErrorMessage = StringMinLengthMessage)]
         [MaxLength(16, ErrorMessage = StringMaxLengthMessage)]
-        public string PhoneNumber { get; set; }        
+        public string PhoneNumber { get; set; }
     }
 }

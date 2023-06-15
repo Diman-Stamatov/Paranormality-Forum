@@ -18,10 +18,14 @@ namespace ForumSystemTeamFour.Security
         }
 
         public User Authenticate(string login)
-        { 
+        {
+            if (login == null)
+            {
+                throw new BadHttpRequestException("Please provide your login information!");
+            }
             var loginData = login.Split(":");
 
-            if (login==null || loginData.Length == 1)
+            if (loginData.Length == 1)
             {
                 throw new BadHttpRequestException("Please provide your login information!");
             }           

@@ -62,13 +62,13 @@ namespace ForumSystemTeamFour.Controllers
 
         }
 
-        [Route("update/{username}")]
-        [HttpPut("{username}")]
-        public IActionResult UpdateUser([FromHeader] string login, string username, [FromQuery] UserUpdateData updateData)
+        
+        [HttpPut("update/{id}")]
+        public IActionResult UpdateUser([FromHeader] string login, int id, [FromQuery] UserUpdateDto updateData)
         {
             try
             {
-                User updatedUser = this.userServices.Update(login, username, updateData);
+                User updatedUser = this.userServices.Update(login, id, updateData);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -90,13 +90,13 @@ namespace ForumSystemTeamFour.Controllers
             }
         }
 
-        [Route("promote/{username}")]
-        [HttpPut("{username}")]
-        public IActionResult PromoteToAdmin([FromHeader] string login, string username)
+        
+        [HttpPut("promote/{id}")]
+        public IActionResult PromoteToAdmin([FromHeader] string login, int id)
         {
             try
             {
-                User updatedUser = this.userServices.PromoteToAdmin(login, username);
+                User updatedUser = this.userServices.PromoteToAdmin(login, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -118,13 +118,12 @@ namespace ForumSystemTeamFour.Controllers
             }
         }
 
-        [Route("demote/{username}")]
-        [HttpPut("{username}")]
-        public IActionResult DemoteFromAdmin([FromHeader] string login, string username)
+        [HttpPut("demote/{id}")]
+        public IActionResult DemoteFromAdmin([FromHeader] string login, int id)
         {
             try
             {
-                User updatedUser = this.userServices.DemoteFromAdmin(login, username);
+                User updatedUser = this.userServices.DemoteFromAdmin(login, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -145,10 +144,9 @@ namespace ForumSystemTeamFour.Controllers
                 return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
             }
         }
-
-        [Route("block/{username}")]
-        [HttpPut("{username}")]
-        public IActionResult Block([FromHeader] string login, string username)
+                
+        [HttpPut("block/{id}")]
+        public IActionResult Block([FromHeader] string login, int id)
         {
             try
             {
@@ -174,13 +172,13 @@ namespace ForumSystemTeamFour.Controllers
             }
         }
 
-        [Route("unblock/{username}")]
-        [HttpPut("{username}")]
-        public IActionResult Unblock([FromHeader] string login, string username)
+        [Route("")]
+        [HttpPut("unblock/{id}")]
+        public IActionResult Unblock([FromHeader] string login, int id)
         {
             try
             {
-                User updatedUser = this.userServices.Unblock(login, username);
+                User updatedUser = this.userServices.Unblock(login, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -202,12 +200,12 @@ namespace ForumSystemTeamFour.Controllers
             }
         }
 
-        [HttpDelete("{username}")]
-        public IActionResult DeleteUser([FromHeader] string login, string username)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser([FromHeader] string login, int id)
         {
             try
             {
-                var deletedUser = this.userServices.Delete(login, username);
+                var deletedUser = this.userServices.Delete(login, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, deletedUser);
             }
