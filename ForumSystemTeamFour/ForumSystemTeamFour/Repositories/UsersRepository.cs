@@ -11,7 +11,7 @@ using ForumSystemTeamFour.Repositories.Interfaces;
 
 namespace ForumSystemTeamFour.Repositories
 {
-    
+
     public class UsersRepository : IUsersRepository
     {
         private readonly ForumDbContext context;
@@ -114,21 +114,28 @@ namespace ForumSystemTeamFour.Repositories
             var foundUser = context.Users.FirstOrDefault(user=>user.Username == username);
             return foundUser ?? throw new EntityNotFoundException($"No user with the Username \"{username}\" exists on the forum!");
         }
-
-        public User Update(string username, UserUpdateData updateData)
+        public User GetById(int id)
         {
-            
-            var userToUpdate = this.GetByUsername(username);
-            
+            var foundUser = context.Users.FirstOrDefault(user => user.Id == id);
+            return foundUser ?? throw new EntityNotFoundException($"No user with ID number {id} exists on the forum!");
+        }
+        public User Update(User userToUpdate, UserUpdateDto updateData)
+        {
             CheckDuplicateUsername(updateData.Username);
             CheckDuplicateEmail(updateData.Email);
 
             userToUpdate.FirstName = updateData.FirstName ?? userToUpdate.FirstName;
             userToUpdate.LastName = updateData.LastName ?? userToUpdate.LastName;
             userToUpdate.Email = updateData.Email ?? userToUpdate.Email;
-            userToUpdate.Username = updateData.Username ?? userToUpdate.Username;            
-            userToUpdate.Password = updateData.Password ?? userToUpdate.Password;
-            
+            if (updateData.Username != null)
+            {
+                if (!userToUpdate.IsAdmin)
+                {
+                    throw new UnauthorizedAccessException("You cannot change your Username!");
+                }
+                userToUpdate.Username = updateData.Username;
+            }                        
+            userToUpdate.Password = updateData.Password ?? userToUpdate.Password;            
             if (updateData.PhoneNumber!=null)
             {
                 if (!userToUpdate.IsAdmin)

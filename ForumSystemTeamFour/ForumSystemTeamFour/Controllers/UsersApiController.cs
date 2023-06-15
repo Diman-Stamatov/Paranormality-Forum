@@ -62,13 +62,13 @@ namespace ForumSystemTeamFour.Controllers
 
         }
 
-        [Route("update/{username}")]
-        [HttpPut("{username}")]
-        public IActionResult UpdateUser([FromHeader] string login, string username, [FromQuery] UserUpdateData updateData)
+        
+        [HttpPut("update/{id}")]
+        public IActionResult UpdateUser([FromHeader] string login, int id, [FromQuery] UserUpdateDto updateData)
         {
             try
             {
-                User updatedUser = this.userServices.Update(login, username, updateData);
+                User updatedUser = this.userServices.Update(login, id, updateData);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }

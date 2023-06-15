@@ -9,9 +9,10 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
     {
         List<UserResponseDto> GetAll();
         List<UserResponseDto> FilterBy(User loggedUser, UserQueryParameters filterParameters);
-        User GetByUsername(string username);        
+        User GetByUsername(string username);
+        User GetById(int id);
         User Create(User user);
-        User Update(string username, UserUpdateData updateData);
+        User Update(User userToUpdate, UserUpdateDto updateData);
         User Block(string username);
         User Unblock(string username);
         User PromoteToAdmin(string username); 

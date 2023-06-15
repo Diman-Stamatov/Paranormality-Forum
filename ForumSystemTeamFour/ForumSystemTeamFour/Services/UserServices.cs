@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using ForumSystemTeamFour.Mappers;
+﻿using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
-using ForumSystemTeamFour.Repositories;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Security;
 using ForumSystemTeamFour.Services.Interfaces;
+using System.Collections.Generic;
 
 
 namespace ForumSystemTeamFour.Services
@@ -16,11 +15,11 @@ namespace ForumSystemTeamFour.Services
         private readonly IUsersRepository repository;
         private readonly ForumSecurity forumSecurity;
         private readonly UserMapper userMapper;
-        public UserServices(IUsersRepository repository, ForumSecurity forumSecurity, UserMapper userMapper) 
+        public UserServices(IUsersRepository repository, ForumSecurity forumSecurity, UserMapper userMapper)
         {
             this.repository = repository;
             this.forumSecurity = forumSecurity;
-            this.userMapper = userMapper;   
+            this.userMapper = userMapper;
         }
 
         public User Block(string login, string usernameToBlock)
@@ -59,11 +58,16 @@ namespace ForumSystemTeamFour.Services
             var loggedUser = forumSecurity.Authenticate(login);
 
             return this.repository.FilterBy(loggedUser, filterParameters);
-        }   
+        }
 
         public User GetByUsername(string username)
         {
             return this.repository.GetByUsername(username);
+        }
+
+        public User GetById(int id)
+        {
+            return this.repository.GetById(id);
         }
 
         public User PromoteToAdmin(string login, string usernameToPromote)
@@ -82,13 +86,13 @@ namespace ForumSystemTeamFour.Services
             return this.repository.Unblock(usernameToUnblock);
         }
 
-        public User Update(string login, string usernameToUpdate, UserUpdateData updateData)
+        public User Update(string login, int idToUpdate, UserUpdateDto updateData)
         {
             var loggedUser = forumSecurity.Authenticate(login);
-            var userToUpdate = this.GetByUsername(usernameToUpdate);
+            var userToUpdate = this.GetById(idToUpdate);
             forumSecurity.CheckUserAuthorization(loggedUser, userToUpdate);
 
-            return this.repository.Update(usernameToUpdate, updateData);
+            return this.repository.Update(userToUpdate, updateData);
         }
     }
 }
