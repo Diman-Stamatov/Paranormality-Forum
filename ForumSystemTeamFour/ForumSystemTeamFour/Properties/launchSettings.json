@@ -6,6 +6,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "api/swagger",
       "applicationUrl": "http://localhost:5107",
       "sqlDebugging": true
     }

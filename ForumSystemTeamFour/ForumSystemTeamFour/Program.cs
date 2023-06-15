@@ -7,6 +7,7 @@ using ForumSystemTeamFour.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 
 namespace ForumSystemTeamFour
 {
@@ -24,6 +25,11 @@ namespace ForumSystemTeamFour
                 options.UseSqlServer(connectionString);
             });
 
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "ForumSystemAPI", Version = "v1" });
+            });
+
             // Repositories
             builder.Services.AddScoped<IUsersRepository, UsersRepository>();
             builder.Services.AddScoped<ITagsRepository, TagsRepository>();
@@ -39,7 +45,17 @@ namespace ForumSystemTeamFour
             var app = builder.Build();
 
             app.UseRouting();
-            app.MapControllers();
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "AspNetCoreDemo API V1");
+                options.RoutePrefix = "api/swagger";
+            });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
             app.Run();
         }
     }
