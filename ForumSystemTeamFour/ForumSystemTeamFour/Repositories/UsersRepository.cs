@@ -33,10 +33,8 @@ namespace ForumSystemTeamFour.Repositories
             return user;
         }
 
-        public User Delete(string username)
+        public User Delete(User userToDelete)
         {
-            //ToDo Validation
-            var userToDelete = this.GetByUsername(username);
             context.Users.Remove(userToDelete);
             context.SaveChanges();
 

@@ -202,12 +202,12 @@ namespace ForumSystemTeamFour.Controllers
             }
         }
 
-        [HttpDelete("{username}")]
-        public IActionResult DeleteUser([FromHeader] string login, string username)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser([FromHeader] string login, int id)
         {
             try
             {
-                var deletedUser = this.userServices.Delete(login, username);
+                var deletedUser = this.userServices.Delete(login, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, deletedUser);
             }

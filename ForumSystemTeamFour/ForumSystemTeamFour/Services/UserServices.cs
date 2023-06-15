@@ -36,13 +36,13 @@ namespace ForumSystemTeamFour.Services
             return this.repository.Create(user);
         }
 
-        public User Delete(string login, string usernameToDelete)
+        public User Delete(string login, int idToDelete)
         {
             var loggedUser = forumSecurity.Authenticate(login);
-            var userToDelete = this.GetByUsername(usernameToDelete);
+            var userToDelete = this.GetById(idToDelete);
             forumSecurity.CheckUserAuthorization(loggedUser, userToDelete);
 
-            return this.repository.Delete(usernameToDelete);
+            return this.repository.Delete(userToDelete);
         }
 
         public User DemoteFromAdmin(string login, string usernameToDemote)

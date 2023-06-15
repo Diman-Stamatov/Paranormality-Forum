@@ -17,7 +17,7 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
         User Unblock(string username);
         User PromoteToAdmin(string username); 
         User DemoteFromAdmin(string username);
-        User Delete(string username);
+        User Delete(User userToDelete);
         
     }
 }

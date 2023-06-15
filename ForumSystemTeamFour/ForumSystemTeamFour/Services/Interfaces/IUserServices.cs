@@ -12,7 +12,7 @@ namespace ForumSystemTeamFour.Services.Interfaces
         User GetById(int id);
         User Create(UserCreateDto userDto);
         User Update(string login, int idToUpdate, UserUpdateDto updateData);
-        User Delete(string login, string usernameToDelete);
+        User Delete(string login, int idToDelete);
         User Block(string login, string usernameToBlock);
         User Unblock(string login, string usernameToUnblock);
         User PromoteToAdmin(string login, string usernameToPromote);
