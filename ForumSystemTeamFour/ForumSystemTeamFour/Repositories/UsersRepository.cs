@@ -111,7 +111,15 @@ namespace ForumSystemTeamFour.Repositories
         public User GetByUsername(string username)
         {
             //ToDo
-            var foundUser = context.Users.FirstOrDefault(user=>user.Username == username);
+            /*var foundUser = context.Users.FirstOrDefault(user=>user.Username == username);*/
+            User foundUser = null;
+            foreach (var user in context.Users)
+            {
+                if (user.Username == username)
+                {
+                    foundUser = user;
+                }
+            }
             return foundUser ?? throw new EntityNotFoundException($"No user with the Username \"{username}\" exists on the forum!");
         }
         public User GetById(int id)
@@ -180,6 +188,7 @@ namespace ForumSystemTeamFour.Repositories
                 throw new InvalidUserInputException($"\"{userToDemote.Username}\" is already a basic user!");
             }            
             userToDemote.IsAdmin = false;
+            userToDemote.PhoneNumber = null;
 
             context.SaveChanges();
             return userToDemote;
