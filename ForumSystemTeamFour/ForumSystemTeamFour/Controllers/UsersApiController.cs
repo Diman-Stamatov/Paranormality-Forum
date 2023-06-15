@@ -150,7 +150,7 @@ namespace ForumSystemTeamFour.Controllers
         {
             try
             {
-                User updatedUser = this.userServices.Block(login, username);
+                User updatedUser = this.userServices.Block(login, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }

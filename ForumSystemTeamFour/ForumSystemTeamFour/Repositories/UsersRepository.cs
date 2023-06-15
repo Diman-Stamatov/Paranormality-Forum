@@ -14,6 +14,7 @@ namespace ForumSystemTeamFour.Repositories
 
     public class UsersRepository : IUsersRepository
     {
+        private const string NoUserFoundMessage = "No user with the ID number {0} exists on the forum!";
         private readonly ForumDbContext context;
         private readonly UserMapper userMapper;
 
@@ -109,13 +110,14 @@ namespace ForumSystemTeamFour.Repositories
         
         public User GetByUsername(string username)
         {
+            //ToDo
             var foundUser = context.Users.FirstOrDefault(user=>user.Username == username);
             return foundUser ?? throw new EntityNotFoundException($"No user with the Username \"{username}\" exists on the forum!");
         }
         public User GetById(int id)
         {
             var foundUser = context.Users.FirstOrDefault(user => user.Id == id);
-            return foundUser ?? throw new EntityNotFoundException($"No user with ID number {id} exists on the forum!");
+            return foundUser ?? throw new EntityNotFoundException(string.Format(NoUserFoundMessage, id));
         }
         public User Update(User userToUpdate, UserUpdateDto updateData)
         {
@@ -153,7 +155,7 @@ namespace ForumSystemTeamFour.Repositories
             
             if (userToPromote == null)
             {
-                throw new EntityNotFoundException($"No user with ID number{idToPromote} exists on the forum!");
+                throw new EntityNotFoundException(string.Format(NoUserFoundMessage, idToPromote));
             }
             if (userToPromote.IsAdmin==true)
             {
@@ -165,17 +167,17 @@ namespace ForumSystemTeamFour.Repositories
             return userToPromote;
         }
 
-        public User DemoteFromAdmin(string username)
+        public User DemoteFromAdmin(int idToDemote)
         {
-            var userToDemote = this.GetByUsername(username);
+            var userToDemote = this.GetById(idToDemote);
             
             if (userToDemote == null)
             {
-                throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
+                throw new EntityNotFoundException(string.Format(NoUserFoundMessage, idToDemote));
             }
             if (userToDemote.IsAdmin == false)
             {
-                throw new InvalidUserInputException($"\"{username}\" is already a basic user!");
+                throw new InvalidUserInputException($"\"{userToDemote.Username}\" is already a basic user!");
             }            
             userToDemote.IsAdmin = false;
 
@@ -183,17 +185,17 @@ namespace ForumSystemTeamFour.Repositories
             return userToDemote;
         }
 
-        public User Block(string username)
+        public User Block(int idToBlock)
         {
-            var userToBlock = this.GetByUsername(username);
+            var userToBlock = this.GetById(idToBlock);
             
             if (userToBlock == null)
             {
-                throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
+                throw new EntityNotFoundException(string.Format(NoUserFoundMessage, idToBlock));
             }
             if (userToBlock.Blocked == true)
             {
-                throw new InvalidUserInputException($"\"{username}\" is already blocked!");
+                throw new InvalidUserInputException($"\"{userToBlock.Username}\" is already blocked!");
             }            
             userToBlock.Blocked = true;
 
@@ -201,23 +203,24 @@ namespace ForumSystemTeamFour.Repositories
             return userToBlock;
         }
 
-        public User Unblock(string username)
+        public User Unblock(int idToUnblock)
         {
-            var userToUnblock = this.GetByUsername(username);
+            var userToUnblock = this.GetById(idToUnblock);
             
             if (userToUnblock == null)
             {
-                throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
+                throw new EntityNotFoundException(string.Format(NoUserFoundMessage, idToUnblock));
             }
             if (userToUnblock.Blocked == false)
             {
-                throw new InvalidUserInputException($"\"{username}\" hasn't been blocked!");
+                throw new InvalidUserInputException($"\"{userToUnblock.Username}\" hasn't been blocked!");
             }            
             userToUnblock.Blocked = false;
 
             context.SaveChanges();
             return userToUnblock;
         }
+
         private void CheckDuplicateUsername(string username)
         {
             var foundUser = context.Users.FirstOrDefault(user => user.Username == username);
