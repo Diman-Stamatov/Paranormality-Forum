@@ -13,10 +13,10 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
         User GetById(int id);
         User Create(User user);
         User Update(User userToUpdate, UserUpdateDto updateData);
-        User Block(string username);
-        User Unblock(string username);
-        User PromoteToAdmin(string username); 
-        User DemoteFromAdmin(string username);
+        User Block(int idToBlock);
+        User Unblock(int idToUnblock);
+        User PromoteToAdmin(int idToPromote); 
+        User DemoteFromAdmin(int idToDemote);
         User Delete(User userToDelete);
         
     }

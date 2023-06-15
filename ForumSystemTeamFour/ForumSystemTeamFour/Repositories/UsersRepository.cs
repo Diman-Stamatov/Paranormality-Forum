@@ -147,17 +147,17 @@ namespace ForumSystemTeamFour.Repositories
             return userToUpdate;
         }        
 
-        public User PromoteToAdmin(string username)
+        public User PromoteToAdmin(int idToPromote)
         {
-            var userToPromote = this.GetByUsername(username);
+            var userToPromote = this.GetById(idToPromote);
             
             if (userToPromote == null)
             {
-                throw new EntityNotFoundException($"\"{username}\" is not a member of the forum!");
+                throw new EntityNotFoundException($"No user with ID number{idToPromote} exists on the forum!");
             }
             if (userToPromote.IsAdmin==true)
             {
-                throw new InvalidUserInputException($"\"{username}\" is already an Administrator!");
+                throw new InvalidUserInputException($"\"{userToPromote.Username}\" is already an Administrator!");
             }            
             userToPromote.IsAdmin = true;
 

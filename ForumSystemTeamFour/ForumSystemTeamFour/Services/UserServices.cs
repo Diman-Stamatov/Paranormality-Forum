@@ -22,12 +22,12 @@ namespace ForumSystemTeamFour.Services
             this.userMapper = userMapper;
         }
 
-        public User Block(string login, string usernameToBlock)
+        public User Block(string login, int idToBlock)
         {
             var loggedUser = forumSecurity.Authenticate(login);
             forumSecurity.CheckAdminAuthorization(loggedUser);
 
-            return this.repository.Block(usernameToBlock);
+            return this.repository.Block(idToBlock);
         }
 
         public User Create(UserCreateDto userDto)
@@ -45,12 +45,12 @@ namespace ForumSystemTeamFour.Services
             return this.repository.Delete(userToDelete);
         }
 
-        public User DemoteFromAdmin(string login, string usernameToDemote)
+        public User DemoteFromAdmin(string login, int idToDemote)
         {
             var loggedUser = forumSecurity.Authenticate(login);
             forumSecurity.CheckAdminAuthorization(loggedUser);
 
-            return this.repository.DemoteFromAdmin(usernameToDemote);
+            return this.repository.DemoteFromAdmin(idToDemote);
         }
 
         public List<UserResponseDto> FilterBy(string login, UserQueryParameters filterParameters)
@@ -70,20 +70,20 @@ namespace ForumSystemTeamFour.Services
             return this.repository.GetById(id);
         }
 
-        public User PromoteToAdmin(string login, string usernameToPromote)
+        public User PromoteToAdmin(string login, int idToPromote)
         {
             var loggedUser = forumSecurity.Authenticate(login);
             forumSecurity.CheckAdminAuthorization(loggedUser);
 
-            return this.repository.PromoteToAdmin(usernameToPromote);
+            return this.repository.PromoteToAdmin(idToPromote);
         }
 
-        public User Unblock(string login, string usernameToUnblock)
+        public User Unblock(string login, int idToUnblock)
         {
             var loggedUser = forumSecurity.Authenticate(login);
             forumSecurity.CheckAdminAuthorization(loggedUser);
 
-            return this.repository.Unblock(usernameToUnblock);
+            return this.repository.Unblock(idToUnblock);
         }
 
         public User Update(string login, int idToUpdate, UserUpdateDto updateData)
