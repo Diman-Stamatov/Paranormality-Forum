@@ -110,8 +110,9 @@ namespace ForumSystemTeamFour.Repositories
         
         public User GetByUsername(string username)
         {
-            //ToDo
+            //CaseInsensitive
             /*var foundUser = context.Users.FirstOrDefault(user=>user.Username == username);*/
+
             User foundUser = null;
             foreach (var user in context.Users)
             {

@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using System;
 
-namespace ForumSystemTeamFour.Security
+namespace ForumSystemTeamFour.Services
 {
-    public class ForumSecurity
+    public class SecurityServices :ISecurityServices
     {
         private readonly IUsersRepository usersRepository;
-        public ForumSecurity(IUsersRepository usersRepository)
+        public SecurityServices(IUsersRepository usersRepository)
         {
             this.usersRepository = usersRepository;
         }
@@ -28,10 +28,10 @@ namespace ForumSystemTeamFour.Security
             if (loginData.Length == 1)
             {
                 throw new BadHttpRequestException("Please provide your login information!");
-            }           
+            }
             string loginUsername = loginData[0];
             string loginPassword = loginData[1];
-            var authenticatedUser = this.usersRepository.GetByUsername(loginUsername);
+            var authenticatedUser = usersRepository.GetByUsername(loginUsername);
             if (authenticatedUser.Password != loginPassword)
             {
                 throw new BadHttpRequestException("The provided password is invalid!");
@@ -52,7 +52,7 @@ namespace ForumSystemTeamFour.Security
             {
                 throw new UnauthorizedAccessException("You are not the author of this post!");
             }
-            
+
         }
         public void CheckUserAuthorization(User loggedUser, User targetUser)
         {
@@ -60,7 +60,7 @@ namespace ForumSystemTeamFour.Security
             {
                 throw new UnauthorizedAccessException("You can only edit your own information!");
             }
-           
+
         }
     }
 }

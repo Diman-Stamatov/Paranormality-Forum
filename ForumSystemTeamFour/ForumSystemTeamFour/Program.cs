@@ -2,7 +2,6 @@ using ForumSystemTeamFour.Data;
 using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Repositories;
 using ForumSystemTeamFour.Repositories.Interfaces;
-using ForumSystemTeamFour.Security;
 using ForumSystemTeamFour.Services;
 using ForumSystemTeamFour.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -35,7 +34,7 @@ namespace ForumSystemTeamFour
             
             // Helpers
             builder.Services.AddScoped<UserMapper>();
-            builder.Services.AddScoped<ForumSecurity>();
+            builder.Services.AddScoped<SecurityServices>();
 
             var app = builder.Build();
 

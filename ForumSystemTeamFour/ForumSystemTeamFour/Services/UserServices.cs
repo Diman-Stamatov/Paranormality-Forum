@@ -3,7 +3,6 @@ using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
-using ForumSystemTeamFour.Security;
 using ForumSystemTeamFour.Services.Interfaces;
 using System.Collections.Generic;
 
@@ -13,9 +12,9 @@ namespace ForumSystemTeamFour.Services
     public class UserServices : IUserServices
     {
         private readonly IUsersRepository repository;
-        private readonly ForumSecurity forumSecurity;
+        private readonly SecurityServices forumSecurity;
         private readonly UserMapper userMapper;
-        public UserServices(IUsersRepository repository, ForumSecurity forumSecurity, UserMapper userMapper)
+        public UserServices(IUsersRepository repository, SecurityServices forumSecurity, UserMapper userMapper)
         {
             this.repository = repository;
             this.forumSecurity = forumSecurity;

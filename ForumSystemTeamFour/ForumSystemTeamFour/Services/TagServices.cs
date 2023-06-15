@@ -2,7 +2,6 @@
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Repositories;
 using ForumSystemTeamFour.Repositories.Interfaces;
-using ForumSystemTeamFour.Security;
 using ForumSystemTeamFour.Services.Interfaces;
 
 namespace ForumSystemTeamFour.Services
@@ -10,8 +9,8 @@ namespace ForumSystemTeamFour.Services
     public class TagServices : ITagServices
     {
         private readonly ITagsRepository repository;
-        private readonly ForumSecurity forumSecurity;
-        public TagServices(ITagsRepository repository, ForumSecurity forumSecurity)
+        private readonly SecurityServices forumSecurity;
+        public TagServices(ITagsRepository repository, SecurityServices forumSecurity)
         {
             this.repository = repository;
             this.forumSecurity = forumSecurity; 
