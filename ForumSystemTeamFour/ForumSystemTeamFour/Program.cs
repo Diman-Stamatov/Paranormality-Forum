@@ -91,6 +91,7 @@ namespace ForumSystemTeamFour
 
             app.UseEndpoints(endpoints =>
             {
+                //Comment .RequireAuthorization() to disable Authentication 
                 endpoints.MapControllers().RequireAuthorization();
              
             });
