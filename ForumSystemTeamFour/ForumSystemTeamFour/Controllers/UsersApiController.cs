@@ -1,19 +1,13 @@
 ﻿using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
-using ForumSystemTeamFour.Models.Interfaces;
 using ForumSystemTeamFour.Models.QueryParameters;
 
 using ForumSystemTeamFour.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace ForumSystemTeamFour.Controllers
 {
@@ -22,12 +16,10 @@ namespace ForumSystemTeamFour.Controllers
     public class UsersApiController : ControllerBase
     {
         private readonly IUserServices userServices;
-        private readonly ISecurityServices securityServices;
 
-        public UsersApiController(IUserServices userServices, ISecurityServices securityServices)
+        public UsersApiController(IUserServices userServices)
         {
             this.userServices = userServices;
-            this.securityServices = securityServices;
         }
 
         [HttpGet("")]
@@ -51,9 +43,8 @@ namespace ForumSystemTeamFour.Controllers
                 return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
             }
 
-        }
+        }       
 
-        [AllowAnonymous]
         [HttpPost("")]
         public IActionResult CreateUser([FromBody] UserCreateDto userDto)
         {
@@ -70,36 +61,7 @@ namespace ForumSystemTeamFour.Controllers
 
         }
 
-        [AllowAnonymous]
-        [HttpPost("/security/createToken")]
-        public IActionResult CreateToken([FromHeader] string login)
-        {
-            try
-            {
-                var tokenString = this.securityServices.CreateToken(login);
-
-                return this.StatusCode(StatusCodes.Status201Created, tokenString);
-            }
-            catch (EntityNotFoundException exception)
-            {
-                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
-            }
-            catch (DuplicateEntityException exception)
-            {
-                return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
-            }
-            catch (BadHttpRequestException exception)
-            {
-                return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
-            }
-            catch (UnauthorizedAccessException exception)
-            {
-                return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
-            }
-
-        }
         
-
         [HttpPut("update/{id}")]
         public IActionResult UpdateUser([FromHeader] string login, int id, [FromQuery] UserUpdateDto updateData)
         {
@@ -259,6 +221,5 @@ namespace ForumSystemTeamFour.Controllers
                 return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
             }
         }
-
     }
 }

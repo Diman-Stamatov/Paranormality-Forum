@@ -11,6 +11,5 @@ namespace ForumSystemTeamFour.Services.Interfaces
         void CheckAdminAuthorization(User user);
         void CheckAuthorAuthorization(User user, IPost post);
         void CheckUserAuthorization(User loggedUser, User targetUser);
-        string CreateToken(string login);
     }
 }
