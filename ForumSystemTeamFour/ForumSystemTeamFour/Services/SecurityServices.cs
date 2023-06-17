@@ -3,18 +3,26 @@ using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.Interfaces;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace ForumSystemTeamFour.Services
 {
     public class SecurityServices :ISecurityServices
     {
         private readonly IUsersRepository usersRepository;
-        public SecurityServices(IUsersRepository usersRepository)
+        private readonly IConfiguration configManager;
+        public SecurityServices(IUsersRepository usersRepository, IConfiguration configManager)
         {
             this.usersRepository = usersRepository;
+            this.configManager = configManager;
         }
 
         public User Authenticate(string login)
@@ -34,7 +42,7 @@ namespace ForumSystemTeamFour.Services
             var authenticatedUser = usersRepository.GetByUsername(loginUsername);
             if (authenticatedUser.Password != loginPassword)
             {
-                throw new BadHttpRequestException("The provided password is invalid!");
+                throw new InvalidUserInputException("The provided password is invalid!");
             }
             return authenticatedUser;
         }
@@ -61,6 +69,27 @@ namespace ForumSystemTeamFour.Services
                 throw new UnauthorizedAccessException("You can only edit your own information!");
             }
 
+        }
+        public string CreateToken(string login)
+        {
+            var loggedUser = this.Authenticate(login);
+            var claims = new[] {
+                new Claim("Id", Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, loggedUser.Username),
+                new Claim(JwtRegisteredClaimNames.Email, loggedUser.Email),
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+            };
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configManager["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(configManager["Jwt:Issuer"],
+                configManager["Jwt:Audience"],
+                claims,
+                expires: DateTime.Now.AddMinutes(10),
+                signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
