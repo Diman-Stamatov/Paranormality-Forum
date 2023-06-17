@@ -17,66 +17,71 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ForumSystemTeamFour
 {
     
     public class Program
     {
-        public static WebApplicationBuilder Builder = null;
+        
         public static void Main(string[] args)
         {
-            Builder = WebApplication.CreateBuilder(args);
-            Builder.Services.AddControllers();
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddControllers();
 
             // Data persistence
-            Builder.Services.AddDbContext<ForumDbContext>(options =>
+            builder.Services.AddDbContext<ForumDbContext>(options =>
             {
-                var connectionString = Builder.Configuration["ForumSystem:DevConnectionString"];
+                var connectionString = builder.Configuration["ForumSystem:DevConnectionString"];
                 options.UseSqlServer(connectionString);
             });
 
-            Builder.Services.AddSwaggerGen(options =>
+            builder.Services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "ForumSystemAPI", Version = "v1" });
             });
 
             // Repositories
-            Builder.Services.AddScoped<IUsersRepository, UsersRepository>();
-            Builder.Services.AddScoped<ITagsRepository, TagsRepository>();
+            builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+            builder.Services.AddScoped<ITagsRepository, TagsRepository>();
             
             // Services
-            Builder.Services.AddScoped<IUserServices, UserServices>();
-            Builder.Services.AddScoped<ISecurityServices, SecurityServices>();
-            Builder.Services.AddScoped<ITagServices, TagServices>();
+            builder.Services.AddScoped<IUserServices, UserServices>();
+            builder.Services.AddScoped<ISecurityServices, SecurityServices>();
+            builder.Services.AddScoped<ITagServices, TagServices>();
             
             // Helpers
-            Builder.Services.AddScoped<UserMapper>();
-            Builder.Services.AddScoped<SecurityServices>();
-
-            Builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
+            builder.Services.AddScoped<UserMapper>();
+            builder.Services.AddScoped<SecurityServices>();
+            
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = Builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = Builder.Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey
-                    (Encoding.UTF8.GetBytes(Builder.Configuration["Jwt:Key"])),
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidateLifetime = false,
-                    ValidateIssuerSigningKey = true
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                };
+                options.Events = new JwtBearerEvents
+                {  
+                    OnMessageReceived = context => {
+                        context.Token = context.Request.Cookies["Cookie_JWT"];
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
-            Builder.Services.AddAuthorization();
+            builder.Services.AddMvc();
 
-            var app = Builder.Build();
+            builder.Services.AddAuthorization();
+
+            var app = builder.Build();
 
             app.UseRouting();
             app.UseSwagger();

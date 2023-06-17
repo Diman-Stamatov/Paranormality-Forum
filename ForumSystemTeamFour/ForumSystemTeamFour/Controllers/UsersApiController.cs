@@ -8,9 +8,11 @@ using ForumSystemTeamFour.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -30,12 +32,13 @@ namespace ForumSystemTeamFour.Controllers
             this.securityServices = securityServices;
         }
 
+        [Authorize]
         [HttpGet("")]
-        public IActionResult FilterUsers([FromHeader] string login, [FromQuery] UserQueryParameters filterParameters)
+        public IActionResult FilterUsers([FromHeader][Required] int loggedUserId, [FromQuery] UserQueryParameters filterParameters)
         {
             try
             {
-                List<UserResponseDto> filterResult = this.userServices.FilterBy(login, filterParameters);
+                List<UserResponseDto> filterResult = this.userServices.FilterBy(loggedUserId, filterParameters);
                 return this.StatusCode(StatusCodes.Status200OK, filterResult);
             }
             catch (EntityNotFoundException exception)
@@ -45,6 +48,10 @@ namespace ForumSystemTeamFour.Controllers
             catch (UnauthorizedAccessException exception)
             {
                 return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
+            catch (InvalidUserInputException exception)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
             }
             catch (BadHttpRequestException exception)
             {
@@ -61,7 +68,7 @@ namespace ForumSystemTeamFour.Controllers
             {
                 var createdUser = this.userServices.Create(userDto);
 
-                return this.StatusCode(StatusCodes.Status201Created, createdUser); 
+                return this.StatusCode(StatusCodes.Status201Created, createdUser);
             }
             catch (DuplicateEntityException exception)
             {
@@ -71,51 +78,53 @@ namespace ForumSystemTeamFour.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("/security/createToken")]
+        [HttpPost("/security/login")]
         public IActionResult CreateToken([FromHeader] string login)
         {
             try
             {
-                var tokenString = this.securityServices.CreateToken(login);
-
-                return this.StatusCode(StatusCodes.Status201Created, tokenString);
+                var token = this.securityServices.CreateToken(login);
+                Response.Cookies.Append("Cookie_JWT", token);
+                return this.StatusCode(StatusCodes.Status201Created, token);
             }
             catch (EntityNotFoundException exception)
             {
                 return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
-            catch (DuplicateEntityException exception)
+            catch (InvalidUserInputException exception)
             {
-                return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
+                return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
             }
             catch (BadHttpRequestException exception)
             {
                 return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
             }
-            catch (UnauthorizedAccessException exception)
-            {
-                return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
-            }
-
         }
-        
 
+        [HttpPost("/security/logout")]
+        public IActionResult DeleteToken()
+        {
+                Response.Cookies.Append("Cookie_JWT", "noToken");
+                return this.StatusCode(StatusCodes.Status200OK, "You have successfully logged out!");
+        }
+
+        [Authorize]
         [HttpPut("update/{id}")]
-        public IActionResult UpdateUser([FromHeader] string login, int id, [FromQuery] UserUpdateDto updateData)
+        public IActionResult UpdateUser([FromHeader][Required] int loggedUserId, int id, [FromQuery] UserUpdateDto updateData)
         {
             try
             {
-                User updatedUser = this.userServices.Update(login, id, updateData);
+                User updatedUser = this.userServices.Update(loggedUserId, id, updateData);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
             catch (EntityNotFoundException exception)
             {
-                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message); 
+                return this.StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
             catch (DuplicateEntityException exception)
             {
-                return this.StatusCode(StatusCodes.Status409Conflict, exception.Message); 
+                return this.StatusCode(StatusCodes.Status409Conflict, exception.Message);
             }
             catch (BadHttpRequestException exception)
             {
@@ -127,13 +136,13 @@ namespace ForumSystemTeamFour.Controllers
             }
         }
 
-        
+        [Authorize]
         [HttpPut("promote/{id}")]
-        public IActionResult PromoteToAdmin([FromHeader] string login, int id)
+        public IActionResult PromoteToAdmin([FromHeader][Required] int loggedUserId, int id)
         {
             try
             {
-                User updatedUser = this.userServices.PromoteToAdmin(login, id);
+                User updatedUser = this.userServices.PromoteToAdmin(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -155,12 +164,13 @@ namespace ForumSystemTeamFour.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("demote/{id}")]
-        public IActionResult DemoteFromAdmin([FromHeader] string login, int id)
+        public IActionResult DemoteFromAdmin([FromHeader][Required] int loggedUserId, int id)
         {
             try
             {
-                User updatedUser = this.userServices.DemoteFromAdmin(login, id);
+                User updatedUser = this.userServices.DemoteFromAdmin(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -181,13 +191,14 @@ namespace ForumSystemTeamFour.Controllers
                 return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
             }
         }
-                
+
+        [Authorize]
         [HttpPut("block/{id}")]
-        public IActionResult Block([FromHeader] string login, int id)
+        public IActionResult Block([FromHeader][Required] int loggedUserId, int id)
         {
             try
             {
-                User updatedUser = this.userServices.Block(login, id);
+                User updatedUser = this.userServices.Block(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -209,13 +220,13 @@ namespace ForumSystemTeamFour.Controllers
             }
         }
 
-        
+        [Authorize]
         [HttpPut("unblock/{id}")]
-        public IActionResult Unblock([FromHeader] string login, int id)
+        public IActionResult Unblock([FromHeader][Required] int loggedUserId, int id)
         {
             try
             {
-                User updatedUser = this.userServices.Unblock(login, id);
+                User updatedUser = this.userServices.Unblock(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -237,12 +248,13 @@ namespace ForumSystemTeamFour.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
-        public IActionResult DeleteUser([FromHeader] string login, int id)
+        public IActionResult DeleteUser([FromHeader][Required] int loggedUserId, int id)
         {
             try
             {
-                var deletedUser = this.userServices.Delete(login, id);
+                var deletedUser = this.userServices.Delete(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, deletedUser);
             }

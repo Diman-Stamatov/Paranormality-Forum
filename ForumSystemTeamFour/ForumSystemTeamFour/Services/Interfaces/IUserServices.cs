@@ -7,15 +7,13 @@ namespace ForumSystemTeamFour.Services.Interfaces
 {
     public interface IUserServices
     {
-        List<UserResponseDto> FilterBy(string login, UserQueryParameters filterParameters);
-        User GetByUsername(string username);
-        User GetById(int id);
+        List<UserResponseDto> FilterBy(int loggedUserId, UserQueryParameters filterParameters);
         User Create(UserCreateDto userDto);
-        User Update(string login, int idToUpdate, UserUpdateDto updateData);
-        User Delete(string login, int idToDelete);
-        User Block(string login, int idToBlock);
-        User Unblock(string login, int idToUnblock);
-        User PromoteToAdmin(string login, int idToPromote);
-        User DemoteFromAdmin(string login, int idToDemote);
+        User Update(int loggedUserId, int idToUpdate, UserUpdateDto updateData);
+        User Delete(int loggedUserId, int idToDelete);
+        User Block(int loggedUserId, int idToBlock);
+        User Unblock(int loggedUserId, int idToUnblock);
+        User PromoteToAdmin(int loggedUserId, int idToPromote);
+        User DemoteFromAdmin(int loggedUserId, int idToDemote);
     }
 }
