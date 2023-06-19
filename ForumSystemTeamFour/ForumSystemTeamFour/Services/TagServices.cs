@@ -9,8 +9,8 @@ namespace ForumSystemTeamFour.Services
     public class TagServices : ITagServices
     {
         private readonly ITagsRepository repository;
-        private readonly SecurityServices forumSecurity;
-        public TagServices(ITagsRepository repository, SecurityServices forumSecurity)
+        private readonly ISecurityServices forumSecurity;
+        public TagServices(ITagsRepository repository, ISecurityServices forumSecurity)
         {
             this.repository = repository;
             this.forumSecurity = forumSecurity; 
