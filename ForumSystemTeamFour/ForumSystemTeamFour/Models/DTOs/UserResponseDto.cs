@@ -13,5 +13,19 @@ namespace ForumSystemTeamFour.Models.DTOs
         public string Email { get; set; }  
 
         public bool Blocked { get; set; }
+
+        public override bool Equals(object otherDto)
+        {
+            var comparedDto = (UserResponseDto)otherDto;
+            if (this.FirstName == comparedDto.FirstName 
+                && this.LastName == comparedDto.LastName
+                && this.Username == comparedDto.Username
+                && this.Email == comparedDto.Email
+                && this.Blocked == comparedDto.Blocked)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
