@@ -113,15 +113,16 @@ namespace ForumSystemTeamFour.Repositories
             //CaseInsensitive
             /*var foundUser = context.Users.FirstOrDefault(user=>user.Username == username);*/
 
-            User foundUser = null;
+            
             foreach (var user in context.Users)
             {
                 if (user.Username == username)
                 {
-                    foundUser = user;
+                    return user;
                 }
             }
-            return foundUser ?? throw new EntityNotFoundException($"No user with the Username \"{username}\" exists on the forum!");
+
+            throw new EntityNotFoundException($"No user with the Username \"{username}\" exists on the forum!");
         }
         public User GetById(int id)
         {
