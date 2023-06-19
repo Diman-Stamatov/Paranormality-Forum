@@ -4,6 +4,7 @@ using System.Linq;
 using ForumSystemTeamFour.Data;
 using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Mappers;
+using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
@@ -16,9 +17,9 @@ namespace ForumSystemTeamFour.Repositories
     {
         private const string NoUserFoundMessage = "No user with the ID number {0} exists on the forum!";
         private readonly ForumDbContext context;
-        private readonly UserMapper userMapper;
+        private readonly IUserMapper userMapper;
 
-        public UsersRepository(ForumDbContext context, UserMapper userMapper)
+        public UsersRepository(ForumDbContext context, IUserMapper userMapper)
         {
             this.context = context;
             this.userMapper = userMapper;

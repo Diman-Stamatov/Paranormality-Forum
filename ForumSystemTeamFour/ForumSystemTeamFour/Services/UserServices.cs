@@ -1,4 +1,5 @@
 ﻿using ForumSystemTeamFour.Mappers;
+using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
@@ -12,9 +13,9 @@ namespace ForumSystemTeamFour.Services
     public class UserServices : IUserServices
     {
         private readonly IUsersRepository repository;
-        private readonly SecurityServices forumSecurity;
-        private readonly UserMapper userMapper;
-        public UserServices(IUsersRepository repository, SecurityServices forumSecurity, UserMapper userMapper)
+        private readonly ISecurityServices forumSecurity;
+        private readonly IUserMapper userMapper;
+        public UserServices(IUsersRepository repository, ISecurityServices forumSecurity, IUserMapper userMapper)
         {
             this.repository = repository;
             this.forumSecurity = forumSecurity;

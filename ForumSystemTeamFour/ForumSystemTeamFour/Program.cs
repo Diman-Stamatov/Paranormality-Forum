@@ -1,5 +1,6 @@
 using ForumSystemTeamFour.Data;
 using ForumSystemTeamFour.Mappers;
+using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Repositories;
 using ForumSystemTeamFour.Repositories.Interfaces;
@@ -52,8 +53,8 @@ namespace ForumSystemTeamFour
             builder.Services.AddScoped<ITagServices, TagServices>();
             
             // Helpers
-            builder.Services.AddScoped<UserMapper>();
-            builder.Services.AddScoped<SecurityServices>();
+            builder.Services.AddScoped<IUserMapper, UserMapper>();
+            builder.Services.AddScoped<ISecurityServices, SecurityServices>();
             
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

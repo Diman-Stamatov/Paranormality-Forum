@@ -1,10 +1,11 @@
-﻿using ForumSystemTeamFour.Models;
+﻿using ForumSystemTeamFour.Mappers.Interfaces;
+using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using System.Collections.Generic;
 
 namespace ForumSystemTeamFour.Mappers
 {
-    public class UserMapper
+    public class UserMapper : IUserMapper
     {
         
 
