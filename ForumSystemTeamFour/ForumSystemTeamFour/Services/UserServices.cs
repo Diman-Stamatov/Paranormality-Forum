@@ -15,10 +15,10 @@ namespace ForumSystemTeamFour.Services
         private readonly IUsersRepository repository;
         private readonly ISecurityServices forumSecurity;
         private readonly IUserMapper userMapper;
-        public UserServices(IUsersRepository repository, ISecurityServices forumSecurity, IUserMapper userMapper)
+        public UserServices(IUsersRepository repository, ISecurityServices securityServices, IUserMapper userMapper)
         {
             this.repository = repository;
-            this.forumSecurity = forumSecurity;
+            this.forumSecurity = securityServices;
             this.userMapper = userMapper;
         }
 
@@ -26,8 +26,8 @@ namespace ForumSystemTeamFour.Services
         {
             var loggedUser = this.repository.GetById(loggedUserId);
             forumSecurity.CheckAdminAuthorization(loggedUser);
-
-            return this.repository.Block(idToBlock);
+            var blockedUser = this.repository.Block(idToBlock);
+            return blockedUser;
         }
 
         public User Create(UserCreateDto userDto)

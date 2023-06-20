@@ -16,15 +16,27 @@ namespace ForumSystemTeamFour.Tests.MockModels
 {
     internal static class TestModels
     {
-        const int DefaultId = 1;
-        const string ValidFirstName = "FirstName";
-        const string ValidLastName = "LastName";
-        const string ValidEmail = "valid@email.com";
-        const string ValidUsername = "ValidUsername";
-        const string ValidPassword = "ValidPassword";
-        const string ValidPhoneNumber = "0888 123 456";
-        const string ValidTagName = "TagName";
+        public const int DefaultId = 1;
+        public const int NamesMinLength = 4;
+        public const int NamesMaxLength = 32;
+        public const string ValidFirstName = "FirstName";
+        public const string ValidLastName = "LastName";        
+        public const string ValidEmail = "valid@email.com";
+        public const int UsernameMinLength = 4;
+        public const int UsernameMaxLength = 20;
+        public const string ValidUsername = "ValidUsername";
+        public const int PasswordMinLength = 4;
+        public const int PasswordMaxLength = 20;
+        public const string ValidPassword = "ValidPassword";
+        public const int PhoneNumberMinLength = 4;
+        public const int PhoneNumberMaxLength = 20;
+        public const string ValidPhoneNumber = "0888 123 456";
+        public const string ValidTagName = "TagName";
 
+        public static string GetTestString(int length)
+        {
+            return new string('x', length);
+        }
         public static User GetTestUser(int id)
         {
             return new User
@@ -117,27 +129,27 @@ namespace ForumSystemTeamFour.Tests.MockModels
         {
             var mockRepository = new Mock<IUsersRepository>();
 
-            mockRepository.Setup(repository => repository.Create(GetDefaultUser()))
+            mockRepository.Setup(repository => repository.Create(It.IsAny<User>()))
                 .Returns(GetDefaultUser());
-            mockRepository.Setup(repository => repository.Delete(GetDefaultUser()))
+            mockRepository.Setup(repository => repository.Delete(It.IsAny<User>()))
                 .Returns(GetDefaultUser());
             mockRepository.Setup(repository => repository.FilterBy(It.IsAny<User>(), It.IsAny<UserQueryParameters>()))
                 .Returns(GetTestUserResponseDtoList(3));
             mockRepository.Setup(repository => repository.GetAll())
                 .Returns(GetTestUserResponseDtoList(3));
-            mockRepository.Setup(repository => repository.GetByUsername(ValidUsername))
+            mockRepository.Setup(repository => repository.GetByUsername(It.IsAny<string>()))
                 .Returns(GetDefaultUser());
-            mockRepository.Setup(repository => repository.GetById(DefaultId))
+            mockRepository.Setup(repository => repository.GetById(It.IsAny<int>()))
                 .Returns(GetTestUser(DefaultId));
             mockRepository.Setup(repository => repository.Update(GetDefaultUser(), It.IsAny<UserUpdateDto>()))
                 .Returns(GetDefaultUser());
-            mockRepository.Setup(repository => repository.PromoteToAdmin(DefaultId))
+            mockRepository.Setup(repository => repository.PromoteToAdmin(It.IsAny<int>()))
                 .Returns(GetDefaultAdmin());
-            mockRepository.Setup(repository => repository.DemoteFromAdmin(DefaultId))
+            mockRepository.Setup(repository => repository.DemoteFromAdmin(It.IsAny<int>()))
                 .Returns(GetDefaultUser());
-            mockRepository.Setup(repository => repository.Block(DefaultId))
+            mockRepository.Setup(repository => repository.Block(It.IsAny<int>()))
                 .Returns(GetBlockedUser());
-            mockRepository.Setup(repository => repository.Unblock(DefaultId))
+            mockRepository.Setup(repository => repository.Unblock(It.IsAny<int>()))
                 .Returns(GetDefaultUser());
 
             return mockRepository;
