@@ -89,11 +89,10 @@ namespace ForumSystemTeamFour.Repositories
                 {
                     filteredUsers = filteredUsers.OrderBy(user => user.Username).ToList(); 
                 }
-
-                if (!string.IsNullOrEmpty(filterParameters.SortOrder) && filterParameters.SortOrder.Equals("desc", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    filteredUsers.Reverse();
-                }
+            }
+            if (!string.IsNullOrEmpty(filterParameters.SortOrder) && filterParameters.SortOrder.Equals("desc", StringComparison.InvariantCultureIgnoreCase))
+            {
+                filteredUsers.Reverse();
             }
             if (filteredUsers.Count == 0)
             {

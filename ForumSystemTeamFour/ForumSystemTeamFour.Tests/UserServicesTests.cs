@@ -10,8 +10,9 @@ namespace ForumSystemTeamFour.Tests
     [TestClass]
     public class UserServicesTests
     {
-        [TestMethod]
         /*[DataRow(TaskTitleMaxLength + 1)]*/
+        
+        [TestMethod]        
         public void Block_ShouldBlockUser_WhenInputIsValid()
         {
             var mockUserRepository = TestModels.GetTestUsersRepository().Object;
@@ -240,14 +241,14 @@ namespace ForumSystemTeamFour.Tests
             Assert.ThrowsException<UnauthorizedAccessException>(()=> testedServices.DemoteFromAdmin(loggedUserId, IdtoDemote));
         }
 
-       /* [TestMethod]
+        [TestMethod]
         public void DemoteFromAdmin_ShouldThrow_WhenUserToDemoteIsNotAdmin()
         {
             var mockUserRepository = TestModels.GetTestUsersRepository();
             mockUserRepository.Setup(repository => repository.DemoteFromAdmin(It.IsAny<int>()))
             .Throws<InvalidUserInputException>();
 
-            var mockSecurityServices = TestModels.GetInvalidAuthenticationTestSecurity().Object;
+            var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
             var mockUserMapper = TestModels.GetTestUserMapper().Object;
 
             var testedServices = new UserServices(mockUserRepository.Object, mockSecurityServices, mockUserMapper);
@@ -255,6 +256,6 @@ namespace ForumSystemTeamFour.Tests
             int IdtoDemote = TestModels.DefaultId + 1;
 
             Assert.ThrowsException<InvalidUserInputException>(()=> testedServices.DemoteFromAdmin(loggedUserId, IdtoDemote));
-        }*/
+        }
     }
 }

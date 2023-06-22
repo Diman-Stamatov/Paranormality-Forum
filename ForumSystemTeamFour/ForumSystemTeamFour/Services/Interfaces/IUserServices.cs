@@ -8,6 +8,7 @@ namespace ForumSystemTeamFour.Services.Interfaces
     public interface IUserServices
     {
         List<UserResponseDto> FilterBy(int loggedUserId, UserQueryParameters filterParameters);
+        User GetById(int id);
         User Create(UserCreateDto userDto);
         User Update(int loggedUserId, int idToUpdate, UserUpdateDto updateData);
         User Delete(int loggedUserId, int idToDelete);

@@ -22,6 +22,11 @@ namespace ForumSystemTeamFour.Services
             this.userMapper = userMapper;
         }
 
+        public User GetById(int id)
+        {
+            return repository.GetById(id);
+        }
+
         public User Block(int loggedUserId, int idToBlock)
         {
             var loggedUser = this.repository.GetById(loggedUserId);

@@ -74,7 +74,7 @@ namespace ForumSystemTeamFour.Services
         {
             var loggedUser = this.Authenticate(login);
             var claims = new[] {
-                new Claim("Id", Guid.NewGuid().ToString()),
+                new Claim("LoggedUserId", loggedUser.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, loggedUser.Username),
                 new Claim(JwtRegisteredClaimNames.Email, loggedUser.Email),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())

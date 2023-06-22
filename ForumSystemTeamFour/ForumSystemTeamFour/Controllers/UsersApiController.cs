@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -34,10 +35,12 @@ namespace ForumSystemTeamFour.Controllers
 
         [Authorize]
         [HttpGet("")]
-        public IActionResult FilterUsers([FromHeader][Required] int loggedUserId, [FromQuery] UserQueryParameters filterParameters)
+        public IActionResult FilterUsers([FromQuery] UserQueryParameters filterParameters)
         {
             try
             {
+                int loggedUserId = LoggedUserIdFromClaim();
+
                 List<UserResponseDto> filterResult = this.userServices.FilterBy(loggedUserId, filterParameters);
                 return this.StatusCode(StatusCodes.Status200OK, filterResult);
             }
@@ -101,19 +104,21 @@ namespace ForumSystemTeamFour.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("/security/logout")]
         public IActionResult DeleteToken()
         {
-                Response.Cookies.Append("Cookie_JWT", "noToken");
-                return this.StatusCode(StatusCodes.Status200OK, "You have successfully logged out!");
+            Response.Cookies.Append("Cookie_JWT", "noToken");
+            return this.StatusCode(StatusCodes.Status200OK, "You have successfully logged out!");
         }
 
         [Authorize]
         [HttpPut("update/{id}")]
-        public IActionResult UpdateUser([FromHeader][Required] int loggedUserId, int id, [FromQuery] UserUpdateDto updateData)
+        public IActionResult UpdateUser(int id, [FromQuery] UserUpdateDto updateData)
         {
             try
             {
+                int loggedUserId = LoggedUserIdFromClaim();
                 User updatedUser = this.userServices.Update(loggedUserId, id, updateData);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
@@ -138,10 +143,11 @@ namespace ForumSystemTeamFour.Controllers
 
         [Authorize]
         [HttpPut("promote/{id}")]
-        public IActionResult PromoteToAdmin([FromHeader][Required] int loggedUserId, int id)
+        public IActionResult PromoteToAdmin([Required] int id)
         {
             try
             {
+                int loggedUserId = LoggedUserIdFromClaim();
                 User updatedUser = this.userServices.PromoteToAdmin(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
@@ -166,10 +172,11 @@ namespace ForumSystemTeamFour.Controllers
 
         [Authorize]
         [HttpPut("demote/{id}")]
-        public IActionResult DemoteFromAdmin([FromHeader][Required] int loggedUserId, int id)
+        public IActionResult DemoteFromAdmin(int id)
         {
             try
             {
+                int loggedUserId = LoggedUserIdFromClaim();
                 User updatedUser = this.userServices.DemoteFromAdmin(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
@@ -194,10 +201,12 @@ namespace ForumSystemTeamFour.Controllers
 
         [Authorize]
         [HttpPut("block/{id}")]
-        public IActionResult Block([FromHeader][Required] int loggedUserId, int id)
+        public IActionResult Block(int id)
         {
             try
             {
+                int loggedUserId = LoggedUserIdFromClaim();
+
                 User updatedUser = this.userServices.Block(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
@@ -222,10 +231,12 @@ namespace ForumSystemTeamFour.Controllers
 
         [Authorize]
         [HttpPut("unblock/{id}")]
-        public IActionResult Unblock([FromHeader][Required] int loggedUserId, int id)
+        public IActionResult Unblock(int id)
         {
             try
             {
+                int loggedUserId = LoggedUserIdFromClaim();
+
                 User updatedUser = this.userServices.Unblock(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
@@ -250,10 +261,12 @@ namespace ForumSystemTeamFour.Controllers
 
         [Authorize]
         [HttpDelete("{id}")]
-        public IActionResult DeleteUser([FromHeader][Required] int loggedUserId, int id)
+        public IActionResult DeleteUser(int id)
         {
             try
             {
+                int loggedUserId = LoggedUserIdFromClaim();
+
                 var deletedUser = this.userServices.Delete(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, deletedUser);
@@ -270,6 +283,14 @@ namespace ForumSystemTeamFour.Controllers
             {
                 return this.StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
             }
+        }
+
+        private int LoggedUserIdFromClaim()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userIdClaim = identity.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+
+            return int.Parse(userIdClaim);
         }
 
     }
