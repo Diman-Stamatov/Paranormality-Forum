@@ -72,7 +72,7 @@ namespace ForumSystemTeamFour.Repositories
 
             if (filterParameters.Blocked != null)
             {
-                filteredUsers = filteredUsers.FindAll(user => user.Blocked == filterParameters.Blocked);
+                filteredUsers = filteredUsers.FindAll(user => user.IsBlocked == filterParameters.Blocked);
             }
 
             if (!string.IsNullOrEmpty(filterParameters.SortBy))
@@ -204,7 +204,7 @@ namespace ForumSystemTeamFour.Repositories
             {
                 throw new EntityNotFoundException(string.Format(NoUserFoundMessage, idToBlock));
             }
-            if (userToBlock.Blocked == true)
+            if (userToBlock.IsBlocked == true)
             {
                 throw new InvalidUserInputException($"\"{userToBlock.Username}\" is already blocked!");
             }
@@ -212,7 +212,7 @@ namespace ForumSystemTeamFour.Repositories
             {
                 throw new InvalidUserInputException($"\"{userToBlock.Username}\" is an Administrator and cannot be blocked!");
             }
-            userToBlock.Blocked = true;
+            userToBlock.IsBlocked = true;
 
             context.SaveChanges();
             return userToBlock;
@@ -226,11 +226,11 @@ namespace ForumSystemTeamFour.Repositories
             {
                 throw new EntityNotFoundException(string.Format(NoUserFoundMessage, idToUnblock));
             }
-            if (userToUnblock.Blocked == false)
+            if (userToUnblock.IsBlocked == false)
             {
                 throw new InvalidUserInputException($"\"{userToUnblock.Username}\" hasn't been blocked!");
             }            
-            userToUnblock.Blocked = false;
+            userToUnblock.IsBlocked = false;
 
             context.SaveChanges();
             return userToUnblock;

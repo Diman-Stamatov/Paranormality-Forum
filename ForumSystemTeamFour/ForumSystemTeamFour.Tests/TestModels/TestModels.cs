@@ -71,7 +71,7 @@ namespace ForumSystemTeamFour.Tests.MockModels
         public static User GetBlockedUser()
         {
             var blockedUser = GetDefaultUser();
-            blockedUser.Blocked = true;
+            blockedUser.IsBlocked = true;
             return blockedUser;
         }
 

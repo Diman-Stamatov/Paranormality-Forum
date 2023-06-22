@@ -25,12 +25,12 @@ namespace ForumSystemTeamFour.Tests
 
             var blockedUser = testedServices.Block(loggedUserID, idToBlock);
 
-            Assert.AreEqual(blockedUser.Blocked, true);
+            Assert.AreEqual(blockedUser.IsBlocked, true);
 
         }
 
         [TestMethod]
-        public void Block_ShouldThrow_WhenNotAdmin()
+        public void Block_ShouldThrow_WhenLoggedUserIsNotAdmin()
         {
             var mockUserRepository = TestModels.GetTestUsersRepository().Object;
             var mockSecurityServices = TestModels.GetInvalidAuthenticationTestSecurity().Object;
@@ -242,7 +242,7 @@ namespace ForumSystemTeamFour.Tests
         }
 
         [TestMethod]
-        public void DemoteFromAdmin_ShouldThrow_WhenUserToDemoteIsNotAdmin()
+        public void DemoteFromAdmin_ShouldThrow_WhenUserToDemoteIsAdmin()
         {
             var mockUserRepository = TestModels.GetTestUsersRepository();
             mockUserRepository.Setup(repository => repository.DemoteFromAdmin(It.IsAny<int>()))
@@ -256,6 +256,86 @@ namespace ForumSystemTeamFour.Tests
             int IdtoDemote = TestModels.DefaultId + 1;
 
             Assert.ThrowsException<InvalidUserInputException>(()=> testedServices.DemoteFromAdmin(loggedUserId, IdtoDemote));
+        }
+
+        [TestMethod]
+        public void PromoteToAdmin_ShouldPromote_WhenInputIsValid()
+        {
+            var mockUserRepository = TestModels.GetTestUsersRepository().Object;
+            var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
+            var mockUserMapper = TestModels.GetTestUserMapper().Object;
+
+            var testedServices = new UserServices(mockUserRepository, mockSecurityServices, mockUserMapper);
+            int loggedUserId = TestModels.DefaultId;
+            int idToPromote = TestModels.DefaultId + 1;
+
+            var promotedUser = testedServices.PromoteToAdmin(loggedUserId, idToPromote);
+
+            Assert.AreEqual(promotedUser.IsAdmin, true);
+        }
+
+        [TestMethod]
+        public void PromoteToAdmin_ShouldThrow_WhenLoggedUserIsNotAdmin()
+        {
+            var mockUserRepository = TestModels.GetTestUsersRepository().Object;
+            var mockSecurityServices = TestModels.GetInvalidAuthenticationTestSecurity().Object;
+            var mockUserMapper = TestModels.GetTestUserMapper().Object;
+
+            var testedServices = new UserServices(mockUserRepository, mockSecurityServices, mockUserMapper);
+            int loggedUserId = TestModels.DefaultId;
+            int idToPromote = TestModels.DefaultId + 1;
+
+            Assert.ThrowsException<UnauthorizedAccessException>(() => testedServices.PromoteToAdmin(loggedUserId, idToPromote));
+        }
+
+        [TestMethod]
+        public void PromoteToAdmin_ShouldThrow_WhenUserNotFound()
+        {
+            var mockUserRepository = TestModels.GetTestUsersRepository();
+            mockUserRepository.Setup(repository => repository.PromoteToAdmin(It.IsAny<int>()))
+           .Throws<EntityNotFoundException>();
+
+            var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
+            var mockUserMapper = TestModels.GetTestUserMapper().Object;
+
+            var testedServices = new UserServices(mockUserRepository.Object, mockSecurityServices, mockUserMapper);
+            int loggedUserId = TestModels.DefaultId;
+            int idToPromote = TestModels.DefaultId + 1;
+
+            Assert.ThrowsException<EntityNotFoundException>(() => testedServices.PromoteToAdmin(loggedUserId, idToPromote));
+        }
+
+        [TestMethod]
+        public void PromoteToAdmin_ShouldThrow_WhenUserIsAdmin()
+        {
+            var mockUserRepository = TestModels.GetTestUsersRepository();
+            mockUserRepository.Setup(repository => repository.PromoteToAdmin(It.IsAny<int>()))
+           .Throws<InvalidUserInputException>();
+
+            var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
+            var mockUserMapper = TestModels.GetTestUserMapper().Object;
+
+            var testedServices = new UserServices(mockUserRepository.Object, mockSecurityServices, mockUserMapper);
+            int loggedUserId = TestModels.DefaultId;
+            int idToPromote = TestModels.DefaultId + 1;
+
+            Assert.ThrowsException<InvalidUserInputException>(() => testedServices.PromoteToAdmin(loggedUserId, idToPromote));
+        }
+
+        [TestMethod]
+        public void Unblock_ShouldUnblock_WhenInputIsValid()
+        {
+            var mockUserRepository = TestModels.GetTestUsersRepository().Object;
+            var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
+            var mockUserMapper = TestModels.GetTestUserMapper().Object;
+
+            var testedServices = new UserServices(mockUserRepository, mockSecurityServices, mockUserMapper);
+            int loggedUserId = TestModels.DefaultId;
+            int idToUnblock = TestModels.DefaultId + 1;
+
+            var promotedUser = testedServices.Unblock(loggedUserId, idToUnblock);
+
+            Assert.AreEqual(promotedUser.IsBlocked, false);
         }
     }
 }

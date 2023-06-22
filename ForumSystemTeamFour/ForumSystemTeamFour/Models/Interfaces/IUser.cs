@@ -10,6 +10,6 @@
         string Password { get; set; }
         bool IsAdmin { get; set; }
         string? PhoneNumber { get; set; }
-        bool Blocked { get; set; }
+        bool IsBlocked { get; set; }
     }
 }

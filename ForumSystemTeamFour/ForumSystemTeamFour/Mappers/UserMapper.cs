@@ -28,7 +28,7 @@ namespace ForumSystemTeamFour.Mappers
                 LastName = user.LastName,
                 Email = user.Email,
                 Username = user.Username,
-                Blocked = user.Blocked,
+                Blocked = user.IsBlocked,
             };
         }
         public List<UserResponseDto> Map(List<User> users)

@@ -26,7 +26,7 @@ namespace ForumSystemTeamFour.Models
         
         [MaxLength(16)]
         public string PhoneNumber { get; set; }
-        public bool Blocked { get; set; }
+        public bool IsBlocked { get; set; }
         public override bool Equals(object otherUser)
         {
             var comparedUser = (User)otherUser;
