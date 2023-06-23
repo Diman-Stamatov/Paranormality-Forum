@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ForumSystemTeamFour.Mappers;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ForumSystemTeamFour.Models.DTOs
 {
@@ -11,6 +13,8 @@ namespace ForumSystemTeamFour.Models.DTOs
         public string Username { get; set; }
 
         public string Email { get; set; }  
+        //ToDo Update later with proper Thread DTO
+        public List<ThreadResponseDto> Threads { get; set; }
 
         public bool Blocked { get; set; }
 

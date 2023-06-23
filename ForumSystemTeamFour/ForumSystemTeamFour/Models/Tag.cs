@@ -8,5 +8,9 @@ namespace ForumSystemTeamFour.Models
         public int Id { get ; set ; }
         public string Name { get; set; }
         public List<Thread> Threads { get; set; }
+        public Tag() 
+        { 
+            Threads = new List<Thread>();
+        }
     }
 }

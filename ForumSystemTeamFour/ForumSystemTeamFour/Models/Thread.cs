@@ -10,5 +10,11 @@ namespace ForumSystemTeamFour.Models
         public string Title { get; set; }
         public List<Reply> Replies { get; set; }
         public List<Tag> Tags { get; set; }
+
+        public Thread()
+        {
+            Replies = new List<Reply>();
+            Tags = new List<Tag>();
+        }
     }
 }

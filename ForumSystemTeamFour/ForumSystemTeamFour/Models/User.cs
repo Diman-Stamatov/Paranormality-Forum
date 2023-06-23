@@ -1,4 +1,5 @@
 ﻿using ForumSystemTeamFour.Models.Interfaces;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ForumSystemTeamFour.Models
@@ -27,6 +28,14 @@ namespace ForumSystemTeamFour.Models
         [MaxLength(16)]
         public string PhoneNumber { get; set; }
         public bool IsBlocked { get; set; }
+        public List<Thread> Threads { get; set; }
+        public List<Reply> Replies { get; set; }
+
+        public User()
+        {
+            Threads= new List<Thread>();
+            Replies= new List<Reply>();
+        }
         public override bool Equals(object otherUser)
         {
             var comparedUser = (User)otherUser;

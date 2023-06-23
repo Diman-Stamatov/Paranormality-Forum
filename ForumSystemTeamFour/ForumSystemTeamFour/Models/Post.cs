@@ -8,7 +8,8 @@ namespace ForumSystemTeamFour.Models
     {
         public int Id { get; set; }
         public DateTime CreationDate { get; set; }
-        public int? AuthorId { get; set; }
+        
+        public int AuthorId { get; set; }
         public User Author { get; set; }
 
         [MaxLength(8192)]    

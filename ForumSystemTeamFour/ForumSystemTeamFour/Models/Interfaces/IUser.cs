@@ -1,4 +1,6 @@
-﻿namespace ForumSystemTeamFour.Models.Interfaces
+﻿using System.Collections.Generic;
+
+namespace ForumSystemTeamFour.Models.Interfaces
 {
     public interface IUser
     {
@@ -11,5 +13,7 @@
         bool IsAdmin { get; set; }
         string? PhoneNumber { get; set; }
         bool IsBlocked { get; set; }
+        List<Thread> Threads { get; set; }
+        List<Reply> Replies { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace ForumSystemTeamFour.Repositories
 {
@@ -45,7 +46,11 @@ namespace ForumSystemTeamFour.Repositories
 
         public List<UserResponseDto> FilterBy(User loggedUser, UserQueryParameters filterParameters)
         {
-            var filteredUsers = context.Users.ToList();
+            var filteredUsers = context.Users
+                .Include(user=>user.Threads)
+                .ThenInclude(thread=>thread.Replies)
+                .ToList();
+
             if (!string.IsNullOrEmpty(filterParameters.FirstName))
             {
                 filteredUsers = filteredUsers.FindAll(user => user.FirstName == filterParameters.FirstName);

@@ -28,6 +28,7 @@ namespace ForumSystemTeamFour.Mappers
                 LastName = user.LastName,
                 Email = user.Email,
                 Username = user.Username,
+                Threads = MapThreads(user.Threads),
                 Blocked = user.IsBlocked,
             };
         }
@@ -41,5 +42,30 @@ namespace ForumSystemTeamFour.Mappers
             }
             return mappedUsers;
         }
+        //ToDo Update later with proper Thread DTO
+        public List<ThreadResponseDto> MapThreads(List<Thread> threads)
+        {
+            var mappedThreads = new List<ThreadResponseDto>();
+            foreach (var thread in threads)
+            {
+                mappedThreads.Add(new ThreadResponseDto
+                {
+                    Title = thread.Title,
+                    CreationDate = thread.CreationDate.ToString(),
+                    Author = thread.Author.Username,
+                    NumberOfReplies = thread.Replies.Count
+                });
+            }
+            return mappedThreads;
+        }
+    }
+    //ToDo Update later with proper Thread DTO
+    public class ThreadResponseDto
+    {
+        public string Title { get; set; }
+        public string CreationDate { get; set; }
+        public string Author { get; set; }
+        public int NumberOfReplies { get; set; }
+
     }
 }

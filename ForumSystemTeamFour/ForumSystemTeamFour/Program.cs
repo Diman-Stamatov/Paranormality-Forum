@@ -18,6 +18,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ForumSystemTeamFour
@@ -30,12 +31,15 @@ namespace ForumSystemTeamFour
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
             // Data persistence
             builder.Services.AddDbContext<ForumDbContext>(options =>
             {
                 var connectionString = builder.Configuration["ForumSystem:DevConnectionString"];
                 options.UseSqlServer(connectionString);
+                options.EnableSensitiveDataLogging();
             });
 
             builder.Services.AddSwaggerGen(options =>
