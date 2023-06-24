@@ -17,144 +17,56 @@ namespace ForumSystemTeamFour.Data
         public DbSet<Thread> Threads { get; set; }
         public DbSet<Reply> Replies { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<ThreadTag> ThreadTags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            var tag1 = new Tag
+            var users = new List<User>() 
             {
-                Id = 1,
-                Name = "##ModPost"
-            };
-            var tag2 = new Tag
-            {
-                Id = 2,
-                Name = "Ufo"
-            };
-            var tag3 = new Tag
-            {
-                Id = 3,
-                Name = "Skinwalker"
-            };
-            var tag4 = new Tag
-            {
-                Id = 4,
-                Name = "Bigfoot"
-            };
-
-            var user1 = new User
-            {
+                new User {
                 Id = 1,
                 FirstName = "FirstNameOne",
                 LastName = "LastNameOne",
                 Username = "UsernameOne",
                 Email = "FirstnameOne@Lastname.com",
-                Password = "passwordOne",                
-                IsAdmin = true
-            };
-            var user2 = new User
-            {
+                Password = "passwordOne",
+                IsAdmin = true 
+                },
+                new User {
                 Id = 2,
                 FirstName = "FirstNameTwo",
                 LastName = "LastNameTwo",
                 Username = "UsernameTwo",
                 Email = "FirstnameTwo@Lastname.com",
-                Password = "passwordTwo"
-            };
-            var user3 = new User
-            {
+                Password = "passwordTwo",
+                IsBlocked = true 
+                },
+                new User {
                 Id = 3,
                 FirstName = "FirstNameThree",
                 LastName = "LastNameThree",
                 Username = "UsernameThree",
                 Email = "FirstnameThree@Lastname.com",
-                Password = "passwordThree"
-            };
-            var user4 = new User
-            {
+                Password = "passwordThree" 
+                },
+                new User {
                 Id = 4,
                 FirstName = "FirstNameFour",
                 LastName = "LastNameFour",
                 Username = "UsernameFour",
                 Email = "FirstnameFour@Lastname.com",
                 Password = "passwordFour"
-            };
-            var user5 = new User
-            {
+                },
+                new User {
                 Id = 5,
                 FirstName = "FirstNameFive",
                 LastName = "LastNameFive",
                 Username = "UsernameFive",
                 Email = "FirstnameFive@Lastname.com",
                 Password = "passwordFive"
-            };
-
-            var thread1 = new Thread
-            {
-                Id = 1,
-                AuthorId = 2,
-                Title = "First lol",
-                CreationDate = DateTime.Now.AddMinutes(1),                
-                Content = "Hey guys, check out this cool new forum I found!"
-
-            };
-            var thread2 = new Thread
-            {
-                Id = 2,
-                AuthorId = 1,
-                Title = "Welcome to Paranormality.",
-                CreationDate = DateTime.Now.AddMinutes(2),                
-                Content = "This is not a forum for the faint of heart." +
-                            " If you need something to get started with, see the pinned threads for some basic resources." +
-                            " We hope you enjoy your venture into the spooks, the creeps and the unknown."
-            };
-
-            var reply1 = new Reply
-            {
-                Id = 1,
-                AuthorId = 1,
-                ThreadId = 2,
-                CreationDate = DateTime.Now.AddMinutes(3),                
-                Content = "Some of these lists are still a work in progress, as of this writing." +
-                "\n\nFilm Recommendations" +
-                "\n\nGame Recommendations" +
-                "\n\nRadio Shows/Podcasts" +
-                "\n\nWebsites of Interest" +
-                "\n\nWikipedia Articles" +
-                "\n\nYouTube Videos & Channels"
-            };
-            var reply2 = new Reply
-            {
-                Id = 2,
-                AuthorId = 1,
-                ThreadId = 2,
-                CreationDate = DateTime.Now.AddMinutes(4),                
-                Content = "Please note the following:\n\n" +
-                "• This forum desires high quality discussion. High quality posts will be praised.\n\n" +
-                " Low quality posts e.g. \"Is this paranormal?\" or " +
-                "\"I am [insert paranormal entity here] ask me anything,\" etc. will be removed.\n\n" +
-                "• Conspiracy theories are welcome, but please refrain from overly political discussions" +
-                "• For everything else, refer to global and thread-specific rules."
-            };
-
-            var tags = new List<Tag>()
-            {
-                tag1,
-                tag2,
-                tag3,
-                tag4
-            };
-            modelBuilder.Entity<Tag>().HasData(tags);
-
-            
-            var users = new List<User>() 
-            {
-                user1, 
-                user2, 
-                user3, 
-                user4, 
-                user5
+                }
             };            
             modelBuilder.Entity<User>().HasData(users);
 
@@ -173,8 +85,22 @@ namespace ForumSystemTeamFour.Data
            
             var threads = new List<Thread>()
             {
-                thread1,
-                thread2
+                new Thread {
+                Id = 1,
+                AuthorId = 2,
+                Title = "First lol",
+                CreationDate = DateTime.Now.AddMinutes(1),
+                Content = "Hey guys, check out this cool new forum I found!"
+                },
+                new Thread {
+                Id = 2,
+                AuthorId = 1,
+                Title = "Welcome to Paranormality.",
+                CreationDate = DateTime.Now.AddMinutes(2),
+                Content = "This is not a forum for the faint of heart." +
+                            " If you need something to get started with, see the pinned threads for some basic resources." +
+                            " We hope you enjoy your venture into the spooks, the creeps and the unknown."
+                }
             };
             modelBuilder.Entity<Thread>().HasData(threads);
 
@@ -190,11 +116,39 @@ namespace ForumSystemTeamFour.Data
                 .HasForeignKey(reply => reply.ThreadId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Thread>()
+                .HasMany<Tag>(thread => thread.Tags)
+                .WithMany(tag => tag.Threads)
+                .UsingEntity<ThreadTag>();
+
 
             var replies = new List<Reply>()
             {
-                reply1,
-                reply2
+                 new Reply {
+                Id = 1,
+                AuthorId = 1,
+                ThreadId = 2,
+                CreationDate = DateTime.Now.AddMinutes(3),
+                Content = "Some of these lists are still a work in progress, as of this writing." +
+                "\n\nFilm Recommendations" +
+                "\n\nGame Recommendations" +
+                "\n\nRadio Shows/Podcasts" +
+                "\n\nWebsites of Interest" +
+                "\n\nWikipedia Articles" +
+                "\n\nYouTube Videos & Channels"
+                },
+                new Reply{
+                Id = 2,
+                AuthorId = 1,
+                ThreadId = 2,
+                CreationDate = DateTime.Now.AddMinutes(4),
+                Content = "Please note the following:\n\n" +
+                "• This forum desires high quality discussion. High quality posts will be praised.\n\n" +
+                " Low quality posts e.g. \"Is this paranormal?\" or " +
+                "\"I am [insert paranormal entity here] ask me anything,\" etc. will be removed.\n\n" +
+                "• Conspiracy theories are welcome, but please refrain from overly political discussions." +
+                "• For everything else, refer to global and thread-specific rules."
+                }
             };
             modelBuilder.Entity<Reply>().HasData(replies);
 
@@ -211,12 +165,35 @@ namespace ForumSystemTeamFour.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
 
+            var tags = new List<Tag>()
+            {
+                new Tag{ Id = 1, Name = "##ModPost"},
+                new Tag{ Id = 2, Name = "Ufo"},
+                new Tag{ Id = 3, Name = "Skinwalker"},
+                new Tag{ Id = 4, Name = "Bigfoot"}
+            };
+            modelBuilder.Entity<Tag>().HasData(tags);
+
+            modelBuilder.Entity<Tag>()
+               .HasMany<Thread>(tag => tag.Threads)
+               .WithMany(thread => thread.Tags)
+               .UsingEntity<ThreadTag>();
+
+
+            var threadTags = new List<ThreadTag>()
+            {
+                new ThreadTag(){ThreadId = 1, TagId = 2},
+                new ThreadTag(){ThreadId = 1, TagId = 3},
+                new ThreadTag(){ThreadId = 1, TagId = 4},
+                new ThreadTag(){ThreadId = 2, TagId = 1}
+            };
+            modelBuilder.Entity<ThreadTag>().HasData(threadTags);
 
 
 
-            
 
-            
+
+
         }
     }
 }

@@ -53,7 +53,8 @@ namespace ForumSystemTeamFour.Mappers
                     Title = thread.Title,
                     CreationDate = thread.CreationDate.ToString(),
                     Author = thread.Author.Username,
-                    NumberOfReplies = thread.Replies.Count
+                    NumberOfReplies = thread.Replies.Count,
+                    Tags = TagMapper.Map(thread.Tags)
                 });
             }
             return mappedThreads;
@@ -66,6 +67,7 @@ namespace ForumSystemTeamFour.Mappers
         public string CreationDate { get; set; }
         public string Author { get; set; }
         public int NumberOfReplies { get; set; }
+        public List<string> Tags { get;set; }
 
     }
 }

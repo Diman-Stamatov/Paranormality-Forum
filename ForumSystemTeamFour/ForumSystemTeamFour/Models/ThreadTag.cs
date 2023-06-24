@@ -1,0 +1,8 @@
+﻿namespace ForumSystemTeamFour.Models
+{
+    public class ThreadTag
+    {
+        public int ThreadId { get; set;}
+        public int TagId { get; set;}
+    }
+}

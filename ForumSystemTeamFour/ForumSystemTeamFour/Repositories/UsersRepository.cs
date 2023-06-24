@@ -47,8 +47,10 @@ namespace ForumSystemTeamFour.Repositories
         public List<UserResponseDto> FilterBy(User loggedUser, UserQueryParameters filterParameters)
         {
             var filteredUsers = context.Users
-                .Include(user=>user.Threads)
-                .ThenInclude(thread=>thread.Replies)
+                .Include(user => user.Threads)
+                .ThenInclude(thread => thread.Tags)
+                .Include(user => user.Threads)
+                .ThenInclude(thread => thread.Replies)
                 .ToList();
 
             if (!string.IsNullOrEmpty(filterParameters.FirstName))
