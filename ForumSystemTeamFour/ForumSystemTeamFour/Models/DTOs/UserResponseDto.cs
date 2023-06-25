@@ -16,7 +16,10 @@ namespace ForumSystemTeamFour.Models.DTOs
         //ToDo Update later with proper Thread DTO
         public List<ThreadResponseDto> Threads { get; set; }
 
-        public bool Blocked { get; set; }
+        public bool IsAdmin { get; set; }
+
+        public bool IsBlocked { get; set; }
+        
 
         public override bool Equals(object otherDto)
         {
@@ -25,7 +28,7 @@ namespace ForumSystemTeamFour.Models.DTOs
                 && this.LastName == comparedDto.LastName
                 && this.Username == comparedDto.Username
                 && this.Email == comparedDto.Email
-                && this.Blocked == comparedDto.Blocked)
+                && this.IsBlocked == comparedDto.IsBlocked)
             {
                 return true;
             }

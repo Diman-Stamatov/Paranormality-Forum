@@ -29,7 +29,8 @@ namespace ForumSystemTeamFour.Mappers
                 Email = user.Email,
                 Username = user.Username,
                 Threads = MapThreads(user.Threads),
-                Blocked = user.IsBlocked,
+                IsAdmin = user.IsAdmin,
+                IsBlocked = user.IsBlocked,
             };
         }
         public List<UserResponseDto> Map(List<User> users)

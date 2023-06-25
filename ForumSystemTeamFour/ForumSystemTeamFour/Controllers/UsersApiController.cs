@@ -119,7 +119,7 @@ namespace ForumSystemTeamFour.Controllers
             try
             {
                 int loggedUserId = LoggedUserIdFromClaim();
-                User updatedUser = this.userServices.Update(loggedUserId, id, updateData);
+                var updatedUser = this.userServices.Update(loggedUserId, id, updateData);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -148,7 +148,7 @@ namespace ForumSystemTeamFour.Controllers
             try
             {
                 int loggedUserId = LoggedUserIdFromClaim();
-                User updatedUser = this.userServices.PromoteToAdmin(loggedUserId, id);
+                var updatedUser = this.userServices.PromoteToAdmin(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -177,7 +177,7 @@ namespace ForumSystemTeamFour.Controllers
             try
             {
                 int loggedUserId = LoggedUserIdFromClaim();
-                User updatedUser = this.userServices.DemoteFromAdmin(loggedUserId, id);
+                var updatedUser = this.userServices.DemoteFromAdmin(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -207,7 +207,7 @@ namespace ForumSystemTeamFour.Controllers
             {
                 int loggedUserId = LoggedUserIdFromClaim();
 
-                User updatedUser = this.userServices.Block(loggedUserId, id);
+                var updatedUser = this.userServices.Block(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -237,7 +237,7 @@ namespace ForumSystemTeamFour.Controllers
             {
                 int loggedUserId = LoggedUserIdFromClaim();
 
-                User updatedUser = this.userServices.Unblock(loggedUserId, id);
+                var updatedUser = this.userServices.Unblock(loggedUserId, id);
 
                 return this.StatusCode(StatusCodes.Status200OK, updatedUser);
             }

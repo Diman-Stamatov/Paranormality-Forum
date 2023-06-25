@@ -15,15 +15,12 @@ namespace ForumSystemTeamFour.Repositories
 {
 
     public class UsersRepository : IUsersRepository
-    {
-        private const string NoUserFoundMessage = "No user with the ID number {0} exists on the forum!";
+    {        
         private readonly ForumDbContext context;
-        private readonly IUserMapper userMapper;
 
-        public UsersRepository(ForumDbContext context, IUserMapper userMapper)
+        public UsersRepository(ForumDbContext context)
         {
-            this.context = context;
-            this.userMapper = userMapper;
+            this.context = context;            
         }
 
         public User Create(User user)        
@@ -38,15 +35,16 @@ namespace ForumSystemTeamFour.Repositories
 
         public User Delete(User userToDelete)
         {
-            context.Users.Remove(userToDelete);
+            userToDelete.IsDeleted = true;
             context.SaveChanges();
 
             return userToDelete;
         }
 
-        public List<UserResponseDto> FilterBy(User loggedUser, UserQueryParameters filterParameters)
+        public List<User> FilterBy(User loggedUser, UserQueryParameters filterParameters)
         {
             var filteredUsers = context.Users
+                .Where(user=>user.IsDeleted == false)
                 .Include(user => user.Threads)
                 .ThenInclude(thread => thread.Tags)
                 .Include(user => user.Threads)
@@ -106,24 +104,23 @@ namespace ForumSystemTeamFour.Repositories
                 throw new EntityNotFoundException("No users correspond to the specified search parameters!");
             }
             
-            return userMapper.Map(filteredUsers);
+            return filteredUsers;
         }
 
-        public List<UserResponseDto> GetAll()
+        public List<User> GetAll()
         {
-            var allUsers = context.Users.ToList();
-            return userMapper.Map(allUsers);
+            var allUsers = context.Users.Where(user=>user.IsDeleted == false).ToList();
+            return allUsers;
         }
         
         public User GetByUsername(string username)
         {
             //CaseInsensitive
-            /*var foundUser = context.Users.FirstOrDefault(user=>user.Username == username);*/
+            /*var foundUser = context.Users.FirstOrDefault(user => user.Username == username && user.IsDeleted == false);*/
 
-            
-            foreach (var user in context.Users)
+             foreach (var user in context.Users)
             {
-                if (user.Username == username)
+                if (user.Username == username && user.IsDeleted == false)
                 {
                     return user;
                 }
@@ -134,7 +131,11 @@ namespace ForumSystemTeamFour.Repositories
         public User GetById(int id)
         {
             var foundUser = context.Users.FirstOrDefault(user => user.Id == id);
-            return foundUser ?? throw new EntityNotFoundException(string.Format(NoUserFoundMessage, id));
+            if (foundUser == null || foundUser.IsDeleted == true)
+            {
+                throw new EntityNotFoundException($"No user with the ID number {id} exists on the forum!");
+            }
+            return foundUser;
         }
         public User Update(User userToUpdate, UserUpdateDto updateData)
         {
@@ -170,10 +171,6 @@ namespace ForumSystemTeamFour.Repositories
         {
             var userToPromote = this.GetById(idToPromote);
             
-            if (userToPromote == null)
-            {
-                throw new EntityNotFoundException(string.Format(NoUserFoundMessage, idToPromote));
-            }
             if (userToPromote.IsAdmin==true)
             {
                 throw new InvalidUserInputException($"\"{userToPromote.Username}\" is already an Administrator!");
@@ -187,11 +184,7 @@ namespace ForumSystemTeamFour.Repositories
         public User DemoteFromAdmin(int idToDemote)
         {
             var userToDemote = this.GetById(idToDemote);
-            
-            if (userToDemote == null)
-            {
-                throw new EntityNotFoundException(string.Format(NoUserFoundMessage, idToDemote));
-            }
+                        
             if (userToDemote.IsAdmin == false)
             {
                 throw new InvalidUserInputException($"\"{userToDemote.Username}\" is already a basic user!");
@@ -205,12 +198,8 @@ namespace ForumSystemTeamFour.Repositories
 
         public User Block(int idToBlock)
         {
-            var userToBlock = this.GetById(idToBlock);
+            var userToBlock = this.GetById(idToBlock);            
             
-            if (userToBlock == null)
-            {
-                throw new EntityNotFoundException(string.Format(NoUserFoundMessage, idToBlock));
-            }
             if (userToBlock.IsBlocked == true)
             {
                 throw new InvalidUserInputException($"\"{userToBlock.Username}\" is already blocked!");
@@ -227,12 +216,8 @@ namespace ForumSystemTeamFour.Repositories
 
         public User Unblock(int idToUnblock)
         {
-            var userToUnblock = this.GetById(idToUnblock);
+            var userToUnblock = this.GetById(idToUnblock);            
             
-            if (userToUnblock == null)
-            {
-                throw new EntityNotFoundException(string.Format(NoUserFoundMessage, idToUnblock));
-            }
             if (userToUnblock.IsBlocked == false)
             {
                 throw new InvalidUserInputException($"\"{userToUnblock.Username}\" hasn't been blocked!");

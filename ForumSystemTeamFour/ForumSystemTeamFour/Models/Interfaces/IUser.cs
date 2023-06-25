@@ -13,6 +13,7 @@ namespace ForumSystemTeamFour.Models.Interfaces
         bool IsAdmin { get; set; }
         string? PhoneNumber { get; set; }
         bool IsBlocked { get; set; }
+        bool IsDeleted { get; set; }
         List<Thread> Threads { get; set; }
         List<Reply> Replies { get; set; }
     }
