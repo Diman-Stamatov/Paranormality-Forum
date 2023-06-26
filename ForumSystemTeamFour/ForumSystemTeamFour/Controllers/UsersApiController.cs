@@ -55,12 +55,7 @@ namespace ForumSystemTeamFour.Controllers
             catch (InvalidUserInputException exception)
             {
                 return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
-            }
-            catch (BadHttpRequestException exception)
-            {
-                return this.StatusCode(StatusCodes.Status400BadRequest, exception.Message);
-            }
-
+            } 
         }
 
         [AllowAnonymous]

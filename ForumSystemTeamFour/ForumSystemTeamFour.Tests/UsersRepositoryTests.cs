@@ -23,11 +23,10 @@ namespace ForumSystemTeamFour.Tests
     [TestClass]
     public class UsersRepositoryTests 
     {        
-        private static  ForumDbContext TestContext;
+        private static ForumDbContext TestContext;
         private static int NextTestId = 1;
         public UsersRepositoryTests()
-        {
-            // Build DbContextOptions
+        {            
             var dbContextOptions = new DbContextOptionsBuilder<ForumDbContext>()
                 .UseInMemoryDatabase(databaseName: "ForumTestDB")
                 .Options;
