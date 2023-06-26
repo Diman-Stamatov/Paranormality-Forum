@@ -10,9 +10,10 @@ namespace ForumSystemTeamFour.Data
     public class ForumDbContext : DbContext
     {
         public ForumDbContext(DbContextOptions<ForumDbContext> options) 
-            : base(options)
-        {
-        }
+            : base(options) { }
+        public ForumDbContext()
+            : base() { }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Thread> Threads { get; set; }
         public DbSet<Reply> Replies { get; set; }

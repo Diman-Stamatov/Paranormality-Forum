@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ForumSystemTeamFour.Data;
 using ForumSystemTeamFour.Exceptions;
-using ForumSystemTeamFour.Mappers;
-using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
@@ -198,16 +196,16 @@ namespace ForumSystemTeamFour.Repositories
 
         public User Block(int idToBlock)
         {
-            var userToBlock = this.GetById(idToBlock);            
-            
-            if (userToBlock.IsBlocked == true)
-            {
-                throw new InvalidUserInputException($"\"{userToBlock.Username}\" is already blocked!");
-            }
+            var userToBlock = this.GetById(idToBlock);
+
             if (userToBlock.IsAdmin == true)
             {
                 throw new InvalidUserInputException($"\"{userToBlock.Username}\" is an Administrator and cannot be blocked!");
             }
+            if (userToBlock.IsBlocked == true)
+            {
+                throw new InvalidUserInputException($"\"{userToBlock.Username}\" is already blocked!");
+            }            
             userToBlock.IsBlocked = true;
 
             context.SaveChanges();

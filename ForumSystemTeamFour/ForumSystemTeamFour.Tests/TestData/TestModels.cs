@@ -1,18 +1,22 @@
-﻿using ForumSystemTeamFour.Mappers.Interfaces;
+﻿using ForumSystemTeamFour.Data;
+using ForumSystemTeamFour.Mappers;
+using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.Interfaces;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ForumSystemTeamFour.Tests.MockModels
+namespace ForumSystemTeamFour.Tests.TestData
 {
     internal static class TestModels
     {
@@ -37,6 +41,12 @@ namespace ForumSystemTeamFour.Tests.MockModels
         {
             return new string('x', length);
         }
+
+        public static string GetTestString(int length, char character)
+        {
+            return new string(character, length);
+        }
+
         public static User GetTestUser(int id)
         {
             return new User
@@ -48,8 +58,9 @@ namespace ForumSystemTeamFour.Tests.MockModels
                 Username = ValidUsername + id,
                 Password = ValidPassword + id
             };
-        }
-        public static List<User> GetTestUserList(int numberOfUsers)
+        }        
+
+        public static List<User> GetTestUsersList(int numberOfUsers)
         {
             var testUserList = new List<User>();
 
@@ -60,6 +71,7 @@ namespace ForumSystemTeamFour.Tests.MockModels
 
             return testUserList;
         }
+
         public static User GetDefaultUser()
         {
             return new User
@@ -72,6 +84,7 @@ namespace ForumSystemTeamFour.Tests.MockModels
                 Password = ValidPassword
             };
         }
+
         public static User GetDefaultAdmin()
         {
             var newAdmin = GetDefaultUser();
@@ -79,6 +92,7 @@ namespace ForumSystemTeamFour.Tests.MockModels
             newAdmin.PhoneNumber = ValidPhoneNumber;
             return newAdmin;
         }
+
         public static User GetBlockedUser()
         {
             var blockedUser = GetDefaultUser();
@@ -91,6 +105,7 @@ namespace ForumSystemTeamFour.Tests.MockModels
             return new Tag { Id = id, Name = ValidTagName + id };
             
         }
+
         public static List<Tag> GetTestTagsList(int numberOfTags)
         {
             var tagsList = new List<Tag>();
@@ -103,6 +118,7 @@ namespace ForumSystemTeamFour.Tests.MockModels
             return tagsList;
 
         }
+
         public static UserCreateDto GetTestUserCreateDto()
         {
             return new UserCreateDto
@@ -114,6 +130,7 @@ namespace ForumSystemTeamFour.Tests.MockModels
                 Password = ValidPassword
             };
         }
+
         public static UserResponseDto GetTestUserResponseDto(int extraChar)
         {
             return new UserResponseDto
@@ -124,6 +141,7 @@ namespace ForumSystemTeamFour.Tests.MockModels
                 Username = ValidUsername + extraChar
             };
         }
+
         public static UserResponseDto GetTestAdminResponseDto()
         {
             var defaultDto = GetTestUserResponseDto(DefaultId);
@@ -131,6 +149,7 @@ namespace ForumSystemTeamFour.Tests.MockModels
 
             return defaultDto;
         }
+
         public static UserResponseDto GetTestBlockedUserResponseDto()
         {
             var defaultDto = GetTestUserResponseDto(DefaultId);
@@ -151,15 +170,6 @@ namespace ForumSystemTeamFour.Tests.MockModels
             return responseDtoList;
         }
 
-        public static UserQueryParameters GetTestUserQueryParamaters()
-        {
-            return new UserQueryParameters()
-            {
-                FirstName = ValidFirstName,
-                LastName = ValidLastName
-            };
-        }
-
         public static UserUpdateDto GetTestUserUpdateDto()
         {
             return new UserUpdateDto()
@@ -171,6 +181,7 @@ namespace ForumSystemTeamFour.Tests.MockModels
                 Password = ValidPassword
             };
         }
+        
 
         public static Mock<IUsersRepository> GetTestUsersRepository()
         {
@@ -181,9 +192,9 @@ namespace ForumSystemTeamFour.Tests.MockModels
             mockRepository.Setup(repository => repository.Delete(It.IsAny<User>()))
                 .Returns(GetDefaultUser());
             mockRepository.Setup(repository => repository.FilterBy(It.IsAny<User>(), It.IsAny<UserQueryParameters>()))
-                .Returns(GetTestUserList(3));
+                .Returns(GetTestUsersList(3));
             mockRepository.Setup(repository => repository.GetAll())
-                .Returns(GetTestUserList(3));
+                .Returns(GetTestUsersList(3));
             mockRepository.Setup(repository => repository.GetByUsername(It.IsAny<string>()))
                 .Returns(GetDefaultUser());
             mockRepository.Setup(repository => repository.GetById(It.IsAny<int>()))
@@ -260,6 +271,18 @@ namespace ForumSystemTeamFour.Tests.MockModels
             mockSecurity.Setup(security => security.CheckUserAuthorization(It.IsAny<User>(), It.IsAny<User>()));
 
             return mockSecurity;
+        }
+
+        public static List<UserResponseDto> MapResponseList(List<User> users)
+        {
+            var mapper = new UserMapper();
+            var responseDtoList = new List<UserResponseDto>();
+            foreach (var user in users)
+            { 
+                responseDtoList.Add(mapper.Map(user));
+            }
+
+            return responseDtoList;
         }
     }
 }
