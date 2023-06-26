@@ -50,15 +50,18 @@ namespace ForumSystemTeamFour
             // Repositories
             builder.Services.AddScoped<IUsersRepository, UsersRepository>();
             builder.Services.AddScoped<ITagsRepository, TagsRepository>();
+            builder.Services.AddScoped<IRepliesRepository, RepliesRepository>();
             
             // Services
             builder.Services.AddScoped<IUserServices, UserServices>();
             builder.Services.AddScoped<ISecurityServices, SecurityServices>();
             builder.Services.AddScoped<ITagServices, TagServices>();
+            builder.Services.AddScoped<IReplyService, ReplyService>();
             
             // Helpers
             builder.Services.AddScoped<IUserMapper, UserMapper>();
             builder.Services.AddScoped<ISecurityServices, SecurityServices>();
+            builder.Services.AddScoped<IReplyMapper, ReplyMapper>();
             
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

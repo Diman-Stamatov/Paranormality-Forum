@@ -1,15 +1,19 @@
 ﻿using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Mappers;
+using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace ForumSystemTeamFour.Controllers
 {
@@ -18,41 +22,35 @@ namespace ForumSystemTeamFour.Controllers
     public class RepliesApiController : ControllerBase
     {
         private readonly IReplyService replyService;
-        private readonly ReplyMapper replyMapper;
 
-        public RepliesApiController(IReplyService replyService, ReplyMapper replyMapper)
+        public RepliesApiController(IReplyService replyService)
         {
             this.replyService = replyService;
-            this.replyMapper = replyMapper;
         }
 
         // GetById
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
             try
             {
-                // TODO: Authenticate the user
-                Reply reply = replyService.GetById(id);
-                ReplyReadDto replyDto = replyMapper.Map(reply);
+                ReplyReadDto replyDto = replyService.GetById(id);
                 return StatusCode(StatusCodes.Status200OK, replyDto);
             }
             catch (EntityNotFoundException exception)
             {
                 return StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
-            // TODO: Catch "Auth" exceptions
         }
         // Query replies by threadId, ???DateTime???, username
+        [AllowAnonymous]
         [HttpGet("")]
         public IActionResult FilterBy([FromQuery] ReplyQueryParameters filterParameters)
         {
             try
             {
-                // TODO: Authenticate the user
-                List<Reply> replies = replyService.FilterBy(filterParameters);
-
-                List<ReplyReadDto> repliesDtoList = replies.Select(reply => replyMapper.Map(reply)).ToList();
+                List<ReplyReadDto> repliesDtoList = replyService.FilterBy(filterParameters);
 
                 return StatusCode(StatusCodes.Status200OK, repliesDtoList);
             }
@@ -60,12 +58,126 @@ namespace ForumSystemTeamFour.Controllers
             {
                 return StatusCode(StatusCodes.Status404NotFound, exception.Message);
             }
-            // TODO: Catch "Auth" exceptions
         }
         // Create
+        [Authorize]
+        [HttpPost("")]
+        public IActionResult Create([FromBody] ReplyCreateDto replyCreateDto)
+        {
+
+            try
+            {
+                int loggedUserId = LoggedUserIdFromClaim();
+                if (ModelState.IsValid)
+                {
+                    ReplyReadDto replyDto = replyService.Create(replyCreateDto, loggedUserId);
+                    return StatusCode(StatusCodes.Status200OK, replyDto);
+                }
+                throw new BadHttpRequestException("");
+            }
+            catch (BadHttpRequestException exception)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }
+            // TODO: Catch additional types of exceptions.
+        }
         // Update
+        [Authorize]
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] ReplyUpdateDto replyUpdateDto)
+        {
+            try
+            {
+                int loggedUserId = LoggedUserIdFromClaim();
+                if (ModelState.IsValid)
+                {
+                    ReplyReadDto replyDto = replyService.Update(id, replyUpdateDto, loggedUserId);
+                    return StatusCode(StatusCodes.Status200OK, replyDto);
+                }
+                throw new BadHttpRequestException("");
+            }
+            catch (BadHttpRequestException exception)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
+            // TODO: Catch additional types of exceptions.
+        }
         // Delete
+        [Authorize]
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                int loggedUserId = LoggedUserIdFromClaim();
+                
+                ReplyReadDto replyDto = replyService.Delete(id,loggedUserId);
+                return StatusCode(StatusCodes.Status200OK, replyDto);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
+            // TODO: Catch additional types of exceptions.
+        }
         // UpVote
+        [Authorize]
+        [HttpPut("upvote/{id}")]
+        public IActionResult UpVote(int id)
+        {
+            try
+            {
+                ReplyReadDto replyDto = replyService.UpVote(id);
+                return StatusCode(StatusCodes.Status200OK, replyDto);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
+            // TODO: Catch additional types of exceptions.
+        }
         // DownVote
+        [Authorize]
+        [HttpPut("downvote/{id}")]
+        public IActionResult DownVote(int id)
+        {
+            try
+            {
+                ReplyReadDto replyDto = replyService.DownVote(id);
+                return StatusCode(StatusCodes.Status200OK, replyDto);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
+            // TODO: Catch additional types of exceptions.
+        }
+        private int LoggedUserIdFromClaim()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userIdClaim = identity.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+
+            return int.Parse(userIdClaim);
+        }
     }
 }

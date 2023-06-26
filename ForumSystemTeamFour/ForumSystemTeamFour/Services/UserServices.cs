@@ -98,6 +98,5 @@ namespace ForumSystemTeamFour.Services
 
             return userMapper.Map(updatedUser);
         }
-        
     }
 }

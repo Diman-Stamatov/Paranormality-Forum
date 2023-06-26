@@ -1,11 +1,12 @@
-﻿using ForumSystemTeamFour.Models;
+﻿using ForumSystemTeamFour.Mappers.Interfaces;
+using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Services;
 using System;
 
 namespace ForumSystemTeamFour.Mappers
 {
-    public class ReplyMapper
+    public class ReplyMapper : IReplyMapper
     {
         // Create
         public Reply Map(ReplyCreateDto replyCreateDto, User author)
@@ -25,7 +26,7 @@ namespace ForumSystemTeamFour.Mappers
                 Id = reply.Id,
                 ThreadId = (int)reply.ThreadId,
                 CreationDate = reply.CreationDate,
-                Author = reply.Author,
+                Author = new AuthorDto() { UserName = reply.Author.Username, Email = reply.Author.Email },
                 Content = reply.Content,
                 Likes = reply.Likes,
                 Dislikes = reply.Dislikes

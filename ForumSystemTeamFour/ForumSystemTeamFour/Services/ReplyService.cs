@@ -1,54 +1,107 @@
-﻿using ForumSystemTeamFour.Models;
+﻿using ForumSystemTeamFour.Exceptions;
+using ForumSystemTeamFour.Mappers.Interfaces;
+using ForumSystemTeamFour.Models;
+using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ForumSystemTeamFour.Services
 {
     public class ReplyService : IReplyService
     {
         private readonly IRepliesRepository repository;
-
-        public ReplyService(IRepliesRepository replyRepository)
+        private readonly IReplyMapper replyMapper;
+        private readonly IUserServices userServices;
+        private readonly ISecurityServices securityServices;
+        //private readonly IThreadService threadService;
+        public ReplyService(IRepliesRepository replyRepository, 
+                            IReplyMapper replyMapper, 
+                            IUserServices userServices, 
+                            ISecurityServices securityServices)//,IThreadService threadService)
         {
             this.repository = replyRepository;
+            this.replyMapper = replyMapper;
+            this.userServices = userServices;
+            this.securityServices = securityServices;
+            //this.threadService = threadService;
         }
 
-        public Reply Create(Reply reply)
+        public ReplyReadDto Create(ReplyCreateDto replyCreateDto, int loggedUserId)
         {
-           return repository.Create(reply);
+            var loggedUser = userServices.GetById(loggedUserId);
+            //if (!threadService.ThreadExists())
+            //{
+            //    throw new EntityNotFoundException($"Thread with id:{replyCreateDto.ThreadId} does not exist.");
+            //}
+
+            var replyToCreate = replyMapper.Map(replyCreateDto, loggedUser);
+
+            Reply reply = repository.Create(replyToCreate);
+
+            ReplyReadDto replyDto = replyMapper.Map(reply);
+            return replyDto;
         }
-        public List<Reply> FilterBy(ReplyQueryParameters filterParameters)
+        public List<ReplyReadDto> FilterBy(ReplyQueryParameters filterParameters)
         {
-            return repository.FilterBy(filterParameters);
+            var replies = repository.FilterBy(filterParameters);
+            List<ReplyReadDto> replyDtoList = replies.Select(r => replyMapper.Map(r)).ToList();
+            return replyDtoList;
         }
 
-        public Reply GetById(int id)
+        public ReplyReadDto GetById(int id)
         {
-            return repository.GetById(id);
+            var reply = repository.GetById(id);
+            ReplyReadDto replyDto = replyMapper.Map(reply);
+            return replyDto;
         }
 
-        public Reply Update(int id, Reply reply, int userId)
+        public ReplyReadDto Update(int id, ReplyUpdateDto replyUpdateDto, int loggedUserId)
         {
-            // TODO: Check if the user is owner
-            return repository.Update(id, reply);
+            // Check if the user is owner
+            var loggedUser = userServices.GetById(loggedUserId);
+            var replyToUpdate = repository.GetById(id);
+            securityServices.CheckAuthorAuthorization(loggedUser, replyToUpdate);
+
+            // TODO: Check if the parent thread exists, maybe????
+
+            Reply reply = replyMapper.Map(replyToUpdate, replyUpdateDto);
+            var updatedReply = repository.Update(id, reply);
+
+            ReplyReadDto replyDto = replyMapper.Map(updatedReply);
+            return replyDto;
         }
-        public Reply Delete(int id, int userId)
+        public ReplyReadDto Delete(int id, int loggedUserId)
         {
-            // TODO: Check if the user is owner of the reply
-            return repository.Delete(id);
+            // Check if the user is owner of the reply
+            var loggedUser = userServices.GetById(loggedUserId);
+            var replyToUpdate = repository.GetById(id);
+            securityServices.CheckAuthorAuthorization(loggedUser, replyToUpdate);
+
+            Reply replyToDelete = repository.Delete(id);
+
+            ReplyReadDto replyDto = replyMapper.Map(replyToDelete);
+
+            return replyDto;
         }
-        public Reply UpVote(int id)
+        public ReplyReadDto UpVote(int id)
         {
             // TODO: Check if the user has already voted
-            return repository.UpVote(id);
+            var replyToUpVote = repository.UpVote(id);
+
+            ReplyReadDto replyDto = replyMapper.Map(replyToUpVote);
+            return replyDto;
         }
 
-        public Reply DownVote(int id)
+        public ReplyReadDto DownVote(int id)
         {
             // TODO: Check if the user has already voted
-            return repository.DownVote(id);
+            var replyToDownVote = repository.DownVote(id);
+
+            ReplyReadDto replyDto = replyMapper.Map(replyToDownVote);
+            return replyDto;
         }
 
     }

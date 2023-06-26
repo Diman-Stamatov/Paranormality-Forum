@@ -4,6 +4,7 @@ using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -29,18 +30,27 @@ namespace ForumSystemTeamFour.Repositories
         }
         public Reply GetById(int id)
         {
-            Reply reply = context.Replies.Where(r => r.Id == id).FirstOrDefault();
+            Reply reply = context.Replies
+                                .Where(r => r.Id == id)
+                                .Include(u => u.Author)
+                                .FirstOrDefault();
+
 
             return reply ?? throw new EntityNotFoundException($"Reply with id={id} doesn't exist.");
         }
 
-        public List<Reply> FilterBy(ReplyQueryParameters filterParameters)
+        public List<Reply> FilterBy(ReplyQueryParameters filter)
         {
-            IEnumerable<Reply> result = context.Replies.ToList();
+            IEnumerable<Reply> result = context.Replies
+                                               .Include(r => r.Author)
+                                               .ToList();
 
             // Filter
-            result = FilterByUserAttribute(result, filterParameters.UserName, filterParameters.Email);
-            result = FilterByCreationDate(result, filterParameters.CreationDate);
+            result = FilterByUserAttribute(result, filter.UserName, filter.Email);
+            if (DateTime.TryParse(filter.CreationDate, out DateTime creationDate))
+            {
+                result = FilterByCreationDate(result, creationDate);
+            }
 
             // Sort and order
             if (result.Count() == 0)
@@ -49,8 +59,14 @@ namespace ForumSystemTeamFour.Repositories
             }
             else
             {
-                result = SortBy(result, filterParameters.SortBy);
-                result = SortOrder(result, filterParameters.SortOrder);
+                if (!string.IsNullOrWhiteSpace(filter.SortBy))
+                {
+                    result = SortBy(result, filter.SortBy);
+                }
+                if (!string.IsNullOrWhiteSpace(filter.SortOrder))
+                {
+                    result = SortOrder(result, filter.SortOrder);
+                }
             }
 
             return result.ToList();
@@ -60,21 +76,23 @@ namespace ForumSystemTeamFour.Repositories
         {
             if (!string.IsNullOrWhiteSpace(userName))
             {
-                return FilterByUserName(replies, userName);
+                var result = FilterByUserName(replies, userName);
+                return result;
             }
             else if (!string.IsNullOrWhiteSpace(email))
             {
-                return FilterByEmail(replies, email);
+                var result = FilterByEmail(replies, email);
+                return result;
             }
             return replies;
         }
         private IEnumerable<Reply> FilterByUserName(IEnumerable<Reply> replies, string userName)
         {
-            return replies.Where(r => r.Author.Username == userName);
+            return replies.Where(r => r.Author.Username == userName).ToList();
         }
         private IEnumerable<Reply> FilterByEmail(IEnumerable<Reply> replies, string email)
         {
-            return replies.Where(r => r.Author.Email == email);
+            return replies.Where(r => r.Author.Email == email).ToList();
         }
         private IEnumerable<Reply> FilterByCreationDate(IEnumerable<Reply> replies, DateTime? date)
         {
@@ -82,7 +100,7 @@ namespace ForumSystemTeamFour.Repositories
             {
                 DateTime dateToCompare = (DateTime)date;
                 string datePattern = "yyyy-MM-dd";
-                return replies.Where(r => r.CreationDate.ToString(datePattern) == dateToCompare.ToString(datePattern));
+                return replies.Where(r => r.CreationDate.ToString(datePattern) == dateToCompare.ToString(datePattern)).ToList();
             }
             return replies;
         }
@@ -94,6 +112,8 @@ namespace ForumSystemTeamFour.Repositories
                     return replies.OrderBy(reply => reply.Author.Username);
                 case "email":
                     return replies.OrderBy(reply => reply.Author.Email);
+                case "creationdate":
+                    return replies.OrderBy(reply => reply.CreationDate);
                 // The following handles null or empty strings
                 default:
                     return replies;
@@ -122,7 +142,6 @@ namespace ForumSystemTeamFour.Repositories
 
             return replyToRemove;
         }
-
         public Reply UpVote(int id)
         {
             var replyToUpVote = GetById(id);

@@ -2,17 +2,18 @@
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Models;
 using System.Collections.Generic;
+using ForumSystemTeamFour.Models.DTOs;
 
 namespace ForumSystemTeamFour.Services.Interfaces
 {
     public interface IReplyService
     {
-        Reply Create(Reply reply);
-        Reply GetById(int id);
-        List<Reply> FilterBy(ReplyQueryParameters filterParameters);
-        Reply Update(int id, Reply reply, int userId);
-        Reply Delete(int id, int userId);
-        Reply UpVote(int id);
-        Reply DownVote(int id);
+        ReplyReadDto Create(ReplyCreateDto replyCreateDto, int loggedUserId);
+        ReplyReadDto GetById(int id);
+        List<ReplyReadDto> FilterBy(ReplyQueryParameters filterParameters);
+        ReplyReadDto Update(int id, ReplyUpdateDto replyUpdateDto, int loggedUserId);
+        ReplyReadDto Delete(int id, int loggedUserId);
+        ReplyReadDto UpVote(int id);
+        ReplyReadDto DownVote(int id);
     }
 }
