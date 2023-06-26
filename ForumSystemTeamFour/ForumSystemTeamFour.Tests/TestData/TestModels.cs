@@ -231,6 +231,32 @@ namespace ForumSystemTeamFour.Tests.TestData
             return mockRepository;
         }
 
+        public static Mock<IUserServices> GetTestUserServices()
+        {
+            var mockServices = new Mock<IUserServices>();
+
+            mockServices.Setup(services => services.GetById(It.IsAny<int>()))
+                .Returns(GetDefaultUser());
+            mockServices.Setup(services => services.Block(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(GetTestUserResponseDto(DefaultId));
+            mockServices.Setup(services => services.Create(It.IsAny<UserCreateDto>()))
+                .Returns(GetTestUserResponseDto(DefaultId));
+            mockServices.Setup(services => services.Delete(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(GetTestUserResponseDto(DefaultId));
+            mockServices.Setup(services => services.DemoteFromAdmin(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(GetTestUserResponseDto(DefaultId));
+            mockServices.Setup(services => services.FilterBy(It.IsAny<int>(), It.IsAny<UserQueryParameters>()))
+                .Returns(GetTestUserResponseDtoList(3));
+            mockServices.Setup(services => services.PromoteToAdmin(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(GetTestUserResponseDto(DefaultId));
+            mockServices.Setup(services => services.Unblock(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(GetTestUserResponseDto(DefaultId));
+            mockServices.Setup(services => services.Update(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<UserUpdateDto>()))
+                .Returns(GetTestUserResponseDto(DefaultId));
+
+            return mockServices;
+        }
+
         public static Mock<IUserMapper> GetTestUserMapper()
         {
             var mockMapper = new Mock<IUserMapper>();
@@ -264,10 +290,10 @@ namespace ForumSystemTeamFour.Tests.TestData
         public static Mock<ISecurityServices> GetValidAuthenticationTestSecurity()
         {
             var mockSecurity = new Mock<ISecurityServices>();
+            mockSecurity.Setup(security => security.Authenticate(It.IsAny<string>()))
+                .Returns(GetDefaultUser()); ;
             mockSecurity.Setup(security => security.CheckAdminAuthorization(It.IsAny<User>()));
-
             mockSecurity.Setup(security => security.CheckAuthorAuthorization(It.IsAny<User>(), It.IsAny<IPost>()));
-
             mockSecurity.Setup(security => security.CheckUserAuthorization(It.IsAny<User>(), It.IsAny<User>()));
 
             return mockSecurity;

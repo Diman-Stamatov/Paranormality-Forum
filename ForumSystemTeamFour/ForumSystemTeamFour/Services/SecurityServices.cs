@@ -29,13 +29,13 @@ namespace ForumSystemTeamFour.Services
         {
             if (login == null)
             {
-                throw new BadHttpRequestException("Please provide your login information!");
+                throw new InvalidUserInputException("Please provide your login information!");
             }
             var loginData = login.Split(":");
 
             if (loginData.Length == 1)
             {
-                throw new BadHttpRequestException("Please provide your login information!");
+                throw new InvalidUserInputException("Please provide your login information!");
             }
             string loginUsername = loginData[0];
             string loginPassword = loginData[1];
@@ -91,5 +91,7 @@ namespace ForumSystemTeamFour.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+
     }
 }
