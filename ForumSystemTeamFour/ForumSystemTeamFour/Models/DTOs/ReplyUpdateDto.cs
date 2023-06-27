@@ -4,9 +4,10 @@ namespace ForumSystemTeamFour.Models.DTOs
 {
     public class ReplyUpdateDto
     {
-        [Required]
+        [Required, Range(1, int.MaxValue)]
         public int? ThreadId { get; set; }
-        [Required]
+
+        [Required, Range(1, int.MaxValue)]
         public int? ReplyId { get; set; }
 
         [Required, MinLength(32), MaxLength(8192)]

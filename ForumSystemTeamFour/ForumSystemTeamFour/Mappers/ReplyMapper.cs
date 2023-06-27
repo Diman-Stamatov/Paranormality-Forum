@@ -14,7 +14,9 @@ namespace ForumSystemTeamFour.Mappers
             return new Reply
             {
                 CreationDate = DateTime.Now,
+                AuthorId = author.Id,
                 Author = author,
+                ThreadId = (int)replyCreateDto.ThreadId,
                 Content = replyCreateDto.Content
             };
         }
