@@ -28,10 +28,10 @@ namespace ForumSystemTeamFour
     {
         
         public static void Main(string[] args)
-        {
+        {   
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddControllers();
-            builder.Services.AddControllers().AddJsonOptions(x =>
+            
+            builder.Services.AddControllersWithViews().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
             // Data persistence
@@ -102,10 +102,12 @@ namespace ForumSystemTeamFour
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseStaticFiles();
+
             app.UseEndpoints(endpoints =>
             {
                 
-                endpoints.MapControllers().RequireAuthorization();
+                endpoints.MapDefaultControllerRoute().RequireAuthorization();
              
             });
 
