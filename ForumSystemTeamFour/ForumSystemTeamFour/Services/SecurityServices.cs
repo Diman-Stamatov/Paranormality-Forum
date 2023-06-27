@@ -31,8 +31,8 @@ namespace ForumSystemTeamFour.Services
             {
                 throw new InvalidUserInputException("Please provide your login information!");
             }
-            var loginData = login.Split(":");
 
+            var loginData = login.Split(":");
             if (loginData.Length == 1)
             {
                 throw new InvalidUserInputException("Please provide your login information!");
@@ -63,7 +63,7 @@ namespace ForumSystemTeamFour.Services
 
         }
         public void CheckUserAuthorization(User loggedUser, User targetUser)
-        {
+        {            
             if (!loggedUser.IsAdmin && loggedUser.Username != targetUser.Username)
             {
                 throw new UnauthorizedAccessException("You can only edit your own information!");
