@@ -295,6 +295,8 @@ namespace ForumSystemTeamFour.Tests.TestData
             mockSecurity.Setup(security => security.CheckAdminAuthorization(It.IsAny<User>()));
             mockSecurity.Setup(security => security.CheckAuthorAuthorization(It.IsAny<User>(), It.IsAny<IPost>()));
             mockSecurity.Setup(security => security.CheckUserAuthorization(It.IsAny<User>(), It.IsAny<User>()));
+            mockSecurity.Setup(security => security.CreateToken(It.IsAny<string>()))
+                .Returns(GetTestString(10));
 
             return mockSecurity;
         }
