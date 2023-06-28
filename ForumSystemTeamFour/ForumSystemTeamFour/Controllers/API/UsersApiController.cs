@@ -118,11 +118,7 @@ namespace ForumSystemTeamFour.Controllers.API
             catch (DuplicateEntityException exception)
             {
                 return StatusCode(StatusCodes.Status409Conflict, exception.Message);
-            }
-            catch (InvalidUserInputException exception)
-            {
-                return StatusCode(StatusCodes.Status400BadRequest, exception.Message);
-            }
+            }            
             catch (UnauthorizedAccessException exception)
             {
                 return StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
@@ -246,11 +242,7 @@ namespace ForumSystemTeamFour.Controllers.API
             catch (EntityNotFoundException exception)
             {
                 return StatusCode(StatusCodes.Status404NotFound, exception.Message);
-            }
-            catch (InvalidUserInputException exception)
-            {
-                return StatusCode(StatusCodes.Status400BadRequest, exception.Message);
-            }
+            }           
             catch (UnauthorizedAccessException exception)
             {
                 return StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
