@@ -2,9 +2,12 @@
 {
     public class ThreadQueryParameters
     {
-        public string Title { get; set; }
-        public string Content { get; set; }
-        public int Likes { get; set; }
-        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string CreationDate { get; set; }
+        public string CreatedAfter { get; set; }
+        public string CreatedBefore { get; set; }
+        public string SortBy { get; set; }
+        public string SortOrder { get; set; }
     }
 }
