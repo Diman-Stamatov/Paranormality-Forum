@@ -18,7 +18,7 @@ using System.Security.Claims;
 using System.Text;
 
 
-namespace ForumSystemTeamFour.Controllers
+namespace ForumSystemTeamFour.Controllers.API
 {
     [ApiController]
     [Route("api/users")]

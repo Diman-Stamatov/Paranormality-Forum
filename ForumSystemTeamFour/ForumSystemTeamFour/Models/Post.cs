@@ -16,8 +16,8 @@ namespace ForumSystemTeamFour.Models
 
         [MaxLength(8192)]    
         public string Content { get; set; }
-        public int Likes { get; set; }
-        public int Dislikes { get; set ; }
+        //public int Likes { get; set; }
+        //public int Dislikes { get; set ; }
         public bool IsDeleted { get; set; }
     }
 }

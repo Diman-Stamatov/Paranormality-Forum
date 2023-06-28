@@ -1,14 +1,14 @@
 ﻿using ForumSystemTeamFour.Data;
 using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Models;
-using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.Enums;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static ForumSystemTeamFour.Models.Enums.VoteType;
 
 namespace ForumSystemTeamFour.Repositories
 {
@@ -34,6 +34,7 @@ namespace ForumSystemTeamFour.Repositories
             Reply reply = context.Replies
                                 .Where(r => r.Id == id && r.IsDeleted == false)
                                 .Include(u => u.Author)
+                                .Include(v => v.Votes)
                                 .FirstOrDefault();
 
             return reply ?? throw new EntityNotFoundException($"Reply with id={id} doesn't exist.");
@@ -144,31 +145,59 @@ namespace ForumSystemTeamFour.Repositories
         public Reply Delete(int id)
         {
             var replyToRemove = GetById(id);
-
             replyToRemove.IsDeleted = true;
 
             context.SaveChanges();
 
             return replyToRemove;
         }
-        public Reply UpVote(int id)
+        public Reply UpVote(int id, string loggedUserName)
         {
             var replyToUpVote = GetById(id);
-            replyToUpVote.Likes += 1;
+            var vote = new ReplyVote()
+            {
+                ReplyId = id,
+                VoterUsername = loggedUserName,
+                VoteType = VoteType.Like
+            };
+            replyToUpVote.Votes.Add(vote);
 
             context.SaveChanges();
 
             return replyToUpVote;
         }
-        public Reply DownVote(int id)
+        public Reply DownVote(int id, string loggedUserName)
         {
             var replyToDownVote = GetById(id);
-            replyToDownVote.Dislikes += 1;
+            var vote = new ReplyVote()
+            {
+                ReplyId = id,
+                VoterUsername = loggedUserName,
+                VoteType = VoteType.Dislike
+            };
+            replyToDownVote.Votes.Add(vote);
 
             context.SaveChanges();
 
             return replyToDownVote;
         }
+        public Reply ChangeVote(int id, string loggedUserName)
+        {
+            var replyToChangeVote = GetById(id);
+            var vote = replyToChangeVote.Votes.FirstOrDefault(v => v.VoterUsername == loggedUserName);
 
+            if (vote.VoteType == Like)
+            {
+                vote.VoteType = Dislike;
+            }
+            else
+            {
+                vote.VoteType = Like;
+            }
+
+            context.SaveChanges();
+
+            return replyToChangeVote;
+        }
     }
 }

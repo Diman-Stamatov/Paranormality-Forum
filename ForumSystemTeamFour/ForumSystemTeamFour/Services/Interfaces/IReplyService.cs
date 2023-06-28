@@ -13,7 +13,7 @@ namespace ForumSystemTeamFour.Services.Interfaces
         List<ReplyReadDto> FilterBy(ReplyQueryParameters filterParameters);
         ReplyReadDto Update(int id, ReplyUpdateDto replyUpdateDto, int loggedUserId);
         ReplyReadDto Delete(int id, int loggedUserId);
-        ReplyReadDto UpVote(int id);
-        ReplyReadDto DownVote(int id);
+        ReplyReadDto UpVote(int id, int loggedUserId);
+        ReplyReadDto DownVote(int id, int loggedUserId);
     }
 }

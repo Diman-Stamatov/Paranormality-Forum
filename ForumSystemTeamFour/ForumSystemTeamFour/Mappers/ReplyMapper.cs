@@ -1,8 +1,10 @@
 ﻿using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.Enums;
 using ForumSystemTeamFour.Services;
 using System;
+using System.Linq;
 
 namespace ForumSystemTeamFour.Mappers
 {
@@ -30,8 +32,8 @@ namespace ForumSystemTeamFour.Mappers
                 CreationDate = reply.CreationDate,
                 Author = new AuthorDto() { UserName = reply.Author.Username, Email = reply.Author.Email },
                 Content = reply.Content,
-                Likes = reply.Likes,
-                Dislikes = reply.Dislikes
+                Likes = reply.Votes.Count(v => v.VoteType == VoteType.Like),
+                Dislikes = reply.Votes.Count(v => v.VoteType == VoteType.Dislike)
             };
         }
         // Update

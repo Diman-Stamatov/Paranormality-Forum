@@ -1,31 +1,30 @@
 ﻿using ForumSystemTeamFour.Exceptions;
-using ForumSystemTeamFour.Mappers;
-using ForumSystemTeamFour.Mappers.Interfaces;
-using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-namespace ForumSystemTeamFour.Controllers
+namespace ForumSystemTeamFour.Controllers.API
 {
     [Route("api/replies")]
     [ApiController]
     public class RepliesApiController : ControllerBase
     {
         private readonly IReplyService replyService;
+        private readonly ISecurityServices securityServices;
+        private readonly IUserServices userServices;
 
-        public RepliesApiController(IReplyService replyService)
+        public RepliesApiController(IReplyService replyService, ISecurityServices securityServices, IUserServices userServices)
         {
             this.replyService = replyService;
+            this.securityServices = securityServices;
+            this.userServices = userServices;
         }
 
         // GetById
@@ -68,11 +67,10 @@ namespace ForumSystemTeamFour.Controllers
             try
             {
                 int loggedUserId = LoggedUserIdFromClaim();
-                if (ModelState.IsValid)
-                {
-                    ReplyReadDto replyDto = replyService.Create(replyCreateDto, loggedUserId);
-                    return StatusCode(StatusCodes.Status200OK, replyDto);
-                }
+
+                ReplyReadDto replyDto = replyService.Create(replyCreateDto, loggedUserId);
+                return StatusCode(StatusCodes.Status200OK, replyDto);
+
                 throw new BadHttpRequestException("");
             }
             catch (BadHttpRequestException exception)
@@ -89,11 +87,10 @@ namespace ForumSystemTeamFour.Controllers
             try
             {
                 int loggedUserId = LoggedUserIdFromClaim();
-                if (ModelState.IsValid)
-                {
-                    ReplyReadDto replyDto = replyService.Update(id, replyUpdateDto, loggedUserId);
-                    return StatusCode(StatusCodes.Status200OK, replyDto);
-                }
+
+                ReplyReadDto replyDto = replyService.Update(id, replyUpdateDto, loggedUserId);
+                return StatusCode(StatusCodes.Status200OK, replyDto);
+
                 throw new BadHttpRequestException("");
             }
             catch (BadHttpRequestException exception)
@@ -118,8 +115,8 @@ namespace ForumSystemTeamFour.Controllers
             try
             {
                 int loggedUserId = LoggedUserIdFromClaim();
-                
-                ReplyReadDto replyDto = replyService.Delete(id,loggedUserId);
+
+                ReplyReadDto replyDto = replyService.Delete(id, loggedUserId);
                 return StatusCode(StatusCodes.Status200OK, replyDto);
             }
             catch (EntityNotFoundException exception)
@@ -139,7 +136,9 @@ namespace ForumSystemTeamFour.Controllers
         {
             try
             {
-                ReplyReadDto replyDto = replyService.UpVote(id);
+                int loggedUserId = LoggedUserIdFromClaim();
+
+                ReplyReadDto replyDto = replyService.UpVote(id, loggedUserId);
                 return StatusCode(StatusCodes.Status200OK, replyDto);
             }
             catch (EntityNotFoundException exception)
@@ -149,6 +148,10 @@ namespace ForumSystemTeamFour.Controllers
             catch (UnauthorizedAccessException exception)
             {
                 return StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
+            catch (DuplicateEntityException exception)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, exception.Message);
             }
             // TODO: Catch additional types of exceptions.
         }
@@ -159,7 +162,9 @@ namespace ForumSystemTeamFour.Controllers
         {
             try
             {
-                ReplyReadDto replyDto = replyService.DownVote(id);
+                int loggedUserId = LoggedUserIdFromClaim();
+
+                ReplyReadDto replyDto = replyService.DownVote(id, loggedUserId);
                 return StatusCode(StatusCodes.Status200OK, replyDto);
             }
             catch (EntityNotFoundException exception)
@@ -169,6 +174,10 @@ namespace ForumSystemTeamFour.Controllers
             catch (UnauthorizedAccessException exception)
             {
                 return StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
+            catch (DuplicateEntityException exception)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, exception.Message);
             }
             // TODO: Catch additional types of exceptions.
         }

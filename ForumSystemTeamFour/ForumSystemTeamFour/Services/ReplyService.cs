@@ -1,12 +1,14 @@
-﻿using ForumSystemTeamFour.Exceptions;
-using ForumSystemTeamFour.Mappers.Interfaces;
+﻿using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
+using ForumSystemTeamFour.Models.Enums;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using ForumSystemTeamFour.Exceptions;
+using static ForumSystemTeamFour.Models.Enums.VoteType; 
 
 namespace ForumSystemTeamFour.Services
 {
@@ -86,23 +88,64 @@ namespace ForumSystemTeamFour.Services
 
             return replyDto;
         }
-        public ReplyReadDto UpVote(int id)
+        public ReplyReadDto UpVote(int id, int loggedUserId)
         {
-            // TODO: Check if the user has already voted
-            var replyToUpVote = repository.UpVote(id);
+            // Check if the user has already voted
+            var replyToUpVote = repository.GetById(id);
+            var loggedUser = userServices.GetById(loggedUserId);
+            if (AlreadyVoted(replyToUpVote, loggedUser.Username, out Vote vote))
+            {
+                if (vote.VoteType == Like)
+                {
+                    throw new DuplicateEntityException($"User: {vote.VoterUsername} already upvoted reply with id: {id}.");
+                }
+                else
+                {
+                    repository.ChangeVote(id, loggedUser.Username);
+                }
+            }
+            else
+            {
+                replyToUpVote = repository.UpVote(id, loggedUser.Username);
+            }
 
             ReplyReadDto replyDto = replyMapper.Map(replyToUpVote);
             return replyDto;
         }
-
-        public ReplyReadDto DownVote(int id)
+        public ReplyReadDto DownVote(int id, int loggedUserId)
         {
-            // TODO: Check if the user has already voted
-            var replyToDownVote = repository.DownVote(id);
+            // Check if the user has already voted
+            var replyToDownVote = repository.GetById(id);
+            var loggedUser = userServices.GetById(loggedUserId);
+            if (AlreadyVoted(replyToDownVote, loggedUser.Username, out Vote vote))
+            {
+                if (vote.VoteType == Dislike)
+                {
+                    throw new DuplicateEntityException($"User: {vote.VoterUsername} already downvoted reply with id: {id}.");
+                }
+                else
+                {
+                    repository.ChangeVote(id, loggedUser.Username);
+                }
+            }
+            else
+            {
+                replyToDownVote = repository.DownVote(id, loggedUser.Username);
+            }
 
             ReplyReadDto replyDto = replyMapper.Map(replyToDownVote);
             return replyDto;
         }
+        private bool AlreadyVoted(Reply reply, string loggedUserName, out Vote vote)
+        {
+            vote = reply.Votes.FirstOrDefault(v => v.VoterUsername == loggedUserName);
 
+            if (vote != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
