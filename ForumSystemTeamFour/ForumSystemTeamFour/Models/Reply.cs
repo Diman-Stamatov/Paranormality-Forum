@@ -9,6 +9,6 @@ namespace ForumSystemTeamFour.Models
         [Required, Range(1,int.MaxValue)]
         public int ThreadId { get; set; }
         public Thread Thread { get; set; }
-        public List<ReplyVote> Votes { get; set; }
+        public List<ReplyVote> Votes { get; set; } = new List<ReplyVote>();
     }
 }

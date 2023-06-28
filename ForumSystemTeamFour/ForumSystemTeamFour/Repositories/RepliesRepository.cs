@@ -52,10 +52,8 @@ namespace ForumSystemTeamFour.Repositories
             result = FilterByUserAttribute(result, filter.UserName, filter.Email);
 
             // Filter by date
-            if (DateTime.TryParse(filter.CreationDate, out DateTime creationDate))
-            {
-                result = FilterByCreationDate(result, creationDate);
-            }
+            result = FilterByCreationDate(result, filter.CreationDate);
+            result = FilterByDateRange(result, filter.CreatedBefore, filter.CreatedAfter);
 
             // TODO: filter by before and after dates.
 
@@ -101,13 +99,25 @@ namespace ForumSystemTeamFour.Repositories
         {
             return replies.Where(r => r.Author.Email == email).ToList();
         }
-        private IEnumerable<Reply> FilterByCreationDate(IEnumerable<Reply> replies, DateTime? date)
+        private IEnumerable<Reply> FilterByCreationDate(IEnumerable<Reply> replies, string date)
         {
-            if (date.HasValue)
+            if (DateTime.TryParse(date, out DateTime creationDate))
             {
-                DateTime dateToCompare = (DateTime)date;
+                DateTime dateToCompare = creationDate;
                 string datePattern = "yyyy-MM-dd";
                 return replies.Where(r => r.CreationDate.ToString(datePattern) == dateToCompare.ToString(datePattern)).ToList();
+            }
+            return replies;
+        }
+        private IEnumerable<Reply> FilterByDateRange(IEnumerable<Reply> replies, string before, string after)
+        {
+            if(DateTime.TryParse(before, out DateTime beforeDate))
+            {
+                replies = replies.Where(d => d.CreationDate <= beforeDate);
+            }
+            if(DateTime.TryParse(after, out DateTime afterDate))
+            {
+                replies = replies.Where(d => d.CreationDate >= afterDate);
             }
             return replies;
         }
