@@ -30,27 +30,33 @@ namespace ForumSystemTeamFour.Repositories
         }
         public Reply GetById(int id)
         {
+            // Filter by soft deleted.
             Reply reply = context.Replies
-                                .Where(r => r.Id == id)
+                                .Where(r => r.Id == id && r.IsDeleted == false)
                                 .Include(u => u.Author)
                                 .FirstOrDefault();
-
 
             return reply ?? throw new EntityNotFoundException($"Reply with id={id} doesn't exist.");
         }
 
         public List<Reply> FilterBy(ReplyQueryParameters filter)
         {
+            // Filter for soft deleted.
             IEnumerable<Reply> result = context.Replies
+                                               .Where(r => r.IsDeleted == false)
                                                .Include(r => r.Author)
                                                .ToList();
 
-            // Filter
+            // Filter by attributes
             result = FilterByUserAttribute(result, filter.UserName, filter.Email);
+
+            // Filter by date
             if (DateTime.TryParse(filter.CreationDate, out DateTime creationDate))
             {
                 result = FilterByCreationDate(result, creationDate);
             }
+
+            // TODO: filter by before and after dates.
 
             // Sort and order
             if (result.Count() == 0)
@@ -104,6 +110,8 @@ namespace ForumSystemTeamFour.Repositories
             }
             return replies;
         }
+        // TODO: Filter by created before
+        // TODO: Filter by created after
         private IEnumerable<Reply> SortBy(IEnumerable<Reply> replies, string sortCriteria)
         {
             switch (sortCriteria.ToLower())
@@ -127,9 +135,8 @@ namespace ForumSystemTeamFour.Repositories
         {
             var replyToUpdate = GetById(id);
             replyToUpdate.Content = reply.Content;
-            replyToUpdate.CreationDate = DateTime.Now;
+            replyToUpdate.ModificationDate = DateTime.Now;
 
-            context.Replies.Update(replyToUpdate);
             context.SaveChanges();
 
             return replyToUpdate;
@@ -137,7 +144,9 @@ namespace ForumSystemTeamFour.Repositories
         public Reply Delete(int id)
         {
             var replyToRemove = GetById(id);
-            context.Replies.Remove(replyToRemove);
+
+            replyToRemove.IsDeleted = true;
+
             context.SaveChanges();
 
             return replyToRemove;
@@ -147,7 +156,6 @@ namespace ForumSystemTeamFour.Repositories
             var replyToUpVote = GetById(id);
             replyToUpVote.Likes += 1;
 
-            context.Replies.Update(replyToUpVote);
             context.SaveChanges();
 
             return replyToUpVote;
@@ -157,7 +165,6 @@ namespace ForumSystemTeamFour.Repositories
             var replyToDownVote = GetById(id);
             replyToDownVote.Dislikes += 1;
 
-            context.Replies.Update(replyToDownVote);
             context.SaveChanges();
 
             return replyToDownVote;
