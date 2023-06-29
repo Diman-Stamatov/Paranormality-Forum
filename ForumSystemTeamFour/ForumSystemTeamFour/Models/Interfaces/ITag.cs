@@ -7,5 +7,6 @@ namespace ForumSystemTeamFour.Models.Interfaces
         int Id { get; set; }
         string Name { get; set; }
         List<Thread> Threads { get; set; }
+        bool IsDeleted { get; set; }
     }
 }

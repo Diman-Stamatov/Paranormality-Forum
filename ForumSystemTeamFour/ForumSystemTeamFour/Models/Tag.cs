@@ -12,5 +12,7 @@ namespace ForumSystemTeamFour.Models
         { 
             Threads = new List<Thread>();
         }
+
+        public bool IsDeleted { get; set; }
     }
 }

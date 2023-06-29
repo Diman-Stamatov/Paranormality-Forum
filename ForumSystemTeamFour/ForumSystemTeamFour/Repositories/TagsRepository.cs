@@ -27,10 +27,9 @@ namespace ForumSystemTeamFour.Repositories
 
         public Tag Delete(int id)
         {
-
             var tagToDelete = this.GetById(id);
 
-            context.Tags.Remove(tagToDelete);
+            tagToDelete.IsDeleted = true;
             context.SaveChanges();
 
             return tagToDelete;
@@ -38,17 +37,17 @@ namespace ForumSystemTeamFour.Repositories
 
         public List<Tag> GetAll()
         {
-            return context.Tags.ToList() ;
+            return context.Tags.Where(tag=>tag.IsDeleted == false).ToList();
         }
 
         public Tag GetById(int id)
         {
-            return context.Tags.FirstOrDefault(tag => tag.Id == id);            
+            return context.Tags.FirstOrDefault(tag => tag.Id == id && tag.IsDeleted == false);            
         }
 
         public Tag GetByName(string name)
         {
-            return context.Tags.FirstOrDefault(tag => tag.Name == name);            
+            return context.Tags.FirstOrDefault(tag => tag.Name == name && tag.IsDeleted == false);            
         }
     }
 }
