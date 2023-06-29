@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ForumSystemTeamFour.Models.DTOs
 {
-    public class ThreadResponcseDto
+    public class ThreadResponseDto
     {
         public int Id { get; set; }
         public DateTime CreationDate { get; set; }
@@ -17,6 +17,8 @@ namespace ForumSystemTeamFour.Models.DTOs
         public int Likes { get; set; }
 
         public int Dislikes { get; set; }
+
+        public bool isDeleted { get; set; }
         public List<ReplyReadDto> Comments { get; set; }
 
        // public UserResponseDto Author { get; set; }
