@@ -23,7 +23,7 @@ namespace ForumSystemTeamFour.Repositories
 
         public Thread Create(Thread thread)
         {
-            context.Add(thread);
+            context.Threads.Add(thread);
             Save();
             return thread;
         }
