@@ -32,7 +32,7 @@ namespace ForumSystemTeamFour.Services
             this.replyService = replyService;
         }
 
-        public ThreadResponcseDto Create(ThreadCreateDto threadCreateDto, int loggedUserId)
+        public ThreadResponcseDto Create(ThreadCreateDto threadCreateDto, `int loggedUserId)
         {
             var loggedUser = userServices.GetById(loggedUserId);
             var newThread = this.threadMapper.Map(threadCreateDto, loggedUser);
