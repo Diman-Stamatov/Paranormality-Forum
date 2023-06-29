@@ -22,7 +22,7 @@ using System.Text;
 namespace ForumSystemTeamFour.Controllers.API
 {
     [ApiController]
-    [Route("api/users")]
+    [Route("api/threads")]
     public class ThreadApiController : ControllerBase
     {
         private readonly IThreadService threadService;

@@ -24,11 +24,11 @@ namespace ForumSystemTeamFour.Mappers
             };
         }
 
-        public Models.DTOs.ThreadResponseDto Map(Thread thread)
+        public ThreadResponseDto Map(Thread thread)
         {
-            return new Models.DTOs.ThreadResponseDto
+            return new ThreadResponseDto
             {
-                Id = thread.Id,
+                
                 Title = thread.Title,
                 CreationDate = DateTime.Now,
                 ModificationDate = thread.ModificationDate,
@@ -46,9 +46,9 @@ namespace ForumSystemTeamFour.Mappers
             return threadToUpdate;
         }
 
-        public List<Models.DTOs.ThreadResponseDto> Map (List<Thread> threads)
+        public List<ThreadResponseDto> Map (List<Thread> threads)
         {
-            var mappedThreads = new List<Models.DTOs.ThreadResponseDto>();
+            var mappedThreads = new List<ThreadResponseDto>();
             foreach (var thread in threads)
             {
                 var newThread = this.Map(thread);

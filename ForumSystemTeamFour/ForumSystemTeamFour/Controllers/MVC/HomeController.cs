@@ -11,5 +11,11 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Error404()
+        {
+            return View();
+        }
     }
 }

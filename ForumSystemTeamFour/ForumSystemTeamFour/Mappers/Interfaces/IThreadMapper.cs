@@ -15,6 +15,6 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
 
         public List<ThreadResponseDto> Map(List<Thread> threads);
 
-        List<UserThreadResponseDto> MapForUser(List<Thread> threads)
+        List<UserThreadResponseDto> MapForUser(List<Thread> threads);
     }
 }
