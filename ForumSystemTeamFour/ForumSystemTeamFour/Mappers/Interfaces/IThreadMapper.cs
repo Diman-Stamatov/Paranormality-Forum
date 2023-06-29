@@ -13,6 +13,6 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
 
         public Thread Map(Thread threadToUpdate, ThreadUpdateDto threadUpdateDto);
 
-        public List<ThreadResponcseDto> Map(List<Thread> threads);
+        List<UserThreadResponseDto> MapForUser(List<Thread> threads);
     }
 }

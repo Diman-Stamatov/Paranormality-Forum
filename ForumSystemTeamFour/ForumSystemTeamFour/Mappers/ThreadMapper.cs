@@ -56,5 +56,22 @@ namespace ForumSystemTeamFour.Mappers
             }
             return mappedThreads;
         }
+
+        public List<UserThreadResponseDto> MapForUser(List<Thread> threads)
+        {
+            var mappedThreads = new List<UserThreadResponseDto>();
+            foreach (var thread in threads)
+            {
+                mappedThreads.Add(new UserThreadResponseDto
+                {
+                    Title = thread.Title,
+                    CreationDate = thread.CreationDate.ToString(),
+                    Author = thread.Author.Username,
+                    NumberOfReplies = thread.Replies.Count,
+                    Tags = TagMapper.Map(thread.Tags)
+                });
+            }
+            return mappedThreads;
+        }
     }
 }

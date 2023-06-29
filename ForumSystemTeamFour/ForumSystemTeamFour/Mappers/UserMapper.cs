@@ -7,7 +7,14 @@ namespace ForumSystemTeamFour.Mappers
 {
     public class UserMapper : IUserMapper
     {
+        private readonly IThreadMapper ThreadMapper; 
         
+        public UserMapper()
+        { }
+        public UserMapper(IThreadMapper threadMapper)
+        {
+            this.ThreadMapper = threadMapper;
+        }
 
         public User Map(UserCreateDto userDto) 
         {            
@@ -28,7 +35,7 @@ namespace ForumSystemTeamFour.Mappers
                 LastName = user.LastName,
                 Email = user.Email,
                 Username = user.Username,
-                Threads = MapThreads(user.Threads),
+                Threads = ThreadMapper.MapForUser(user.Threads),
                 IsAdmin = user.IsAdmin,
                 IsBlocked = user.IsBlocked,
             };
@@ -43,32 +50,8 @@ namespace ForumSystemTeamFour.Mappers
             }
             return mappedUsers;
         }
-        //ToDo Update later with proper Thread DTO
-        public List<ThreadResponseDto> MapThreads(List<Thread> threads)
-        {
-            var mappedThreads = new List<ThreadResponseDto>();
-            foreach (var thread in threads)
-            {
-                mappedThreads.Add(new ThreadResponseDto
-                {
-                    Title = thread.Title,
-                    CreationDate = thread.CreationDate.ToString(),
-                    Author = thread.Author.Username,
-                    NumberOfReplies = thread.Replies.Count,
-                    Tags = TagMapper.Map(thread.Tags)
-                });
-            }
-            return mappedThreads;
-        }
+        
     }
-    //ToDo Update later with proper Thread DTO
-    public class ThreadResponseDto
-    {
-        public string Title { get; set; }
-        public string CreationDate { get; set; }
-        public string Author { get; set; }
-        public int NumberOfReplies { get; set; }
-        public List<string> Tags { get;set; }
-
-    }
+    
+    
 }

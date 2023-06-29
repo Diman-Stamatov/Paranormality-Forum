@@ -13,8 +13,8 @@ namespace ForumSystemTeamFour.Models.DTOs
         public string Username { get; set; }
 
         public string Email { get; set; }  
-        //ToDo Update later with proper Thread DTO
-        public List<ThreadResponseDto> Threads { get; set; }
+        
+        public List<UserThreadResponseDto> Threads { get; set; }
 
         public bool IsAdmin { get; set; }
 
