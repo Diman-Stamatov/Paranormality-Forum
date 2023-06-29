@@ -97,7 +97,7 @@ namespace ForumSystemTeamFour.Services
             var userThreads = this.threadRepositroy.GetAllByUserId(id);
             var mappedUserThreads = this.threadMapper.Map(userThreads);
             return mappedUserThreads;
-        }
+        }     
 
         public bool IsDeleted(int id)
         {
