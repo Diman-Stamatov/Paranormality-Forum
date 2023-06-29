@@ -33,7 +33,7 @@ namespace ForumSystemTeamFour.Repositories
             // Filter by soft deleted.
             Reply reply = context.Replies
                                 .Where(r => r.Id == id && r.IsDeleted == false)
-                                .Include(u => u.Author)
+                                .Include(a => a.Author)
                                 .Include(v => v.Votes)
                                 .FirstOrDefault();
 
@@ -45,7 +45,8 @@ namespace ForumSystemTeamFour.Repositories
             // Filter for soft deleted.
             IEnumerable<Reply> result = context.Replies
                                                .Where(r => r.IsDeleted == false)
-                                               .Include(r => r.Author)
+                                               .Include(a => a.Author)
+                                               .Include(v => v.Votes)
                                                .ToList();
 
             // Filter by attributes
@@ -53,9 +54,7 @@ namespace ForumSystemTeamFour.Repositories
 
             // Filter by date
             result = FilterByCreationDate(result, filter.CreationDate);
-            result = FilterByDateRange(result, filter.CreatedBefore, filter.CreatedAfter);
-
-            // TODO: filter by before and after dates.
+            result = FilterByDateRange(result, filter.CreatedAfter, filter.CreatedBefore, filter.ModifiedAfter, filter.ModifiedBefore);
 
             // Sort and order
             if (result.Count() == 0)
@@ -81,23 +80,21 @@ namespace ForumSystemTeamFour.Repositories
         {
             if (!string.IsNullOrWhiteSpace(userName))
             {
-                var result = FilterByUserName(replies, userName);
-                return result;
+                return FilterByUserName(replies, userName);
             }
             else if (!string.IsNullOrWhiteSpace(email))
             {
-                var result = FilterByEmail(replies, email);
-                return result;
+                return FilterByEmail(replies, email);
             }
             return replies;
         }
         private IEnumerable<Reply> FilterByUserName(IEnumerable<Reply> replies, string userName)
         {
-            return replies.Where(r => r.Author.Username == userName).ToList();
+            return replies.Where(r => r.Author.Username == userName);
         }
         private IEnumerable<Reply> FilterByEmail(IEnumerable<Reply> replies, string email)
         {
-            return replies.Where(r => r.Author.Email == email).ToList();
+            return replies.Where(r => r.Author.Email == email);
         }
         private IEnumerable<Reply> FilterByCreationDate(IEnumerable<Reply> replies, string date)
         {
@@ -105,24 +102,36 @@ namespace ForumSystemTeamFour.Repositories
             {
                 DateTime dateToCompare = creationDate;
                 string datePattern = "yyyy-MM-dd";
-                return replies.Where(r => r.CreationDate.ToString(datePattern) == dateToCompare.ToString(datePattern)).ToList();
+                return replies.Where(r => r.CreationDate.ToString(datePattern) == dateToCompare.ToString(datePattern));
             }
             return replies;
         }
-        private IEnumerable<Reply> FilterByDateRange(IEnumerable<Reply> replies, string before, string after)
+        private IEnumerable<Reply> FilterByDateRange(IEnumerable<Reply> replies, string createdAfter, string createdBefore, string modifiedAfter, string modifiedBefore)
         {
-            if(DateTime.TryParse(before, out DateTime beforeDate))
+            replies = FilterByAfterDate(replies, createdAfter, d => d.CreationDate);
+            replies = FilterByBeforeDate(replies, createdBefore, d => d.CreationDate);
+
+            replies = FilterByAfterDate(replies, modifiedAfter, d => d.ModificationDate);
+            replies = FilterByBeforeDate(replies, modifiedBefore, d => d.ModificationDate);
+
+            return replies;
+        }
+        private IEnumerable<Reply> FilterByAfterDate(IEnumerable<Reply> replies, string after, Func<Reply,DateTime> properySelector )
+        {
+            if (DateTime.TryParse(after, out DateTime afterDate))
             {
-                replies = replies.Where(d => d.CreationDate <= beforeDate);
-            }
-            if(DateTime.TryParse(after, out DateTime afterDate))
-            {
-                replies = replies.Where(d => d.CreationDate >= afterDate);
+                replies = replies.Where(d => properySelector(d) >= afterDate);
             }
             return replies;
         }
-        // TODO: Filter by created before
-        // TODO: Filter by created after
+        private IEnumerable<Reply> FilterByBeforeDate(IEnumerable<Reply> replies, string before, Func<Reply, DateTime> properySelector)
+        {
+            if (DateTime.TryParse(before, out DateTime beforeDate))
+            {
+                replies = replies.Where(d => properySelector(d) <= beforeDate);
+            }
+            return replies;
+        }
         private IEnumerable<Reply> SortBy(IEnumerable<Reply> replies, string sortCriteria)
         {
             switch (sortCriteria.ToLower())
