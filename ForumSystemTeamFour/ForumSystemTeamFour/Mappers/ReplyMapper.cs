@@ -30,6 +30,7 @@ namespace ForumSystemTeamFour.Mappers
                 Id = reply.Id,
                 ThreadId = (int)reply.ThreadId,
                 CreationDate = reply.CreationDate,
+                ModificationDate = reply.ModificationDate,
                 Author = new AuthorDto() { UserName = reply.Author.Username, Email = reply.Author.Email },
                 Content = reply.Content,
                 Likes = reply.Votes.Count(v => v.VoteType == VoteType.Like),

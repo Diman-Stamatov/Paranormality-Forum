@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -34,5 +35,106 @@ namespace ForumSystemTeamFour.Controllers.API
             this.securityServices = securityServices;
         }
 
+        [HttpPost("")]
+        public IActionResult Create([FromBody] ThreadCreateDto threadCreateDto)
+        {
+            try
+            {
+                int loggedUserId = LoggedUserIdFromClaim();
+                ThreadResponseDto threadResponseDto = this.threadService.Create(threadCreateDto, loggedUserId);                
+                return StatusCode(StatusCodes.Status201Created, threadResponseDto);
+            }
+            catch (BadHttpRequestException exception)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }            
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] ThreadUpdateDto threadCreateDto)
+        {
+            try
+            {
+                int loggedUserId = LoggedUserIdFromClaim();
+                ThreadResponseDto threadResponseDto = this.threadService.Update(id, threadCreateDto, loggedUserId);
+                return StatusCode(StatusCodes.Status201Created, threadResponseDto);
+            }
+            catch (BadHttpRequestException exception)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, exception.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                int loggedUserId = LoggedUserIdFromClaim();
+                ThreadResponseDto threadResponseDto = this.threadService.Delete(id, loggedUserId);
+                return StatusCode(StatusCodes.Status201Created, threadResponseDto);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            catch (UnauthorizedOperationException exception)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
+        }
+
+        [HttpGet("")]
+        public IActionResult GetAll() 
+        {
+            try
+            {
+                int loggedUserId = LoggedUserIdFromClaim();          
+                List<ThreadResponseDto> threds = this.threadService.GetAll();
+                return StatusCode(StatusCodes.Status200OK, threds);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id) 
+        {
+            try
+            {
+                int loggedUserId = LoggedUserIdFromClaim();
+                ThreadResponseDto thread = this.threadService.GetById(id);
+                return StatusCode(StatusCodes.Status201Created, thread);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+        }
+
+        [HttpGet("{userId}")]
+        public IActionResult GetAllByUserId(int userId)
+        {
+            try
+            {
+                int loggedUserId = LoggedUserIdFromClaim();
+                List<ThreadResponseDto> threds = this.threadService.GetAllByUserId(userId);
+                return StatusCode(StatusCodes.Status200OK, threds);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+        }
+
+        private int LoggedUserIdFromClaim()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userIdClaim = identity.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+
+            return int.Parse(userIdClaim);
+        }
     }
 }

@@ -9,10 +9,12 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
     {
         public Thread Map(ThreadCreateDto threadDto, User author);
 
-        public ThreadResponcseDto Map(Thread thread);
+        public ThreadResponseDto Map(Thread thread);
 
         public Thread Map(Thread threadToUpdate, ThreadUpdateDto threadUpdateDto);
 
-        List<UserThreadResponseDto> MapForUser(List<Thread> threads);
+        public List<ThreadResponseDto> Map(List<Thread> threads);
+
+        List<UserThreadResponseDto> MapForUser(List<Thread> threads)
     }
 }

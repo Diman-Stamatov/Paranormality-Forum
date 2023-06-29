@@ -10,10 +10,16 @@ namespace ForumSystemTeamFour.Services.Interfaces
 {
     public interface IThreadService
     {
-        public ThreadResponcseDto Create(ThreadCreateDto threadCreateDto, int loggedUserId);
+        public ThreadResponseDto Create(ThreadCreateDto threadCreateDto, int loggedUserId);
 
-        public ThreadResponcseDto Update(int id, ThreadUpdateDto threadUpdateDto, int loggedUserId);
+        public ThreadResponseDto Update(int id, ThreadUpdateDto threadUpdateDto, int loggedUserId);
 
-        public ThreadResponcseDto Delete(int id, int loggedUserId);
+        public ThreadResponseDto Delete(int id, int loggedUserId);
+
+        public List<ThreadResponseDto> GetAll();
+
+        public ThreadResponseDto GetById(int id);
+
+        public List<ThreadResponseDto> GetAllByUserId(int id);
     }
 }

@@ -62,6 +62,7 @@ namespace ForumSystemTeamFour
             builder.Services.AddScoped<IUserMapper, UserMapper>();
             builder.Services.AddScoped<ISecurityServices, SecurityServices>();
             builder.Services.AddScoped<IReplyMapper, ReplyMapper>();
+            builder.Services.AddScoped<IThreadMapper, ThreadMapper>();
             
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
