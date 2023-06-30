@@ -34,7 +34,7 @@ namespace ForumSystemTeamFour.Controllers.API
             this.threadService = threadService;
             this.securityServices = securityServices;
         }
-
+        [Authorize]
         [HttpPost("")]
         public IActionResult Create([FromBody] ThreadCreateDto threadCreateDto)
         {
@@ -50,6 +50,7 @@ namespace ForumSystemTeamFour.Controllers.API
             }            
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] ThreadUpdateDto threadCreateDto)
         {
@@ -65,6 +66,7 @@ namespace ForumSystemTeamFour.Controllers.API
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -84,6 +86,7 @@ namespace ForumSystemTeamFour.Controllers.API
             }
         }
 
+        [Authorize]
         [HttpGet("")]
         public IActionResult GetAll() 
         {
@@ -99,6 +102,7 @@ namespace ForumSystemTeamFour.Controllers.API
             }
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetById(int id) 
         {
@@ -114,6 +118,7 @@ namespace ForumSystemTeamFour.Controllers.API
             }
         }
 
+        [Authorize]
         [HttpGet("{userId}")]
         public IActionResult GetAllByUserId(int userId)
         {
