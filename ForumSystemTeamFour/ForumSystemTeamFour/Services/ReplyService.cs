@@ -18,18 +18,18 @@ namespace ForumSystemTeamFour.Services
         private readonly IReplyMapper replyMapper;
         private readonly IUserServices userServices;
         private readonly ISecurityServices securityServices;
-        private readonly IThreadService threadService;
+        private readonly IThreadRepositroy threadRepositroy;
         public ReplyService(IRepliesRepository replyRepository, 
                             IReplyMapper replyMapper, 
                             IUserServices userServices, 
                             ISecurityServices securityServices,
-                            IThreadService threadService)
+                            IThreadRepositroy threadRepositroy)
         {
             this.repository = replyRepository;
             this.replyMapper = replyMapper;
             this.userServices = userServices;
             this.securityServices = securityServices;
-            this.threadService = threadService;
+            this.threadRepositroy = threadRepositroy;
         }
 
         public ReplyReadDto Create(ReplyCreateDto replyCreateDto, int loggedUserId)
@@ -145,6 +145,16 @@ namespace ForumSystemTeamFour.Services
             ReplyReadDto replyDto = replyMapper.Map(replyToDownVote);
             return replyDto;
         }
+        public VotesDto GetReplyVotes(int id)
+        {
+            var reply = repository.GetById(id);
+            var votesDto = new VotesDto()
+            {
+                Likes = reply.Votes.Where(v => v.VoteType == Like).Select(u => u.VoterUsername).ToList(),
+                Dislikes = reply.Votes.Where(v => v.VoteType == Dislike).Select(u => u.VoterUsername).ToList()
+            };
+            return votesDto;
+        }
         private bool AlreadyVoted(Reply reply, string loggedUserName, out Vote vote)
         {
             vote = reply.Votes.FirstOrDefault(v => v.VoterUsername == loggedUserName);
@@ -158,7 +168,7 @@ namespace ForumSystemTeamFour.Services
         }
         private bool ParentThreadExists(int id)
         {
-            var thread = threadService.GetById(id);
+            var thread = threadRepositroy.GetById(id);
             
             if(thread != null)
             {

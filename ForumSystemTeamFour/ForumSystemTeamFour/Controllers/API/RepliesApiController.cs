@@ -181,6 +181,21 @@ namespace ForumSystemTeamFour.Controllers.API
             }
             // TODO: Catch additional types of exceptions.
         }
+        // VoteList
+        [Authorize]
+        [HttpGet("{id}/votes")]
+        public IActionResult GetVotes(int id)
+        {
+            try
+            {
+                var votes = replyService.GetReplyVotes(id);
+                return StatusCode(StatusCodes.Status200OK, votes);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+        }
         private int LoggedUserIdFromClaim()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;

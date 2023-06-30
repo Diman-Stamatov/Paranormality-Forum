@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace ForumSystemTeamFour.Services
 {
-    public class ThreadService
+    public class ThreadService : IThreadService
     {
         private const string UnauthorizedErrorMessage = "Only author or admin can modify a comment.";
         private const string NotFoundErrorMessage = "Thread with id {0} doesn't exist!";
