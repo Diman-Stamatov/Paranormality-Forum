@@ -1,6 +1,7 @@
 ﻿using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models;
 using System;
+using System.Collections.Generic;
 
 namespace ForumSystemTeamFour.Mappers.Interfaces
 {
@@ -11,6 +12,7 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
 
         // Read
         ReplyReadDto Map(Reply reply);
+        List<ReplyReadDto> Map(List<Reply> replies);
 
         // Update
         Reply Map(Reply reply, ReplyUpdateDto replyUpdateDto);

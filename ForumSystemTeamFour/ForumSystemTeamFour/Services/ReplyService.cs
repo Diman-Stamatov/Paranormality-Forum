@@ -18,38 +18,39 @@ namespace ForumSystemTeamFour.Services
         private readonly IReplyMapper replyMapper;
         private readonly IUserServices userServices;
         private readonly ISecurityServices securityServices;
-        //private readonly IThreadService threadService;
+        private readonly IThreadService threadService;
         public ReplyService(IRepliesRepository replyRepository, 
                             IReplyMapper replyMapper, 
                             IUserServices userServices, 
-                            ISecurityServices securityServices)//,IThreadService threadService)
+                            ISecurityServices securityServices,
+                            IThreadService threadService)
         {
             this.repository = replyRepository;
             this.replyMapper = replyMapper;
             this.userServices = userServices;
             this.securityServices = securityServices;
-            //this.threadService = threadService;
+            this.threadService = threadService;
         }
 
         public ReplyReadDto Create(ReplyCreateDto replyCreateDto, int loggedUserId)
         {
             var loggedUser = userServices.GetById(loggedUserId);
-            //if (!threadService.ThreadExists())
-            //{
-            //    throw new EntityNotFoundException($"Thread with id:{replyCreateDto.ThreadId} does not exist.");
-            //}
 
-            var replyToCreate = replyMapper.Map(replyCreateDto, loggedUser);
+            if (ParentThreadExists(replyCreateDto.ThreadId.Value))
+            {
+                var replyToCreate = replyMapper.Map(replyCreateDto, loggedUser);
 
-            Reply reply = repository.Create(replyToCreate);
+                Reply reply = repository.Create(replyToCreate);
 
-            ReplyReadDto replyDto = replyMapper.Map(reply);
-            return replyDto;
+                ReplyReadDto replyDto = replyMapper.Map(reply);
+                return replyDto;
+            }
+            throw new EntityNotFoundException($"Thread with id:{replyCreateDto.ThreadId} does not exist.");
         }
         public List<ReplyReadDto> FilterBy(ReplyQueryParameters filterParameters)
         {
             var replies = repository.FilterBy(filterParameters);
-            List<ReplyReadDto> replyDtoList = replies.Select(r => replyMapper.Map(r)).ToList();
+            List<ReplyReadDto> replyDtoList = replyMapper.Map(replies);
             return replyDtoList;
         }
 
@@ -58,6 +59,14 @@ namespace ForumSystemTeamFour.Services
             var reply = repository.GetById(id);
             ReplyReadDto replyDto = replyMapper.Map(reply);
             return replyDto;
+        }
+        public List<ReplyReadDto> GetByThreadId(int id)
+        {
+            ReplyQueryParameters filterByThreadId = new ReplyQueryParameters()
+            {
+                ThreadId = id
+            };
+            return FilterBy(filterByThreadId);
         }
 
         public ReplyReadDto Update(int id, ReplyUpdateDto replyUpdateDto, int loggedUserId)
@@ -145,6 +154,16 @@ namespace ForumSystemTeamFour.Services
                 return true;
             }
 
+            return false;
+        }
+        private bool ParentThreadExists(int id)
+        {
+            var thread = threadService.GetById(id);
+            
+            if(thread != null)
+            {
+                return true;
+            }
             return false;
         }
     }
