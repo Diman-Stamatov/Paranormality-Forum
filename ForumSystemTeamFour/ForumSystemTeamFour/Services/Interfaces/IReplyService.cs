@@ -10,10 +10,12 @@ namespace ForumSystemTeamFour.Services.Interfaces
     {
         ReplyReadDto Create(ReplyCreateDto replyCreateDto, int loggedUserId);
         ReplyReadDto GetById(int id);
+        List<ReplyReadDto> GetByThreadId(int id);
         List<ReplyReadDto> FilterBy(ReplyQueryParameters filterParameters);
         ReplyReadDto Update(int id, ReplyUpdateDto replyUpdateDto, int loggedUserId);
         ReplyReadDto Delete(int id, int loggedUserId);
         ReplyReadDto UpVote(int id, int loggedUserId);
         ReplyReadDto DownVote(int id, int loggedUserId);
+        VotesDto GetReplyVotes(int id);
     }
 }

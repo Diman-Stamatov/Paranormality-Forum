@@ -51,12 +51,14 @@ namespace ForumSystemTeamFour
             builder.Services.AddScoped<IUsersRepository, UsersRepository>();
             builder.Services.AddScoped<ITagsRepository, TagsRepository>();
             builder.Services.AddScoped<IRepliesRepository, RepliesRepository>();
+            builder.Services.AddScoped<IThreadRepositroy, ThreadRepository>();
             
             // Services
             builder.Services.AddScoped<IUserServices, UserServices>();
             builder.Services.AddScoped<ISecurityServices, SecurityServices>();
             builder.Services.AddScoped<ITagServices, TagServices>();
             builder.Services.AddScoped<IReplyService, ReplyService>();
+            builder.Services.AddScoped<IThreadService, ThreadService>();
             
             // Helpers
             builder.Services.AddScoped<IUserMapper, UserMapper>();

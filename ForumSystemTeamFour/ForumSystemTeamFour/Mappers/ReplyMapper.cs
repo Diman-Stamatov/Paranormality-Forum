@@ -4,6 +4,7 @@ using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.Enums;
 using ForumSystemTeamFour.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ForumSystemTeamFour.Mappers
@@ -37,6 +38,11 @@ namespace ForumSystemTeamFour.Mappers
                 Dislikes = reply.Votes.Count(v => v.VoteType == VoteType.Dislike)
             };
         }
+        public List<ReplyReadDto> Map(List<Reply> replies)
+        {
+            return replies.Select(reply => Map(reply)).ToList();
+        }
+
         // Update
         public Reply Map(Reply reply, ReplyUpdateDto replyUpdateDto)
         {
