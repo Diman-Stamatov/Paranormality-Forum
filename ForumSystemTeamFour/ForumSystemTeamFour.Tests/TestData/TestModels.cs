@@ -44,7 +44,6 @@ namespace ForumSystemTeamFour.Tests.TestData
         public const string ValidPhoneNumber = "0888 123 456";
         public const string ValidTagName = "TagName";
 
-
         public static string GetTestString(int length)
         {
             return new string('x', length);
@@ -199,7 +198,6 @@ namespace ForumSystemTeamFour.Tests.TestData
                 Password = ValidPassword
             };
         }
-
 
         public static Mock<IUsersRepository> GetTestUsersRepository()
         {
@@ -404,6 +402,7 @@ namespace ForumSystemTeamFour.Tests.TestData
                 Tags = GetTestListOfStrings(2, 2)
             };
         }
+
         public static List<UserThreadResponseDto> GetTestListOfUserThreadResponseDto(int count)
         {
             var listOfUserThreadResponseDto = new List<UserThreadResponseDto>();
@@ -413,7 +412,6 @@ namespace ForumSystemTeamFour.Tests.TestData
             }
             return listOfUserThreadResponseDto;
         }
-
 
         public static ThreadUpdateDto GetTestThreadUpdateDto()
         {
@@ -463,6 +461,7 @@ namespace ForumSystemTeamFour.Tests.TestData
 
             return mockMapper;
         }
+
         public static Mock<IThreadService> GetTestThreadService()
         {
             var mockServices = new Mock<IThreadService>();
