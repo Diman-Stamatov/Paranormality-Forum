@@ -344,6 +344,21 @@ namespace ForumSystemTeamFour.Tests.TestData
             };
         }
 
+        public static Models.Thread GetTestThread(int id)
+        {
+            return new Models.Thread
+            {
+                Id = DefaultThreadId + id,
+                Title = ValidThreadTitle + id,
+                Content = ValidThreadContent + id   ,
+                CreationDate = DateTime.Now,
+                ModificationDate = DateTime.Now,
+                AuthorId = DefaultId,
+                Author = GetDefaultUser(),
+                IsDeleted = false
+            };
+        }
+
         public static List<Models.Thread> GetTestThreads(int numberOfThreads)
         {
             var testThreadList = new List<Models.Thread>();

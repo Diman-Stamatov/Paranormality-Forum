@@ -21,7 +21,36 @@ namespace ForumSystemTeamFour.Tests
 {
 
     [TestClass]
-    internal class ThreadRepositroyTests
+    public class ThreadRepositroyTests
     {
+        private static ForumDbContext TestContext;
+        private static int NextTestId = 1;
+        public ThreadRepositroyTests()
+        {
+            var dbContextOptions = new DbContextOptionsBuilder<ForumDbContext>()
+                .UseInMemoryDatabase(databaseName: "ForumTestDB")
+                .Options;
+
+            TestContext = new ForumDbContext(dbContextOptions);
+        }
+
+        [TestMethod]
+        public void Create_ShouldThrow_WhenIdIsDuplicate() 
+        {
+            //Arrange
+            var testRepository = new ThreadRepository(TestContext);
+            var firstThread = GetTestThread();
+            var secondThread = GetTestThread();
+
+            //Act
+            var createdThread = testRepository.Create(firstThread);
+
+            //Assert
+
+            Assert.ThrowsException<DuplicateEntityException>(() => testRepository.Create(secondThread));
+
+
+
+        }
     }
 }
