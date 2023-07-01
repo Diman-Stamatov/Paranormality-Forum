@@ -18,7 +18,7 @@ namespace ForumSystemTeamFour.Models.DTOs
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
 
-        public List<ReplyReadDto> Comments { get; set; }
+        public List<ReplyReadDto> Replies { get; set; }
 
         public List<Tag> Tags { get; set; }
 

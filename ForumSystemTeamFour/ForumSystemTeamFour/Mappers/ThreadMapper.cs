@@ -11,6 +11,11 @@ namespace ForumSystemTeamFour.Mappers
 {
     public class ThreadMapper : IThreadMapper
     {
+        private readonly IReplyMapper ReplyMapper;
+        public ThreadMapper(IReplyMapper replyMapper) 
+        { 
+            this.ReplyMapper = replyMapper;
+        }
 
         public Thread Map(ThreadCreateDto threadDto, User author)
         {
@@ -33,6 +38,7 @@ namespace ForumSystemTeamFour.Mappers
                 CreationDate = DateTime.Now,
                 ModificationDate = thread.ModificationDate,
                 Content = thread.Content,
+                Replies = ReplyMapper.Map(thread.Replies) ?? new List<ReplyReadDto>(),
                 Likes = thread.Votes.Count(v => v.VoteType == VoteType.Like),
                 Dislikes = thread.Votes.Count(v => v.VoteType == VoteType.Dislike)
             };

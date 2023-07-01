@@ -16,6 +16,7 @@ namespace ForumSystemTeamFour.Models
         {
             Replies = new List<Reply>();
             Tags = new List<Tag>();
+            Votes = new List<ThreadVote>();
         }
     }
 }
