@@ -21,10 +21,17 @@ namespace ForumSystemTeamFour.Tests.TestData
     internal static class TestModels
     {
         public const int DefaultId = 1;
+        public const int DefaultThreadId = 1;
         public const int NamesMinLength = 4;
         public const int NamesMaxLength = 32;
+        public const int ThreadTitleMinLength = 16;
+        public const int ThreadTitleMaxLength = 64;
+        public const int ThreadContentMinLength = 32;
+        public const int ThreadContentMaxLength = 8192;
         public const string ValidFirstName = "FirstName";
-        public const string ValidLastName = "LastName";        
+        public const string ValidLastName = "LastName";
+        public const string ValidThreadTitle = "ValidThreadTitle";
+        public const string ValidThreadContent = "ValidThreadContentValidThreadContent";
         public const string ValidEmail = "valid@email.com";
         public const int UsernameMinLength = 4;
         public const int UsernameMaxLength = 20;
@@ -37,9 +44,20 @@ namespace ForumSystemTeamFour.Tests.TestData
         public const string ValidPhoneNumber = "0888 123 456";
         public const string ValidTagName = "TagName";
 
+
         public static string GetTestString(int length)
         {
             return new string('x', length);
+        }
+
+        public static List<string> GetTestListOfStrings(int lengthOfTag, int countOfTags)
+        {
+            var listOfStrings = new List<string>();
+            for (int i = 1; i <= countOfTags; i++)
+            {
+                listOfStrings.Add(GetTestString(lengthOfTag));
+            }
+            return listOfStrings;
         }
 
         public static string GetTestString(int length, char character)
@@ -58,7 +76,7 @@ namespace ForumSystemTeamFour.Tests.TestData
                 Username = ValidUsername + id,
                 Password = ValidPassword + id
             };
-        }        
+        }
 
         public static List<User> GetTestUsersList(int numberOfUsers)
         {
@@ -103,7 +121,7 @@ namespace ForumSystemTeamFour.Tests.TestData
         public static Tag GetTestTag(int id)
         {
             return new Tag { Id = id, Name = ValidTagName + id };
-            
+
         }
 
         public static List<Tag> GetTestTagsList(int numberOfTags)
@@ -181,7 +199,7 @@ namespace ForumSystemTeamFour.Tests.TestData
                 Password = ValidPassword
             };
         }
-        
+
 
         public static Mock<IUsersRepository> GetTestUsersRepository()
         {
@@ -306,11 +324,163 @@ namespace ForumSystemTeamFour.Tests.TestData
             var mapper = new UserMapper();
             var responseDtoList = new List<UserResponseDto>();
             foreach (var user in users)
-            { 
+            {
                 responseDtoList.Add(mapper.Map(user));
             }
 
             return responseDtoList;
+        }
+
+        public static Models.Thread GetTestThread()
+        {
+            return new Models.Thread
+            {
+                Id = DefaultThreadId,
+                Title = ValidThreadTitle,
+                Content = ValidThreadContent,
+                CreationDate = DateTime.Now,
+                ModificationDate = DateTime.Now,
+                AuthorId = DefaultId,
+                Author = GetDefaultUser(),
+                IsDeleted = false
+            };
+        }
+
+        public static List<Models.Thread> GetTestThreads(int numberOfThreads)
+        {
+            var testThreadList = new List<Models.Thread>();
+
+            for (int i = 1; i <= numberOfThreads; i++)
+            {
+                testThreadList.Add(GetTestThread());
+            }
+
+            return testThreadList;
+        }
+
+        public static ThreadCreateDto GetTestThreadCreateDto()
+        {
+            return new ThreadCreateDto
+            {
+                Title = ValidThreadTitle,
+                Content = ValidThreadContent
+            };
+        }
+
+        public static ThreadResponseDto GetTestThreadResponseDto()
+        {
+            return new ThreadResponseDto
+            {
+                Title = ValidThreadTitle,
+                Content = ValidThreadContent,
+                Likes = 0,
+                Dislikes = 0,
+                isDeleted = false,
+                CreationDate = DateTime.Now,
+                ModificationDate = DateTime.Now
+                //ToDo Add list<ReplyReadDto> when test model for Reply is ready 
+            };
+        }
+
+        public static List<ThreadResponseDto> GetTestListOfThreadResponseDto(int count)
+        {
+            var listOfThreadResponseDto = new List<ThreadResponseDto>();
+            for (int i = 1; i <= count; i++)
+            {
+                listOfThreadResponseDto.Add(GetTestThreadResponseDto());
+            }
+
+            return listOfThreadResponseDto;
+        }
+
+        public static UserThreadResponseDto GetTestUserThreadResponseDto()
+        {
+            return new UserThreadResponseDto
+            {
+                Title = ValidThreadTitle,
+                CreationDate = DateTime.Now.ToString(),
+                Author = ValidUsername,
+                NumberOfReplies = 0,
+                Tags = GetTestListOfStrings(2, 2)
+            };
+        }
+        public static List<UserThreadResponseDto> GetTestListOfUserThreadResponseDto(int count)
+        {
+            var listOfUserThreadResponseDto = new List<UserThreadResponseDto>();
+            for (int i = 1; i < count; i++)
+            {
+                listOfUserThreadResponseDto.Add(GetTestUserThreadResponseDto());
+            }
+            return listOfUserThreadResponseDto;
+        }
+
+
+        public static ThreadUpdateDto GetTestThreadUpdateDto()
+        {
+            return new ThreadUpdateDto
+            {
+                Title = ValidThreadTitle,
+                Content = ValidThreadContent,
+            };
+        }
+
+        public static Mock<IThreadRepositroy> GetTestThreadRepositroy()
+        {
+            var mockRepository = new Mock<IThreadRepositroy>();
+
+            mockRepository.Setup(repository => repository.Create(It.IsAny<Models.Thread>()))
+                .Returns(GetTestThread());
+            mockRepository.Setup(repository => repository.Delete(It.IsAny<int>()))
+                .Returns(GetTestThread());
+            mockRepository.Setup(repository => repository.GetAll())
+                .Returns(GetTestThreads(3));
+            mockRepository.Setup(repository => repository.GetAllByUserId(It.IsAny<int>()))
+                .Returns(GetTestThreads(3));
+            mockRepository.Setup(repository => repository.GetById(It.IsAny<int>()))
+                .Returns(GetTestThread());
+            mockRepository.Setup(repository => repository.Update(It.IsAny<Models.Thread>(), It.IsAny<Models.Thread>()))
+                .Returns(GetTestThread());
+            //ToDo  mockRepository.Setup(repository => repository.FilterBy(It.IsAny<Thread>(), It.IsAny<ThreadQueryParameters>()))
+            //  .Returns(GetTestThreadList(3));           
+
+            return mockRepository;
+        }
+
+        public static Mock<IThreadMapper> GetTestThreadMapper()
+        {
+            var mockMapper = new Mock<IThreadMapper>();
+
+            mockMapper.Setup(mapper => mapper.Map(It.IsAny<ThreadCreateDto>(), It.IsAny<User>()))
+                .Returns(GetTestThread());
+            mockMapper.Setup(mapper => mapper.Map(It.IsAny<Models.Thread>()))
+                .Returns(GetTestThreadResponseDto());
+            mockMapper.Setup(mapper => mapper.Map(It.IsAny<Models.Thread>(), It.IsAny<ThreadUpdateDto>()))
+                .Returns(GetTestThread());
+            mockMapper.Setup(mapper => mapper.Map(It.IsAny<List<Models.Thread>>()))
+                .Returns(GetTestListOfThreadResponseDto(3));
+            mockMapper.Setup(mapper => mapper.MapForUser(It.IsAny<List<Models.Thread>>()))
+                .Returns(GetTestListOfUserThreadResponseDto(3));
+
+            return mockMapper;
+        }
+        public static Mock<IThreadService> GetTestThreadService()
+        {
+            var mockServices = new Mock<IThreadService>();
+
+            mockServices.Setup(services => services.Create(It.IsAny<ThreadCreateDto>(), It.IsAny<int>()))
+                .Returns(GetTestThreadResponseDto());
+            mockServices.Setup(services => services.Update(It.IsAny<int>(), It.IsAny<ThreadUpdateDto>(), It.IsAny<int>()))
+                .Returns(GetTestThreadResponseDto());
+            mockServices.Setup(services => services.Delete(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(GetTestThreadResponseDto());
+            mockServices.Setup(services => services.GetAll())
+                .Returns(GetTestListOfThreadResponseDto(3));
+            mockServices.Setup(services => services.GetById(It.IsAny<int>()))
+                .Returns(GetTestThreadResponseDto());
+            mockServices.Setup(services => services.GetAllByUserId(It.IsAny<int>()))
+                .Returns(GetTestListOfThreadResponseDto(3));
+
+            return mockServices;
         }
     }
 }
