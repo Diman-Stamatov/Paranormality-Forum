@@ -52,6 +52,8 @@ namespace ForumSystemTeamFour.Repositories
         {
             var threads = this.context.Threads
                             .Where(t => !t.IsDeleted)
+                            .Include(thread=>thread.Replies)
+                            .Include(thread=>thread.Author)
                             .ToList();
 
             return threads;
