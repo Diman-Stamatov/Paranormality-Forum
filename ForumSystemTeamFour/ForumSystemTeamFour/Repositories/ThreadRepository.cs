@@ -47,7 +47,7 @@ namespace ForumSystemTeamFour.Repositories
         public List<Thread> GetAll()
         {
             var threads = this.context.Threads
-                            .Where(t => !t.IsDeleted)
+                            .Where(thread => !thread.IsDeleted)
                             .Include(thread=>thread.Replies)
                             .Include(thread=>thread.Author)
                             .ToList();
@@ -58,8 +58,10 @@ namespace ForumSystemTeamFour.Repositories
         public Thread GetById(int id)
         {
             var thread = this.context.Threads
-                        .Where(t => t.Id == id && !t.IsDeleted)
-                        .FirstOrDefault();
+                         .Where(t => !t.IsDeleted)
+                            .Include(thread => thread.Replies)
+                            .Include(thread => thread.Author)
+                            .FirstOrDefault();
 
             return thread ?? throw new EntityNotFoundException($"Thread with id={id} doesn't exist.");
         }
