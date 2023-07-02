@@ -178,7 +178,7 @@ namespace ForumSystemTeamFour.Tests
             var mockThreadRepository = TestModels.GetTestThreadRepositroy().Object;
             var mockSecurityServices = TestModels.GetInvalidAuthenticationTestSecurity().Object;
             var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
-            var mockUserServices = new Mock<IUserServices>().Object;
+            var mockUserServices = GetTestUserServices().Object;
             var mockReplyService = new Mock<IReplyService>().Object;
 
             var testedServices = new ThreadService(mockThreadRepository, mockSecurityServices, mockThreadMapper, mockUserServices, mockReplyService);

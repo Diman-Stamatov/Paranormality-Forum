@@ -1,5 +1,46 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Paranormality - Register</title>
+    <link rel="stylesheet" href="~/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/application.css" />
+    <style>
+
+    </style>
+</head>
+
+<body class="forum-body">
+
+    <header>
+        <h2 class="appHeadingText">P A R A N O R M A L I T Y</h2>
+    </header>
+    <form class="appForm">
+        <label for="fname">First name:</label><br>
+        <input type="text" id="fname" name="fname" value="John"><br>
+        <label for="lname">Last name:</label><br>
+        <input type="text" id="lname" name="lname" value="Doe"><br>
+        <label for="email">E-mail:</label><br>
+        <input type="text" id="email" name="email" value="John@Doe.com"><br>
+        <label for="usrname">Username:</label><br>
+        <input type="text" id="usrname" name="usrname" value="Donjoe69"><br>
+        <label for="pswrd">Password:</label><br>
+        <input type="text" id="pswrd" name="pswrd" value="John123"><br>
+    </form>
+
+    <div style="position:absolute;top:70%;left:50%;transform:translate(-50%,-50%);">
+        <input type="submit" value="Register"
+               class="btn appbtn-outline" style="text-decoration:none">&nbsp
+        <a asp-controller="Home" asp-action="Index"
+           type="button" class="btn appbtn-outline" style="text-decoration:none">Reconsider...</a>
+    </div>
+    <footer>
+
+        <div style="text-align:center;padding:10px;margin-top:7px;">
+            © copyright Paranormality.com
+        </div>
+    </footer>
+
+</body>
+</html>

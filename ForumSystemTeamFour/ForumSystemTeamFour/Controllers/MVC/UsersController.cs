@@ -1,9 +1,12 @@
-﻿using ForumSystemTeamFour.Services.Interfaces;
+﻿using ForumSystemTeamFour.Exceptions;
+using ForumSystemTeamFour.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
+    
     public class UsersController : Controller
     {
         private readonly IUserServices UserServices;
@@ -12,25 +15,36 @@ namespace ForumSystemTeamFour.Controllers.MVC
             this.UserServices = userServices;        
         }
 
+        
         [HttpGet]
         public IActionResult Profile([FromRoute] int id)
         {
-            var userProfile = UserServices.GetById(id);
-            return View(userProfile);
+            try
+            {
+                var specifiedUser = UserServices.GetById(id);
+                return this.View(specifiedUser);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                this.ViewData["ErrorMessage"] = exception.Message;
+                return this.View("Error404");
+            }
+            
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpGet]
         public IActionResult Create()
         {            
-            return View();
+            return this.View("Create");
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            return this.View("Login");
         }
 
         
