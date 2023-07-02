@@ -45,6 +45,10 @@ namespace ForumSystemTeamFour.Services
         public ThreadResponseDto Update(int id, ThreadUpdateDto threadUpdateDto, int loggedUserId)
         {
             var threadToUpdate = this.threadRepositroy.GetById(id);
+            if (threadToUpdate.IsDeleted)
+            {
+                throw new EntityNotFoundException($"Thread with id={threadToUpdate.Id} doesn't exist.");
+            }
             var mappedThread = this.threadMapper.Map(threadToUpdate, threadUpdateDto);
             var updatedThread = this.threadRepositroy.Update(threadToUpdate, mappedThread);
             var resultThread = this.threadMapper.Map(updatedThread);
