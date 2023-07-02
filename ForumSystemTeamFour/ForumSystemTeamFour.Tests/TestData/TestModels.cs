@@ -91,15 +91,15 @@ namespace ForumSystemTeamFour.Tests.TestData
 
         public static User GetDefaultUser()
         {
-            id++;
+            
             return new User
             {
-                Id = id,
-                FirstName = ValidFirstName +id,
-                LastName = ValidLastName + id,
+                Id = DefaultId,
+                FirstName = ValidFirstName,
+                LastName = ValidLastName,
                 Email = ValidEmail + id,
-                Username = ValidUsername + id,
-                Password = ValidPassword + id
+                Username = ValidUsername,
+                Password = ValidPassword
             };
         }
 
