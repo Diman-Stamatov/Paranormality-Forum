@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
-    [AllowAnonymous]
+    
     public class HomeController : Controller
     {
         private readonly IThreadService ThreadService;
@@ -14,6 +14,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             this.ThreadService = threadService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()
         {
@@ -30,10 +31,18 @@ namespace ForumSystemTeamFour.Controllers.MVC
             
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Error404()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Append("Cookie_JWT", "noToken");
+            return View("LogoutPage");
         }
     }
 }
