@@ -54,18 +54,14 @@ namespace ForumSystemTeamFour.Services
         public ThreadResponseDto Delete(int id, int loggedUserId)
         {
             var loggedUser = userServices.GetById(loggedUserId);
-            var thread = this.threadRepositroy.GetById(id);
-
-            if(thread.IsDeleted)
-            {
-                throw new EntityNotFoundException(NotFoundErrorMessage);
-            }
-            if (!thread.Author.Equals(loggedUser) && !loggedUser.IsAdmin)
+            var threadToDelete = this.threadRepositroy.GetById(id);
+            
+            if (!threadToDelete.Author.Equals(loggedUser) && !loggedUser.IsAdmin)
             {
                 throw new UnauthorizedOperationException(UnauthorizedErrorMessage);
             }
-            thread = this.threadRepositroy.Delete(id);
-            var mappedThread = this.threadMapper.Map(thread);           
+            var deletedThread= this.threadRepositroy.Delete(threadToDelete);
+            var mappedThread = this.threadMapper.Map(deletedThread);           
 
             return mappedThread;
         }

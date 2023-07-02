@@ -21,7 +21,7 @@ namespace ForumSystemTeamFour.Tests.TestData
     internal static class TestModels
     {
         public const int DefaultId = 1;
-        public const int DefaultThreadId = 1;
+        public static int id = 100;
         public const int NamesMinLength = 4;
         public const int NamesMaxLength = 32;
         public const int ThreadTitleMinLength = 16;
@@ -91,14 +91,15 @@ namespace ForumSystemTeamFour.Tests.TestData
 
         public static User GetDefaultUser()
         {
+            id++;
             return new User
             {
-                Id = DefaultId,
-                FirstName = ValidFirstName,
-                LastName = ValidLastName,
-                Email = ValidEmail,
-                Username = ValidUsername,
-                Password = ValidPassword
+                Id = id,
+                FirstName = ValidFirstName +id,
+                LastName = ValidLastName + id,
+                Email = ValidEmail + id,
+                Username = ValidUsername + id,
+                Password = ValidPassword + id
             };
         }
 
@@ -327,33 +328,19 @@ namespace ForumSystemTeamFour.Tests.TestData
             }
 
             return responseDtoList;
-        }
+        }      
 
         public static Models.Thread GetTestThread()
         {
+            id++;
             return new Models.Thread
             {
-                Id = DefaultThreadId,
-                Title = ValidThreadTitle,
-                Content = ValidThreadContent,
-                CreationDate = DateTime.Now,
-                ModificationDate = DateTime.Now,
-                AuthorId = DefaultId,
-                Author = GetDefaultUser(),
-                IsDeleted = false
-            };
-        }
-
-        public static Models.Thread GetTestThread(int id)
-        {
-            return new Models.Thread
-            {
-                Id = DefaultThreadId + id,
+                Id = id,
                 Title = ValidThreadTitle + id,
-                Content = ValidThreadContent + id   ,
+                Content = ValidThreadContent + id,
                 CreationDate = DateTime.Now,
                 ModificationDate = DateTime.Now,
-                AuthorId = DefaultId,
+                AuthorId = id,
                 Author = GetDefaultUser(),
                 IsDeleted = false
             };
@@ -443,7 +430,7 @@ namespace ForumSystemTeamFour.Tests.TestData
 
             mockRepository.Setup(repository => repository.Create(It.IsAny<Models.Thread>()))
                 .Returns(GetTestThread());
-            mockRepository.Setup(repository => repository.Delete(It.IsAny<int>()))
+            mockRepository.Setup(repository => repository.Delete(It.IsAny<Models.Thread>()))
                 .Returns(GetTestThread());
             mockRepository.Setup(repository => repository.GetAll())
                 .Returns(GetTestThreads(3));
