@@ -21,7 +21,8 @@ namespace ForumSystemTeamFour.Tests.TestData
     internal static class TestModels
     {
         public const int DefaultId = 1;
-        public static int id = 100;
+        public static int id = DefaultId;
+        public static int nextId = id++;
         public const int NamesMinLength = 4;
         public const int NamesMaxLength = 32;
         public const int ThreadTitleMinLength = 16;
@@ -330,6 +331,17 @@ namespace ForumSystemTeamFour.Tests.TestData
             return responseDtoList;
         }      
 
+        public static User GetUser()
+        {
+            return new User
+            {
+                FirstName = ValidFirstName + nextId,
+                LastName = ValidLastName + nextId,
+                Email = ValidEmail + nextId,
+                Username = ValidUsername + nextId,
+                Password = ValidPassword + nextId
+            };
+        }
         public static Models.Thread GetTestThread()
         {
             id++;
@@ -341,7 +353,7 @@ namespace ForumSystemTeamFour.Tests.TestData
                 CreationDate = DateTime.Now,
                 ModificationDate = DateTime.Now,
                 AuthorId = id,
-                Author = GetDefaultUser(),
+                Author = GetUser(),
                 IsDeleted = false
             };
         }

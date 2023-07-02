@@ -31,10 +31,6 @@ namespace ForumSystemTeamFour.Repositories
 
         public Thread Update(Thread threadToUpdate, Thread updatedThread)
         {
-            if (threadToUpdate.IsDeleted)
-            {
-                throw new EntityNotFoundException($"Thread with id={threadToUpdate.Id} doesn't exist.");
-            }
             threadToUpdate.Content = updatedThread.Content ?? threadToUpdate.Content;
             threadToUpdate.Title = updatedThread.Title ?? threadToUpdate.Title;
             Save();
@@ -73,7 +69,11 @@ namespace ForumSystemTeamFour.Repositories
             var threads = this.context.Threads
                             .Where(t => t.AuthorId == id && !t.IsDeleted)
                             .ToList();
-            return threads ?? throw new EntityNotFoundException($"Author with id={id} doesn't have any threads");
+            if (threads == null || !threads.Any())
+            {
+                throw new EntityNotFoundException($"Author with id={id} doesn't have any threads");
+            }
+            return threads;
         }
         private void Save()
         {
