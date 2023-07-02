@@ -30,7 +30,7 @@ namespace ForumSystemTeamFour.Mappers
         }
 
         public ThreadResponseDto Map(Thread thread)
-        {
+        {            
             return new ThreadResponseDto
             {
                 
@@ -38,7 +38,7 @@ namespace ForumSystemTeamFour.Mappers
                 CreationDate = DateTime.Now,
                 ModificationDate = thread.ModificationDate,
                 Content = thread.Content,
-                Replies = ReplyMapper.Map(thread.Replies) ?? new List<ReplyReadDto>(),
+                Replies = ReplyMapper.Map(thread.Replies),
                 Likes = thread.Votes.Count(v => v.VoteType == VoteType.Like),
                 Dislikes = thread.Votes.Count(v => v.VoteType == VoteType.Dislike)
             };
