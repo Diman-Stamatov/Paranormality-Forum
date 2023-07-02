@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using static ForumSystemTeamFour.Tests.TestData.TestModels;
+using Castle.Components.DictionaryAdapter.Xml;
 
 namespace ForumSystemTeamFour.Tests
 {
@@ -91,7 +92,7 @@ namespace ForumSystemTeamFour.Tests
             // Act & Assert
             Assert.ThrowsException<EntityNotFoundException>(() => testedServices.Update(idToUpdate, threadUpdateDto, loggedUserId));
         }
-        ////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         [TestMethod]
         public void Delete_ShouldThrow_WhenThreadNotFound()
         {
@@ -118,7 +119,7 @@ namespace ForumSystemTeamFour.Tests
             var mockThreadRepository = TestModels.GetTestThreadRepositroy().Object;
             var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
             var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
-            var mockUserServices = new Mock<IUserServices>().Object;
+            var mockUserServices = GetTestUserServices().Object;
             var mockReplyService = new Mock<IReplyService>().Object;
 
             var testedServices = new ThreadService(mockThreadRepository,
@@ -126,14 +127,38 @@ namespace ForumSystemTeamFour.Tests
                                                     mockThreadMapper,
                                                     mockUserServices,
                                                     mockReplyService);
-            User loggedUserId = GetUser();
+            User loggedUserId = GetDefaultUser();
             Models.Thread IdtoDelete = GetTestThread();
-
-            var deletedThread = testedServices.Delete(IdtoDelete.Id, loggedUserId.Id);
+            IdtoDelete.Author.Id = 1;
+            var deletedThread = testedServices.Delete(IdtoDelete.Author.Id, loggedUserId.Id);
             var defaultThread = deletedThread;
 
             Assert.AreEqual(defaultThread, deletedThread);
         }
+
+        //[TestMethod]
+        //public void Delete_ShouldDelete_WhenAdminIsLogged()
+        //{
+        //    var mockUserServices = new Mock<IUserServices>();
+        //    mockUserServices.Setup(s => s.GetById(It.IsAny<int>())).Returns(TestModels.GetDefaultAdmin());
+        //    var mockThreadRepository = TestModels.GetTestThreadRepositroy().Object;
+        //    var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
+        //    var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+        //    var mockReplyService = new Mock<IReplyService>().Object;
+
+        //    var testedServices = new ThreadService(mockThreadRepository,
+        //                                            mockSecurityServices,
+        //                                            mockThreadMapper,
+        //                                            mockUserServices,
+        //                                            mockReplyService);
+        //    User loggedUserId = GetDefaultUser();
+        //    Models.Thread IdtoDelete = GetTestThread();
+        //    IdtoDelete.Author.Id = 1;
+        //    var deletedThread = testedServices.Delete(IdtoDelete.Author.Id, loggedUserId.Id);
+        //    var defaultThread = deletedThread;
+
+        //    Assert.AreEqual(defaultThread, deletedThread);
+        //}
 
         [TestMethod]
         public void Delete_ShouldThrow_WhenLoggedUserNotFound()
@@ -178,14 +203,49 @@ namespace ForumSystemTeamFour.Tests
             var mockThreadRepository = TestModels.GetTestThreadRepositroy().Object;
             var mockSecurityServices = TestModels.GetInvalidAuthenticationTestSecurity().Object;
             var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
-            var mockUserServices = new Mock<IUserServices>().Object;
+
+            var mockUserServices = new Mock<IUserServices>();
+            mockUserServices.Setup(s => s.GetById(It.IsAny<int>())).Returns(TestModels.GetUser());
+
             var mockReplyService = new Mock<IReplyService>().Object;
 
-            var testedServices = new ThreadService(mockThreadRepository, mockSecurityServices, mockThreadMapper, mockUserServices, mockReplyService);
-            int loggedUserId = TestModels.DefaultId;
-            int IdtoDelete = TestModels.DefaultId + 1;
+            var testedServices = new ThreadService(mockThreadRepository, mockSecurityServices, mockThreadMapper, mockUserServices.Object, mockReplyService);
+            User loggedUserId = TestModels.GetDefaultUser();
+            Models.Thread IdtoDelete = TestModels.GetTestThread();
+            IdtoDelete.Author.Id = 2;
 
-            Assert.ThrowsException<UnauthorizedOperationException>(() => testedServices.Delete(loggedUserId, IdtoDelete));
+            Assert.ThrowsException<UnauthorizedOperationException>(() => testedServices.Delete(loggedUserId.Id, IdtoDelete.Id));
         }
+        //[TestMethod]
+        //public void GetAll_ShouldReturn_AllThreads()
+        //{
+        //    // Arrange
+        //    var mockThreadRepository = TestModels.GetTestThreadRepositroy();
+        //    var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
+        //    var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+        //    var mockUserServices = new Mock<IUserServices>().Object;
+        //    var mockReplyService = new Mock<IReplyService>().Object;
+
+        //    var testThreadOne = TestModels.GetTestThread();
+        //    var testThreadTwo = TestModels.GetTestThread();
+        //    var testThreadThree = TestModels.GetTestThread();
+
+        //    var testSequence = new List<Models.Thread>() { testThreadOne, testThreadTwo, testThreadThree };
+
+        //    mockThreadRepository.Setup(repo => repo.GetAll()).Returns(testSequence);
+
+        //    var testedServices = new ThreadService(mockThreadRepository.Object, mockSecurityServices, mockThreadMapper, mockUserServices, mockReplyService);
+
+        //    // Act
+        //    var allThreads = testedServices.GetAll();
+
+        //    // Assert
+        //    Assert.AreEqual(3, allThreads.Count);
+        //    Assert.AreEqual(testThreadOne.Title, allThreads[0].Title);
+        //    Assert.AreEqual(testThreadTwo.Title, allThreads[1].Title);
+        //    Assert.AreEqual(testThreadThree.Title, allThreads[2].Title);
+        //}
     }
+
+
 }

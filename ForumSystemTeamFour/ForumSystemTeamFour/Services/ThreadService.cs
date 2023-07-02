@@ -55,19 +55,19 @@ namespace ForumSystemTeamFour.Services
             return resultThread;
         }
 
-        public ThreadResponseDto Delete(int id, int loggedUserId)
+        public ThreadResponseDto Delete(int loggedUserID, int idToDelete)
         {
-            var loggedUser = userServices.GetById(loggedUserId);
-            var threadToDelete = this.threadRepositroy.GetById(id);
-            
-            if (!threadToDelete.Author.Equals(loggedUser) && !loggedUser.IsAdmin)
+            var loggedUser = userServices.GetById(loggedUserID);
+            var threadToDelete = this.threadRepositroy.GetById(idToDelete);
+    
+            if (threadToDelete.AuthorId ==loggedUser.Id || loggedUser.IsAdmin)
             {
-                throw new UnauthorizedOperationException(UnauthorizedErrorMessage);
-            }
-            var deletedThread= this.threadRepositroy.Delete(threadToDelete);
-            var mappedThread = this.threadMapper.Map(deletedThread);           
+                var deletedThread = this.threadRepositroy.Delete(threadToDelete);
+                var mappedThread = this.threadMapper.Map(deletedThread);
 
-            return mappedThread;
+                return mappedThread;
+            }
+                throw new UnauthorizedOperationException(UnauthorizedErrorMessage);            
         }
 
         public List<ThreadResponseDto> GetAll()

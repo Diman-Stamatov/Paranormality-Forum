@@ -22,7 +22,7 @@ namespace ForumSystemTeamFour.Tests.TestData
     {
         public const int DefaultId = 1;
         public static int id = DefaultId;
-        public static int nextId = id++;
+        public static int nextId = id;
         public const int NamesMinLength = 4;
         public const int NamesMaxLength = 32;
         public const int ThreadTitleMinLength = 16;
@@ -335,6 +335,7 @@ namespace ForumSystemTeamFour.Tests.TestData
         {
             return new User
             {
+                Id = nextId++,
                 FirstName = ValidFirstName + nextId,
                 LastName = ValidLastName + nextId,
                 Email = ValidEmail + nextId,
@@ -344,20 +345,32 @@ namespace ForumSystemTeamFour.Tests.TestData
         }
         public static Models.Thread GetTestThread()
         {
-            id++;
             return new Models.Thread
             {
-                Id = id,
+                Id = ++nextId,
                 Title = ValidThreadTitle + id,
                 Content = ValidThreadContent + id,
                 CreationDate = DateTime.Now,
                 ModificationDate = DateTime.Now,
-                AuthorId = id,
+                AuthorId = DefaultId,
                 Author = GetUser(),
                 IsDeleted = false
             };
         }
-
+        public static Models.Thread GetTestDefaultThread()
+        {
+            return new Models.Thread
+            {
+                Id = ++nextId,
+                Title = ValidThreadTitle + id,
+                Content = ValidThreadContent + id,
+                CreationDate = DateTime.Now,
+                ModificationDate = DateTime.Now,
+                AuthorId = DefaultId,
+                Author = GetDefaultUser(),
+                IsDeleted = false
+            };
+        }
         public static List<Models.Thread> GetTestThreads(int numberOfThreads)
         {
             var testThreadList = new List<Models.Thread>();

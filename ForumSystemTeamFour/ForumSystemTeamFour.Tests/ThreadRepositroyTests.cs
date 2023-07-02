@@ -85,13 +85,10 @@ namespace ForumSystemTeamFour.Tests
         {
             // Arrange
             var testRepository = new ThreadRepository(TestContext);
-            var testThreadOne = TestModels.GetTestThread();
-            var testThreadTwo = TestModels.GetTestThread();
-            var testThreadThree = TestModels.GetTestThread();
-
-            TestContext.Threads.Add(testThreadOne);
-            TestContext.Threads.Add(testThreadTwo);
-            TestContext.Threads.Add(testThreadThree);
+            var listOfThreads = GetTestThreads(3);
+            TestContext.Add(listOfThreads[0]);
+            TestContext.Add(listOfThreads[1]);
+            TestContext.Add(listOfThreads[2]);
             TestContext.SaveChanges();
 
             // Act
@@ -99,9 +96,9 @@ namespace ForumSystemTeamFour.Tests
 
             // Assert
             Assert.AreEqual(3, allThreads.Count);
-            CollectionAssert.Contains(allThreads, testThreadOne);
-            CollectionAssert.Contains(allThreads, testThreadTwo);
-            CollectionAssert.Contains(allThreads, testThreadThree);
+            CollectionAssert.Contains(allThreads, listOfThreads[0]);
+            CollectionAssert.Contains(allThreads, listOfThreads[1]);
+            CollectionAssert.Contains(allThreads, listOfThreads[2]);
         }
 
         [TestMethod]
