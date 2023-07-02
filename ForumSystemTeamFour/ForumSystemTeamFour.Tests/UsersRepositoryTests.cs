@@ -343,10 +343,11 @@ namespace ForumSystemTeamFour.Tests
             TestContext.Add(testUserTwo);
             TestContext.Add(testUserThree);
             TestContext.SaveChanges();
-            
+
+            var testSequence = new List<User>() {testUserOne, testUserTwo, testUserThree };
             var allUsers = testRepository.GetAll();
 
-            Assert.AreEqual(true, allUsers.Count != 0);
+            Assert.AreEqual(true, allUsers.SequenceEqual(testSequence));
         }
 
         [TestMethod]

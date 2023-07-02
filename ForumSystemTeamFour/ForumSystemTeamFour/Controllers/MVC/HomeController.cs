@@ -19,7 +19,8 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             if (!User.Identity.IsAuthenticated)
             {
-                var threads = this.ThreadService.GetAll().OrderBy(thread=>thread.Comments.Count).ToList();
+                
+                var threads = this.ThreadService.GetAll().OrderBy(thread=>thread.Replies.Count).ToList();
                 return View("AnonymousHome", threads);
             }
             else

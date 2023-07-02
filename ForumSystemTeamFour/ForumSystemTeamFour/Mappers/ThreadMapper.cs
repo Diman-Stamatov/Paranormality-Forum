@@ -37,6 +37,7 @@ namespace ForumSystemTeamFour.Mappers
                 Title = thread.Title,
                 CreationDate = DateTime.Now,
                 ModificationDate = thread.ModificationDate,
+                Author = thread.Author.Username,
                 Content = thread.Content,
                 Replies = ReplyMapper.Map(thread.Replies),
                 Likes = thread.Votes.Count(v => v.VoteType == VoteType.Like),

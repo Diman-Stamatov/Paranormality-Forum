@@ -22,6 +22,6 @@ namespace ForumSystemTeamFour.Models.DTOs
 
         public List<Tag> Tags { get; set; }
 
-        // public UserResponseDto Author { get; set; }
+        public string Author { get; set; }
     }
 }
