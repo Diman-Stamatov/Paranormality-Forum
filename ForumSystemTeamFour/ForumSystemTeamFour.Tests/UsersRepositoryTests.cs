@@ -25,14 +25,23 @@ namespace ForumSystemTeamFour.Tests
     {        
         private static ForumDbContext TestContext;
         private static int NextTestId = 1;
-        public UsersRepositoryTests()
-        {            
+
+        [TestInitialize]
+        public void Setup()
+        {
             var dbContextOptions = new DbContextOptionsBuilder<ForumDbContext>()
                 .UseInMemoryDatabase(databaseName: "ForumTestDB")
                 .Options;
 
-            TestContext = new ForumDbContext(dbContextOptions);            
+            TestContext = new ForumDbContext(dbContextOptions);
         }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            TestContext.Database.EnsureDeleted();
+        }
+        
 
         [TestMethod]
         public void Create_ShouldCreateUser_WhenInputIsValid()
@@ -102,7 +111,7 @@ namespace ForumSystemTeamFour.Tests
 
             var filteredUsers = testRepository.FilterBy(userOne, new UserQueryParameters());
 
-            Assert.AreEqual(true, filteredUsers.Count != 0);
+            Assert.AreEqual(true, filteredUsers.SequenceEqual(compareList));
         }
 
         [TestMethod]
@@ -334,10 +343,11 @@ namespace ForumSystemTeamFour.Tests
             TestContext.Add(testUserTwo);
             TestContext.Add(testUserThree);
             TestContext.SaveChanges();
-            
+
+            var testSequence = new List<User>() {testUserOne, testUserTwo, testUserThree };
             var allUsers = testRepository.GetAll();
 
-            Assert.AreEqual(true, allUsers.Count != 0);
+            Assert.AreEqual(true, allUsers.SequenceEqual(testSequence));
         }
 
         [TestMethod]

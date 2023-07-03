@@ -8,6 +8,10 @@
     <UserSecretsId>c511c923-d59c-48ce-be56-d5c1c79d8ac0</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Views\Home\index.html" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.18" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.16">

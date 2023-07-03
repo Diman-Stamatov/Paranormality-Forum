@@ -1,11 +1,9 @@
 ﻿using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Mappers.Interfaces;
-using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace ForumSystemTeamFour.Services
 {
@@ -20,7 +18,7 @@ namespace ForumSystemTeamFour.Services
         private readonly IUserServices userServices;
         private readonly IReplyService replyService;
 
-        public ThreadService(IThreadRepositroy threadRepositroy, 
+        public ThreadService(IThreadRepositroy threadRepositroy,
                             ISecurityServices securityServices,
                             IThreadMapper threadMapper,
                             IUserServices userServices,
@@ -35,7 +33,7 @@ namespace ForumSystemTeamFour.Services
 
         public ThreadResponseDto Create(ThreadCreateDto threadCreateDto, int loggedUserId)
         {
-            var loggedUser = userServices.GetById(loggedUserId);
+            var loggedUser = this.userServices.GetById(loggedUserId);
             var newThread = this.threadMapper.Map(threadCreateDto, loggedUser);
             var createdThread = this.threadRepositroy.Create(newThread);
             var threadResponseDto = this.threadMapper.Map(createdThread);
@@ -45,6 +43,10 @@ namespace ForumSystemTeamFour.Services
         public ThreadResponseDto Update(int id, ThreadUpdateDto threadUpdateDto, int loggedUserId)
         {
             var threadToUpdate = this.threadRepositroy.GetById(id);
+            if (threadToUpdate.IsDeleted)
+            {
+                throw new EntityNotFoundException($"Thread with id={threadToUpdate.Id} doesn't exist.");
+            }
             var mappedThread = this.threadMapper.Map(threadToUpdate, threadUpdateDto);
             var updatedThread = this.threadRepositroy.Update(threadToUpdate, mappedThread);
             var resultThread = this.threadMapper.Map(updatedThread);
@@ -54,20 +56,17 @@ namespace ForumSystemTeamFour.Services
         public ThreadResponseDto Delete(int id, int loggedUserId)
         {
             var loggedUser = userServices.GetById(loggedUserId);
-            var thread = this.threadRepositroy.GetById(id);
+            var threadToDelete = this.threadRepositroy.GetById(id);
 
-            if(thread.IsDeleted)
+            if (threadToDelete.Author.Equals(loggedUser) || loggedUser.IsAdmin)
             {
-                throw new EntityNotFoundException(NotFoundErrorMessage);
-            }
-            if (!thread.Author.Equals(loggedUser) && !loggedUser.IsAdmin)
-            {
-                throw new UnauthorizedOperationException(UnauthorizedErrorMessage);
-            }
-            thread = this.threadRepositroy.Delete(id);
-            var mappedThread = this.threadMapper.Map(thread);           
+                var deletedThread = this.threadRepositroy.Delete(threadToDelete);
+                var mappedThread = this.threadMapper.Map(deletedThread);
 
-            return mappedThread;
+                return mappedThread;
+            }
+
+            throw new UnauthorizedOperationException(UnauthorizedErrorMessage);
         }
 
         public List<ThreadResponseDto> GetAll()
@@ -97,7 +96,7 @@ namespace ForumSystemTeamFour.Services
             var userThreads = this.threadRepositroy.GetAllByUserId(id);
             var mappedUserThreads = this.threadMapper.Map(userThreads);
             return mappedUserThreads;
-        }     
+        }
 
         public bool IsDeleted(int id)
         {

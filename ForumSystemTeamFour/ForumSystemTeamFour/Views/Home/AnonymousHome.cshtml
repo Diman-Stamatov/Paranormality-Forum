@@ -1,0 +1,87 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using ForumSystemTeamFour.Models.DTOs
+@model List<ThreadResponseDto>
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <title>Paranormality - Main page</title>
+    <link rel="stylesheet" href="~/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/application.css" />
+    <style>
+    * {
+      box-sizing: border-box;
+    }      
+
+</style>
+</head>
+
+<body class="forum-body">
+   
+    <header>
+        <h1 id="messenger"> P A R A N O R M A L I T Y</h1>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js'></script>
+        <script src="~/js/application.js"></script>
+    </header>
+    <p>
+        <a asp-controller="Users" asp-action="Create"
+           type="button" class="btn appbtn-outline" style="text-decoration:none;position:absolute;top:15%;right:5%;">Register</a>
+        
+    </p>
+    <p>
+        <a asp-controller="Users" asp-action="Login"
+           type="button" class="btn appbtn-outline" style="text-decoration:none;position:absolute;top:20%;right:5%;">Login</a>
+    </p>
+
+    <div> 
+        <div style="position: absolute;top: 5%;left: 50%;transform: translate(-50%, 0%);width:60%">
+            <h3 style ="text-align:center;margin-top:15%">Popular discussions:</h3>
+            <table class="table forum-table table-hover table-dark">
+                @*ToDo Make each thread title link to the Thread in the table*@
+                <thead>
+                    <tr>
+                        <th scope="col">Topic</th>
+                        <th scope="col">Replies</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Last post:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var thread in this.Model)
+                        {
+                            var latestReply = thread.Replies.OrderByDescending(reply => reply.CreationDate).FirstOrDefault();
+                            <tr>
+                            
+                                <td>@thread.Title</td>
+                                <td>@thread.Replies.Count()</td>
+                                <td>@thread.Author</td>
+                                @if (latestReply != null)
+                                {
+                                    <td>@latestReply.CreationDate</td>
+                                }
+                                else
+                                {
+                                    <td>No replies yet :&#0060;</td>
+                                }
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>                
+        </div>
+    </div>
+
+    <footer>
+        <div style="text-align:center">
+            <a href="/Home/Error404" style="text-align:center;">404</a>
+        </div>
+        <div style="text-align:center;padding:10px;margin-top:7px;">            
+            © copyright Paranormality.com
+        </div>
+    </footer>
+
+    </body>
+</html>

@@ -12,12 +12,12 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
 
         public Thread Update(Thread threadToUpdate, Thread updatedThread);
 
-        public Thread Delete(int id);
+        public Thread Delete(Thread thread);
 
         public List<Thread> GetAll();
 
         public Thread GetById(int id);
 
-        public List<Thread> GetAllByUserId(int id);        
+        public List<Thread> GetAllByUserId(int id);
     }
 }

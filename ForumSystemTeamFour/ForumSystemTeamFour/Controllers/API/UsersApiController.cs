@@ -250,9 +250,8 @@ namespace ForumSystemTeamFour.Controllers.API
         }
 
         private int LoggedUserIdFromClaim()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var userIdClaim = identity.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+        {            
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
 
             return int.Parse(userIdClaim);
         }

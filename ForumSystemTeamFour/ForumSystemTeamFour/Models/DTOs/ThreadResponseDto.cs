@@ -5,9 +5,6 @@ namespace ForumSystemTeamFour.Models.DTOs
 {
     public class ThreadResponseDto
     {
-        public DateTime CreationDate { get; set; }
-        public DateTime ModificationDate { get; set; }
-
         public string Title { get; set; }
 
         public string Content { get; set; }
@@ -17,8 +14,14 @@ namespace ForumSystemTeamFour.Models.DTOs
         public int Dislikes { get; set; }
 
         public bool isDeleted { get; set; }
-        public List<ReplyReadDto> Comments { get; set; }
 
-       // public UserResponseDto Author { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime ModificationDate { get; set; }
+
+        public List<ReplyReadDto> Replies { get; set; }
+
+        public List<Tag> Tags { get; set; }
+
+        public string Author { get; set; }
     }
 }

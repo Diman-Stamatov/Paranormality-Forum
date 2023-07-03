@@ -7,14 +7,17 @@ using ForumSystemTeamFour.Models.Interfaces;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace ForumSystemTeamFour.Tests.TestData
 {
@@ -22,10 +25,19 @@ namespace ForumSystemTeamFour.Tests.TestData
     {
         #region Constants
         public const int DefaultId = 1;
+        public static int id = DefaultId;
         public const int NamesMinLength = 4;
         public const int NamesMaxLength = 32;
+        public const int ThreadTitleMinLength = 16;
+        public const int ThreadTitleMaxLength = 64;
+        public const int ThreadContentMinLength = 32;
+        public const int ThreadContentMaxLength = 8192;
         public const string ValidFirstName = "FirstName";
         public const string ValidLastName = "LastName";
+
+        public const string ValidThreadTitle = "ValidThreadTitle";
+        public const string ValidThreadContent = "ValidThreadContentValidThreadContent";
+
         public const string ValidEmail = "valid@email.com";
         public const int UsernameMinLength = 4;
         public const int UsernameMaxLength = 20;
@@ -43,10 +55,10 @@ namespace ForumSystemTeamFour.Tests.TestData
 
         public const int DefaultReplyId = 1;
         public const int InvalidReplyId = -1;
+        public const string ValidCreationDates = "2023-01-01 2023-02-02 2023-03-03";
+        public const string ValidModificationDates = "2023-01-11 2023-02-12 2023-03-13";
         public const int ContentMinLength = 32;
         public const int ContentMaxLength = 8192;
-
-
 
         #endregion Constants
 
@@ -54,6 +66,16 @@ namespace ForumSystemTeamFour.Tests.TestData
         public static string GetTestString(int length)
         {
             return new string('x', length);
+        }
+
+        public static List<string> GetTestListOfStrings(int lengthOfTag, int countOfTags)
+        {
+            var listOfStrings = new List<string>();
+            for (int i = 1; i <= countOfTags; i++)
+            {
+                listOfStrings.Add(GetTestString(lengthOfTag));
+            }
+            return listOfStrings;
         }
 
         public static string GetTestString(int length, char character)
@@ -72,7 +94,7 @@ namespace ForumSystemTeamFour.Tests.TestData
                 Username = ValidUsername + id,
                 Password = ValidPassword + id
             };
-        }        
+        }
 
         public static List<User> GetTestUsersList(int numberOfUsers)
         {
@@ -88,12 +110,13 @@ namespace ForumSystemTeamFour.Tests.TestData
 
         public static User GetDefaultUser()
         {
+
             return new User
             {
                 Id = DefaultId,
                 FirstName = ValidFirstName,
                 LastName = ValidLastName,
-                Email = ValidEmail,
+                Email = ValidEmail + id,
                 Username = ValidUsername,
                 Password = ValidPassword
             };
@@ -117,7 +140,7 @@ namespace ForumSystemTeamFour.Tests.TestData
         public static Tag GetTestTag(int id)
         {
             return new Tag { Id = id, Name = ValidTagName + id };
-            
+
         }
 
         public static List<Tag> GetTestTagsList(int numberOfTags)
@@ -195,7 +218,6 @@ namespace ForumSystemTeamFour.Tests.TestData
                 Password = ValidPassword
             };
         }
-        
 
         public static Mock<IUsersRepository> GetTestUsersRepository()
         {
@@ -320,29 +342,36 @@ namespace ForumSystemTeamFour.Tests.TestData
             var mapper = new UserMapper();
             var responseDtoList = new List<UserResponseDto>();
             foreach (var user in users)
-            { 
+            {
                 responseDtoList.Add(mapper.Map(user));
             }
 
             return responseDtoList;
         }
+
+        public static User GetUser()
+        {
+            id++;
+            return new User
+            {
+                FirstName = ValidFirstName + id,
+                LastName = ValidLastName + id,
+                Email = ValidEmail + id,
+                Username = ValidUsername + id,
+                Password = ValidPassword + id
+            };
+        }
+
         #endregion Users
 
         #region Replies
+        public static List<DateTime> GetValidDates(string dates)
+        {
+            return dates.Split().Select(d => DateTime.Parse(d)).ToList();
+        }
         public static Reply GetTestReply()
         {
-            return new Reply()
-            {
-                Id = DefaultReplyId,
-                Author = GetDefaultUser(),
-                AuthorId = DefaultId,
-                CreationDate = DateTime.Now,
-                ModificationDate = DateTime.MinValue,
-                ThreadId = ValidThreadId,
-                Content = GetTestString(ContentMinLength),
-                IsDeleted = false,
-                Votes = new List<ReplyVote>()
-            };
+            return GetTestReplyList()[0];
         }
         public static Reply GetTestReply(int replyId, DateTime creationDate, DateTime modificationDate, string content)
         {
@@ -361,30 +390,19 @@ namespace ForumSystemTeamFour.Tests.TestData
         }
         public static List<Reply> GetTestReplyList()
         {
+            List<DateTime> creationDates = GetValidDates(ValidCreationDates);
+            List<DateTime> modificationDates = GetValidDates(ValidModificationDates);
+
             return new List<Reply>
             {
-                GetTestReply(1, DateTime.Parse("2023-01-01"), DateTime.Parse("2023-01-02"), GetTestString(ContentMinLength,'a')),
-                GetTestReply(2, DateTime.Parse("2023-02-01"), DateTime.Parse("2023-02-02"), GetTestString(ContentMinLength,'b')),
-                GetTestReply(3, DateTime.Parse("2023-03-01"), DateTime.Parse("2023-03-02"), GetTestString(ContentMinLength,'c'))
+                GetTestReply(1, creationDates[0], modificationDates[0], GetTestString(ContentMinLength,'a')),
+                GetTestReply(2, creationDates[1], modificationDates[1], GetTestString(ContentMinLength,'b')),
+                GetTestReply(3, creationDates[2], modificationDates[2], GetTestString(ContentMinLength,'c'))
             };
         }
         public static ReplyReadDto GetTestReplyReadDto()
         {
-            return new ReplyReadDto()
-            {
-                Id = DefaultReplyId,
-                Author = new AuthorDto()
-                {
-                    UserName = ValidUsername,
-                    Email = ValidEmail
-                },
-                Content = GetTestString(ContentMinLength),
-                CreationDate= DateTime.Now,
-                ModificationDate = DateTime.MinValue,
-                ThreadId = ValidThreadId,
-                Likes = 0,
-                Dislikes = 0
-            };
+            return GetTestReplyReadDtoList()[0];
         }
         public static ReplyReadDto GetTestReplyReadDto(int replyId, DateTime creationDate, DateTime modificationDate, string content)
         {
@@ -406,11 +424,14 @@ namespace ForumSystemTeamFour.Tests.TestData
         }
         public static List<ReplyReadDto> GetTestReplyReadDtoList()
         {
+            List<DateTime> creationDates = GetValidDates(ValidCreationDates);
+            List<DateTime> modificationDates = GetValidDates(ValidModificationDates);
+
             return new List<ReplyReadDto>
             {
-                GetTestReplyReadDto(1, DateTime.Parse("2023-01-01"), DateTime.Parse("2023-01-02"), GetTestString(ContentMinLength,'a')),
-                GetTestReplyReadDto(2, DateTime.Parse("2023-02-01"), DateTime.Parse("2023-02-02"), GetTestString(ContentMinLength,'b')),
-                GetTestReplyReadDto(3, DateTime.Parse("2023-03-01"), DateTime.Parse("2023-03-02"), GetTestString(ContentMinLength,'c'))
+                GetTestReplyReadDto(1, creationDates[0], modificationDates[0], GetTestString(ContentMinLength,'a')),
+                GetTestReplyReadDto(2, creationDates[1], modificationDates[1], GetTestString(ContentMinLength,'b')),
+                GetTestReplyReadDto(3, creationDates[2], modificationDates[2], GetTestString(ContentMinLength,'c'))
             };
         }
         public static Mock<IRepliesRepository> GetTestRepliesRepository()
@@ -423,8 +444,9 @@ namespace ForumSystemTeamFour.Tests.TestData
                 .Returns(GetTestReply());
             mockRepository.Setup(repository => repository.FilterBy(It.IsAny<ReplyQueryParameters>()))
                 .Returns(GetTestReplyList());
-            mockRepository.Setup(repository => repository.Update(It.IsAny<int>(),It.IsAny<Reply>()))
-                .Returns(GetTestReply());
+            mockRepository.Setup(repository => repository.Update(It.IsAny<int>(), It.IsAny<Reply>()))
+                .Returns(GetTestReply())
+                .Verifiable();
             mockRepository.Setup(repository => repository.Delete(It.IsAny<int>()))
                 .Returns(GetTestReply());
             mockRepository.Setup(repository => repository.UpVote(It.IsAny<int>(), It.IsAny<string>()))
@@ -452,5 +474,176 @@ namespace ForumSystemTeamFour.Tests.TestData
             return mockMapper;
         }
         #endregion Replies
+
+        #region Threads
+        public static Models.Thread GetTestThread()
+        {
+            id++;
+            return new Models.Thread
+            {
+                Id = id,
+                Title = ValidThreadTitle + id,
+                Content = ValidThreadContent + id,
+                CreationDate = DateTime.Now,
+                ModificationDate = DateTime.Now,
+                AuthorId = id,
+                Author = GetUser(),
+                IsDeleted = false
+            };
+        }
+        public static Models.Thread GetTestDefaultThread()
+        {
+            id++;
+            return new Models.Thread
+            {
+                Id = DefaultId,
+                Title = ValidThreadTitle,
+                Content = ValidThreadContent,
+                CreationDate = DateTime.Now,
+                ModificationDate = DateTime.Now,
+                AuthorId = DefaultId,
+                Author = GetDefaultUser(),
+                IsDeleted = false
+            };
+        }
+
+        public static List<Models.Thread> GetTestThreads(int numberOfThreads)
+        {
+            var testThreadList = new List<Models.Thread>();
+
+            for (int i = 1; i <= numberOfThreads; i++)
+            {
+                testThreadList.Add(GetTestThread());
+            }
+
+            return testThreadList;
+        }
+
+        public static ThreadCreateDto GetTestThreadCreateDto()
+        {
+            return new ThreadCreateDto
+            {
+                Title = ValidThreadTitle,
+                Content = ValidThreadContent
+            };
+        }
+
+        public static ThreadResponseDto GetTestThreadResponseDto()
+        {
+            return new ThreadResponseDto
+            {
+                Title = ValidThreadTitle,
+                Content = ValidThreadContent,
+                Likes = 0,
+                Dislikes = 0,
+                isDeleted = false,
+                CreationDate = DateTime.Now,
+                ModificationDate = DateTime.Now
+                //ToDo Add list<ReplyReadDto> when test model for Reply is ready 
+            };
+        }
+
+        public static List<ThreadResponseDto> GetTestListOfThreadResponseDto(int count)
+        {
+            var listOfThreadResponseDto = new List<ThreadResponseDto>();
+            for (int i = 1; i <= count; i++)
+            {
+                listOfThreadResponseDto.Add(GetTestThreadResponseDto());
+            }
+
+            return listOfThreadResponseDto;
+        }
+
+        public static UserThreadResponseDto GetTestUserThreadResponseDto()
+        {
+            return new UserThreadResponseDto
+            {
+                Title = ValidThreadTitle,
+                CreationDate = DateTime.Now.ToString(),
+                Author = ValidUsername,
+                NumberOfReplies = 0,
+                Tags = GetTestListOfStrings(2, 2)
+            };
+        }
+
+        public static List<UserThreadResponseDto> GetTestListOfUserThreadResponseDto(int count)
+        {
+            var listOfUserThreadResponseDto = new List<UserThreadResponseDto>();
+            for (int i = 1; i < count; i++)
+            {
+                listOfUserThreadResponseDto.Add(GetTestUserThreadResponseDto());
+            }
+            return listOfUserThreadResponseDto;
+        }
+
+        public static ThreadUpdateDto GetTestThreadUpdateDto()
+        {
+            return new ThreadUpdateDto
+            {
+                Title = ValidThreadTitle,
+                Content = ValidThreadContent,
+            };
+        }
+
+        public static Mock<IThreadRepositroy> GetTestThreadRepositroy()
+        {
+            var mockRepository = new Mock<IThreadRepositroy>();
+
+            mockRepository.Setup(repository => repository.Create(It.IsAny<Models.Thread>()))
+                .Returns(GetTestThread());
+            mockRepository.Setup(repository => repository.Delete(It.IsAny<Models.Thread>()))
+                .Returns(GetTestDefaultThread());
+            mockRepository.Setup(repository => repository.GetAll())
+                .Returns(GetTestThreads(3));
+            mockRepository.Setup(repository => repository.GetAllByUserId(It.IsAny<int>()))
+                .Returns(GetTestThreads(3));
+            mockRepository.Setup(repository => repository.GetById(It.IsAny<int>()))
+                .Returns(GetTestDefaultThread());
+            mockRepository.Setup(repository => repository.Update(It.IsAny<Models.Thread>(), It.IsAny<Models.Thread>()))
+                .Returns(GetTestDefaultThread());
+            //ToDo  mockRepository.Setup(repository => repository.FilterBy(It.IsAny<Thread>(), It.IsAny<ThreadQueryParameters>()))
+            //  .Returns(GetTestThreadList(3));           
+
+            return mockRepository;
+        }
+
+        public static Mock<IThreadMapper> GetTestThreadMapper()
+        {
+            var mockMapper = new Mock<IThreadMapper>();
+
+            mockMapper.Setup(mapper => mapper.Map(It.IsAny<ThreadCreateDto>(), It.IsAny<User>()))
+                .Returns(GetTestDefaultThread());
+            mockMapper.Setup(mapper => mapper.Map(It.IsAny<Models.Thread>()))
+                .Returns(GetTestThreadResponseDto());
+            mockMapper.Setup(mapper => mapper.Map(It.IsAny<Models.Thread>(), It.IsAny<ThreadUpdateDto>()))
+                .Returns(GetTestDefaultThread());
+            mockMapper.Setup(mapper => mapper.Map(It.IsAny<List<Models.Thread>>()))
+                .Returns(GetTestListOfThreadResponseDto(3));
+            mockMapper.Setup(mapper => mapper.MapForUser(It.IsAny<List<Models.Thread>>()))
+                .Returns(GetTestListOfUserThreadResponseDto(3));
+
+            return mockMapper;
+        }
+
+        public static Mock<IThreadService> GetTestThreadService()
+        {
+            var mockServices = new Mock<IThreadService>();
+
+            mockServices.Setup(services => services.Create(It.IsAny<ThreadCreateDto>(), It.IsAny<int>()))
+                .Returns(GetTestThreadResponseDto());
+            mockServices.Setup(services => services.Update(It.IsAny<int>(), It.IsAny<ThreadUpdateDto>(), It.IsAny<int>()))
+                .Returns(GetTestThreadResponseDto());
+            mockServices.Setup(services => services.Delete(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(GetTestThreadResponseDto());
+            mockServices.Setup(services => services.GetAll())
+                .Returns(GetTestListOfThreadResponseDto(0));
+            mockServices.Setup(services => services.GetById(It.IsAny<int>()))
+                .Returns(GetTestThreadResponseDto());
+            mockServices.Setup(services => services.GetAllByUserId(It.IsAny<int>()))
+                .Returns(GetTestListOfThreadResponseDto(3));
+
+            return mockServices;
+        }
+        #endregion Threads
     }
 }

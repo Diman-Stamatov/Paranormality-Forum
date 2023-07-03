@@ -1,21 +1,60 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ForumSystemTeamFour.Exceptions;
+using ForumSystemTeamFour.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
-    [AllowAnonymous]
+    
     public class HomeController : Controller
     {
+        private readonly IThreadService ThreadService;
+        public HomeController(IThreadService threadService)
+        {
+            this.ThreadService = threadService;
+        }
+
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            try
+            {
+                if (!User.Identity.IsAuthenticated)
+                {
+
+                    var threads = this.ThreadService.GetAll().OrderBy(thread => thread.Replies.Count).ToList();
+                    return this.View("AnonymousHome", threads);
+                }
+                else
+                {
+                    return this.View("UserHome");
+                }
+            }
+            catch (EntityNotFoundException)
+            {
+
+                return this.View("Error404");
+            }
+           
+            
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Error404()
         {
-            return View();
+            return this.View("Error404");
         }
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Append("Cookie_JWT", "noToken");
+            return this.View("LogoutPage");
+        }
+
+
     }
 }

@@ -47,7 +47,11 @@ namespace ForumSystemTeamFour.Controllers.API
             catch (BadHttpRequestException exception)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, exception.Message);
-            }            
+            }
+            catch (DuplicateEntityException exception)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, exception.Message);
+            }
         }
 
         [Authorize]
