@@ -19,7 +19,6 @@ namespace ForumSystemTeamFour.Repositories
 
         public Thread Create(Thread thread)
         {
-            CheckDublicateId(thread.Id);
             context.Threads.Add(thread);
             Save();
             return thread;
@@ -54,7 +53,7 @@ namespace ForumSystemTeamFour.Repositories
         public Thread GetById(int id)
         {
                     var thread = this.context.Threads
-                            .Where(t => !t.IsDeleted)
+                            .Where(thread => !thread.IsDeleted && thread.Id ==id)
                             .Include(thread => thread.Replies)
                             .Include(thread => thread.Author)
                             .FirstOrDefault();
@@ -77,15 +76,6 @@ namespace ForumSystemTeamFour.Repositories
         private void Save()
         {
             context.SaveChanges();
-        }
-
-        private void CheckDublicateId(int id)
-        {
-            var foundThread = context.Threads.FirstOrDefault(thread => thread.Id == id);
-            if (foundThread != null)
-            {
-                throw new DuplicateEntityException($"Thread with id {id} already exist.");
-            }
         }
     }
 }
