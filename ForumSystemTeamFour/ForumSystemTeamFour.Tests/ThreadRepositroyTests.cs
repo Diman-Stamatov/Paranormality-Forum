@@ -97,7 +97,7 @@ namespace ForumSystemTeamFour.Tests
         public void GetById_ShouldReturnThread_WhenThreadExists()
         {
             var testRepository = new ThreadRepository(TestContext);
-            var testThread = TestModels.GetTestThread();
+            var testThread = TestModels.GetTestDefaultThread();
             TestContext.Threads.Add(testThread);
             Save();
 
@@ -113,7 +113,7 @@ namespace ForumSystemTeamFour.Tests
         public void GetById_ShouldThrowEntityNotFoundException_WhenThreadDoesNotExist()
         {
             var testRepository = new ThreadRepository(TestContext);
-            var nonExistentThreadId = 999;
+            var nonExistentThreadId = 2;
 
             Assert.ThrowsException<EntityNotFoundException>(() => testRepository.GetById(nonExistentThreadId));
         }
