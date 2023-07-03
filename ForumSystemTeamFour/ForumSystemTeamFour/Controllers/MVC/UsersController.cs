@@ -1,4 +1,5 @@
 ﻿using ForumSystemTeamFour.Exceptions;
+using ForumSystemTeamFour.Models.ViewModels;
 using ForumSystemTeamFour.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -36,8 +37,9 @@ namespace ForumSystemTeamFour.Controllers.MVC
         [AllowAnonymous]
         [HttpGet]
         public IActionResult Create()
-        {            
-            return this.View("Create");
+        {
+            var userCreateVM = new UserCreateVM();
+            return this.View("Create", userCreateVM);
         }
 
         [AllowAnonymous]

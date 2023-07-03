@@ -133,3 +133,8 @@ input[type="text"], textarea {
     background-color: #212529;
     color:ghostwhite;
 }
+
+input[type="password"], textarea {
+    background-color: #212529;
+    color: ghostwhite;
+}
