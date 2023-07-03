@@ -9,7 +9,7 @@
         m.current_length = 0;
         m.fadeBuffer = false;
         m.messages = [
-            'P A R A N O R M A L I T Y'
+            'PARANORMALITY'
         ];
 
         //How fast the initial message appears on the screen, lower is faster
@@ -18,7 +18,7 @@
 
     m.generateRandomString = function (length) {
         //startingMessage
-        var random_text = '߷ ꔍ ᚥ ਲ਼ ꕉ ⩙ ꅵ ꕿ ꌀ Ϡ ፠ ꈾ ⨳';
+        var random_text = '߷ꔍᚥਲ਼ꕉ⩙ꅵꕿꌀϠ፠ꈾ⨳';
         while (random_text.length < length) {
             random_text += m.codeletters.charAt(Math.floor(Math.random() * m.codeletters.length));
         }
@@ -35,8 +35,8 @@
 
             var message = m.generateRandomString(m.current_length);
             $(el).html(message);
-            //How long the initial message stays on screen before the animation starts, 120 is about 3 seconds
-            setTimeout(m.animateIn, 120);
+            //How long the initial message stays on screen before the animation starts, 400 is about 3 seconds
+            setTimeout(m.animateIn, 400);
         } else {
             setTimeout(m.animateFadeBuffer, 20);
         }

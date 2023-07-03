@@ -1,6 +1,7 @@
 ﻿using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.ViewModels;
 using System.Collections.Generic;
 
 namespace ForumSystemTeamFour.Mappers
@@ -25,6 +26,18 @@ namespace ForumSystemTeamFour.Mappers
                 Email = userDto.Email,
                 Username = userDto.Username,
                 Password = userDto.Password
+            };
+        }
+
+        public UserCreateDto Map(UserCreateVM userVM)
+        {
+            return new UserCreateDto
+            {
+                FirstName = userVM.FirstName,
+                LastName = userVM.LastName,
+                Email = userVM.Email,
+                Username = userVM.Username,
+                Password = userVM.Password
             };
         }
         public UserResponseDto Map(User user)
