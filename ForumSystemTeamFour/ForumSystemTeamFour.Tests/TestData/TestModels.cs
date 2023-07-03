@@ -20,11 +20,12 @@ namespace ForumSystemTeamFour.Tests.TestData
 {
     internal static class TestModels
     {
+        #region Constants
         public const int DefaultId = 1;
         public const int NamesMinLength = 4;
         public const int NamesMaxLength = 32;
         public const string ValidFirstName = "FirstName";
-        public const string ValidLastName = "LastName";        
+        public const string ValidLastName = "LastName";
         public const string ValidEmail = "valid@email.com";
         public const int UsernameMinLength = 4;
         public const int UsernameMaxLength = 20;
@@ -37,6 +38,19 @@ namespace ForumSystemTeamFour.Tests.TestData
         public const string ValidPhoneNumber = "0888 123 456";
         public const string ValidTagName = "TagName";
 
+        public const int ValidThreadId = 1;
+        public const int InvalidThreadId = -1;
+
+        public const int DefaultReplyId = 1;
+        public const int InvalidReplyId = -1;
+        public const int ContentMinLength = 32;
+        public const int ContentMaxLength = 8192;
+
+
+
+        #endregion Constants
+
+        #region Users
         public static string GetTestString(int length)
         {
             return new string('x', length);
@@ -312,5 +326,131 @@ namespace ForumSystemTeamFour.Tests.TestData
 
             return responseDtoList;
         }
+        #endregion Users
+
+        #region Replies
+        public static Reply GetTestReply()
+        {
+            return new Reply()
+            {
+                Id = DefaultReplyId,
+                Author = GetDefaultUser(),
+                AuthorId = DefaultId,
+                CreationDate = DateTime.Now,
+                ModificationDate = DateTime.MinValue,
+                ThreadId = ValidThreadId,
+                Content = GetTestString(ContentMinLength),
+                IsDeleted = false,
+                Votes = new List<ReplyVote>()
+            };
+        }
+        public static Reply GetTestReply(int replyId, DateTime creationDate, DateTime modificationDate, string content)
+        {
+            return new Reply()
+            {
+                Id = replyId,
+                Author = GetDefaultUser(),
+                AuthorId = DefaultId,
+                CreationDate = creationDate,
+                ModificationDate = modificationDate,
+                ThreadId = ValidThreadId,
+                Content = content,
+                IsDeleted = false,
+                Votes = new List<ReplyVote>()
+            };
+        }
+        public static List<Reply> GetTestReplyList()
+        {
+            return new List<Reply>
+            {
+                GetTestReply(1, DateTime.Parse("2023-01-01"), DateTime.Parse("2023-01-02"), GetTestString(ContentMinLength,'a')),
+                GetTestReply(2, DateTime.Parse("2023-02-01"), DateTime.Parse("2023-02-02"), GetTestString(ContentMinLength,'b')),
+                GetTestReply(3, DateTime.Parse("2023-03-01"), DateTime.Parse("2023-03-02"), GetTestString(ContentMinLength,'c'))
+            };
+        }
+        public static ReplyReadDto GetTestReplyReadDto()
+        {
+            return new ReplyReadDto()
+            {
+                Id = DefaultReplyId,
+                Author = new AuthorDto()
+                {
+                    UserName = ValidUsername,
+                    Email = ValidEmail
+                },
+                Content = GetTestString(ContentMinLength),
+                CreationDate= DateTime.Now,
+                ModificationDate = DateTime.MinValue,
+                ThreadId = ValidThreadId,
+                Likes = 0,
+                Dislikes = 0
+            };
+        }
+        public static ReplyReadDto GetTestReplyReadDto(int replyId, DateTime creationDate, DateTime modificationDate, string content)
+        {
+            return new ReplyReadDto()
+            {
+                Id = replyId,
+                Author = new AuthorDto()
+                {
+                    UserName = ValidUsername,
+                    Email = ValidEmail
+                },
+                Content = content,
+                CreationDate = creationDate,
+                ModificationDate = modificationDate,
+                ThreadId = ValidThreadId,
+                Likes = 0,
+                Dislikes = 0
+            };
+        }
+        public static List<ReplyReadDto> GetTestReplyReadDtoList()
+        {
+            return new List<ReplyReadDto>
+            {
+                GetTestReplyReadDto(1, DateTime.Parse("2023-01-01"), DateTime.Parse("2023-01-02"), GetTestString(ContentMinLength,'a')),
+                GetTestReplyReadDto(2, DateTime.Parse("2023-02-01"), DateTime.Parse("2023-02-02"), GetTestString(ContentMinLength,'b')),
+                GetTestReplyReadDto(3, DateTime.Parse("2023-03-01"), DateTime.Parse("2023-03-02"), GetTestString(ContentMinLength,'c'))
+            };
+        }
+        public static Mock<IRepliesRepository> GetTestRepliesRepository()
+        {
+            var mockRepository = new Mock<IRepliesRepository>();
+
+            mockRepository.Setup(repository => repository.Create(It.IsAny<Reply>()))
+                .Returns(GetTestReply());
+            mockRepository.Setup(repository => repository.GetById(It.IsAny<int>()))
+                .Returns(GetTestReply());
+            mockRepository.Setup(repository => repository.FilterBy(It.IsAny<ReplyQueryParameters>()))
+                .Returns(GetTestReplyList());
+            mockRepository.Setup(repository => repository.Update(It.IsAny<int>(),It.IsAny<Reply>()))
+                .Returns(GetTestReply());
+            mockRepository.Setup(repository => repository.Delete(It.IsAny<int>()))
+                .Returns(GetTestReply());
+            mockRepository.Setup(repository => repository.UpVote(It.IsAny<int>(), It.IsAny<string>()))
+                .Returns(GetTestReply());
+            mockRepository.Setup(repository => repository.DownVote(It.IsAny<int>(), It.IsAny<string>()))
+                .Returns(GetTestReply());
+            mockRepository.Setup(repository => repository.ChangeVote(It.IsAny<int>(), It.IsAny<string>()))
+                .Returns(GetTestReply());
+
+            return mockRepository;
+        }
+        public static Mock<IReplyMapper> GetTestReplyMapper()
+        {
+            var mockMapper = new Mock<IReplyMapper>();
+
+            mockMapper.Setup(mapper => mapper.Map(It.IsAny<ReplyCreateDto>(), It.IsAny<User>()))
+                .Returns(GetTestReply());
+            mockMapper.Setup(mapper => mapper.Map(It.IsAny<Reply>()))
+                .Returns(GetTestReplyReadDto());
+            mockMapper.Setup(mapper => mapper.Map(It.IsAny<List<Reply>>()))
+                .Returns(GetTestReplyReadDtoList());
+            mockMapper.Setup(mapper => mapper.Map(It.IsAny<Reply>(), It.IsAny<ReplyUpdateDto>()))
+                .Returns(GetTestReply());
+
+            return mockMapper;
+        }
+        #endregion Replies
     }
 }
