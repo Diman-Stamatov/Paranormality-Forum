@@ -1,6 +1,7 @@
 ﻿using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services;
 using ForumSystemTeamFour.Services.Interfaces;
 using ForumSystemTeamFour.Tests.TestData;
@@ -283,7 +284,7 @@ namespace ForumSystemTeamFour.Tests
                                                     testedServices.GetAll());
         }
 
-        /*[TestMethod]
+        [TestMethod]
           public void GetById_ShouldGetThread_WhenThreadIsThere()
           {
               var mockThreadRepository = new Mock<IThreadRepositroy>();
@@ -354,6 +355,6 @@ namespace ForumSystemTeamFour.Tests
 
               Assert.ThrowsException<InvalidOperationException>(() => testedServices
                       .GetById(deletedThread.Id));
-          }*/
+          }
     }
 }
