@@ -202,5 +202,69 @@ namespace ForumSystemTeamFour.Tests
             mockRepliesRepository.Verify(repository => repository.Update(It.IsAny<int>(), It.IsAny<Reply>()), Times.Never);
             Assert.ThrowsException<UnauthorizedAccessException>(() => sut.Update(DefaultReplyId, updateDto, DefaultId));
         }
+        [TestMethod]
+        public void Delete_ShouldDeleteRecord_WhenInputIsValid()
+        {
+            // Arrange
+            var expectedResult = GetTestReplyReadDto();
+
+            var sut = new ReplyService(mockRepliesRepository, mockReplyMapper, mockUserServices, mockValidSecurityServices, mockThreadRepository);
+            // Act
+            var actualResult = sut.Delete(It.IsAny<int>(), It.IsAny<int>());
+
+            // Assert
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+        [TestMethod]
+        public void Delete_ShouldThrow_WhenUserNotFound()
+        {
+            // Arrange
+            var mockUserServices = new Mock<IUserServices>();
+            mockUserServices.Setup(repository => repository.GetById(It.IsAny<int>()))
+                .Throws<EntityNotFoundException>();
+
+            var mockRepliesRepository = new Mock<IRepliesRepository>();
+            mockRepliesRepository.Setup(repository => repository.Delete(It.IsAny<int>()))
+                .Returns(GetTestReply());
+
+            var sut = new ReplyService(mockRepliesRepository.Object, mockReplyMapper, mockUserServices.Object, mockValidSecurityServices, mockThreadRepository);
+
+            // Act and Assert
+            mockRepliesRepository.Verify(repository => repository.Delete(It.IsAny<int>()), Times.Never);
+            Assert.ThrowsException<EntityNotFoundException>(() => sut.Delete(It.IsAny<int>(), It.IsAny<int>()));
+        }
+        [TestMethod]
+        public void Delete_ShouldThrow_WhenReplyNotFound()
+        {
+            // Arrange
+            var mockRepliesRepository = new Mock<IRepliesRepository>();
+
+            mockRepliesRepository.Setup(repository => repository.GetById(It.IsAny<int>()))
+                .Throws<EntityNotFoundException>();
+            mockRepliesRepository.Setup(repository => repository.Delete(It.IsAny<int>()))
+                .Returns(GetTestReply());
+
+
+            var sut = new ReplyService(mockRepliesRepository.Object, mockReplyMapper, mockUserServices, mockValidSecurityServices, mockThreadRepository);
+
+            // Act and Assert
+            mockRepliesRepository.Verify(repository => repository.Delete(It.IsAny<int>()), Times.Never);
+            Assert.ThrowsException<EntityNotFoundException>(() => sut.Delete(It.IsAny<int>(), It.IsAny<int>()));
+        }
+        [TestMethod]
+        public void Delete_ShouldThrow_WhenUserNotAuthorized()
+        {
+            // Arrange
+            var mockRepliesRepository = new Mock<IRepliesRepository>();
+
+            mockRepliesRepository.Setup(repository => repository.Delete(It.IsAny<int>()))
+                .Returns(GetTestReply());
+
+            var sut = new ReplyService(mockRepliesRepository.Object, mockReplyMapper, mockUserServices, mockInvalidSecurityServices, mockThreadRepository);
+
+            // Act and Assert
+            mockRepliesRepository.Verify(repository => repository.Delete(It.IsAny<int>()), Times.Never);
+            Assert.ThrowsException<UnauthorizedAccessException>(() => sut.Delete(It.IsAny<int>(), It.IsAny<int>()));
+        }
     }
 }
