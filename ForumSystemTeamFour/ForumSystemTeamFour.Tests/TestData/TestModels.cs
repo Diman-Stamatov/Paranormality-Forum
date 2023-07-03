@@ -16,13 +16,13 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace ForumSystemTeamFour.Tests.TestData
 {
     internal static class TestModels
     {
         public const int DefaultId = 1;
         public static int id = DefaultId;
-        public static int nextId = id++;
         public const int NamesMinLength = 4;
         public const int NamesMaxLength = 32;
         public const int ThreadTitleMinLength = 16;
@@ -333,13 +333,14 @@ namespace ForumSystemTeamFour.Tests.TestData
 
         public static User GetUser()
         {
+            id++;
             return new User
             {
-                FirstName = ValidFirstName + nextId,
-                LastName = ValidLastName + nextId,
-                Email = ValidEmail + nextId,
-                Username = ValidUsername + nextId,
-                Password = ValidPassword + nextId
+                FirstName = ValidFirstName + id,
+                LastName = ValidLastName + id,
+                Email = ValidEmail + id,
+                Username = ValidUsername + id,
+                Password = ValidPassword + id
             };
         }
         public static Models.Thread GetTestThread()
@@ -354,6 +355,21 @@ namespace ForumSystemTeamFour.Tests.TestData
                 ModificationDate = DateTime.Now,
                 AuthorId = id,
                 Author = GetUser(),
+                IsDeleted = false
+            };
+        }
+        public static Models.Thread GetTestDefaultThread()
+        {
+            id++;
+            return new Models.Thread
+            {
+                Id = DefaultId,
+                Title = ValidThreadTitle,
+                Content = ValidThreadContent,
+                CreationDate = DateTime.Now,
+                ModificationDate = DateTime.Now,
+                AuthorId = DefaultId,
+                Author = GetDefaultUser(),
                 IsDeleted = false
             };
         }
@@ -443,15 +459,15 @@ namespace ForumSystemTeamFour.Tests.TestData
             mockRepository.Setup(repository => repository.Create(It.IsAny<Models.Thread>()))
                 .Returns(GetTestThread());
             mockRepository.Setup(repository => repository.Delete(It.IsAny<Models.Thread>()))
-                .Returns(GetTestThread());
+                .Returns(GetTestDefaultThread());
             mockRepository.Setup(repository => repository.GetAll())
                 .Returns(GetTestThreads(3));
             mockRepository.Setup(repository => repository.GetAllByUserId(It.IsAny<int>()))
                 .Returns(GetTestThreads(3));
             mockRepository.Setup(repository => repository.GetById(It.IsAny<int>()))
-                .Returns(GetTestThread());
+                .Returns(GetTestDefaultThread());
             mockRepository.Setup(repository => repository.Update(It.IsAny<Models.Thread>(), It.IsAny<Models.Thread>()))
-                .Returns(GetTestThread());
+                .Returns(GetTestDefaultThread());
             //ToDo  mockRepository.Setup(repository => repository.FilterBy(It.IsAny<Thread>(), It.IsAny<ThreadQueryParameters>()))
             //  .Returns(GetTestThreadList(3));           
 
@@ -463,11 +479,11 @@ namespace ForumSystemTeamFour.Tests.TestData
             var mockMapper = new Mock<IThreadMapper>();
 
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<ThreadCreateDto>(), It.IsAny<User>()))
-                .Returns(GetTestThread());
+                .Returns(GetTestDefaultThread());
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<Models.Thread>()))
                 .Returns(GetTestThreadResponseDto());
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<Models.Thread>(), It.IsAny<ThreadUpdateDto>()))
-                .Returns(GetTestThread());
+                .Returns(GetTestDefaultThread());
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<List<Models.Thread>>()))
                 .Returns(GetTestListOfThreadResponseDto(3));
             mockMapper.Setup(mapper => mapper.MapForUser(It.IsAny<List<Models.Thread>>()))
@@ -487,7 +503,7 @@ namespace ForumSystemTeamFour.Tests.TestData
             mockServices.Setup(services => services.Delete(It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(GetTestThreadResponseDto());
             mockServices.Setup(services => services.GetAll())
-                .Returns(GetTestListOfThreadResponseDto(3));
+                .Returns(GetTestListOfThreadResponseDto(0));
             mockServices.Setup(services => services.GetById(It.IsAny<int>()))
                 .Returns(GetTestThreadResponseDto());
             mockServices.Setup(services => services.GetAllByUserId(It.IsAny<int>()))
@@ -495,5 +511,6 @@ namespace ForumSystemTeamFour.Tests.TestData
 
             return mockServices;
         }
+       
     }
 }

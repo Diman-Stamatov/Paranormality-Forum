@@ -1,14 +1,10 @@
 ﻿using ForumSystemTeamFour.Data;
 using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Models;
-using ForumSystemTeamFour.Models.Interfaces;
-using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 namespace ForumSystemTeamFour.Repositories
 {
@@ -38,7 +34,7 @@ namespace ForumSystemTeamFour.Repositories
         }
 
         public Thread Delete(Thread thread)
-        {            
+        {
             thread.IsDeleted = true;
             Save();
             return thread;
@@ -48,8 +44,8 @@ namespace ForumSystemTeamFour.Repositories
         {
             var threads = this.context.Threads
                             .Where(thread => !thread.IsDeleted)
-                            .Include(thread=>thread.Replies)
-                            .Include(thread=>thread.Author)
+                            .Include(thread => thread.Replies)
+                            .Include(thread => thread.Author)
                             .ToList();
 
             return threads;

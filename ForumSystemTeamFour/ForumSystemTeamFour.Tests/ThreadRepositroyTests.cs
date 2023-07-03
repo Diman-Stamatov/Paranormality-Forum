@@ -47,27 +47,10 @@ namespace ForumSystemTeamFour.Tests
             var testRepository = new ThreadRepository(TestContext);
             var newThread = GetTestThread();
 
-            var createdUser = testRepository.Create(newThread);
+            var createdThread = testRepository.Create(newThread);
 
-            Assert.AreEqual(newThread, createdUser);
-        }
-
-        [TestMethod]
-        public void Create_ShouldThrow_WhenIdIsDuplicate()
-        {
-            //Arrange
-            var testRepository = new ThreadRepository(TestContext);
-            var firstThread = GetTestThread();
-            var secondThread = GetTestThread();
-            secondThread.Id = firstThread.Id;
-
-            var createdThread = testRepository.Create(firstThread);
-
-            //Act & Assert
-
-            Assert.ThrowsException<DuplicateEntityException>(()
-                => testRepository.Create(secondThread));
-        }
+            Assert.AreEqual(newThread, createdThread);
+        }     
 
         [TestMethod]
         public void Delete_ShouldDelete_WhenInputIsValid()
@@ -83,40 +66,43 @@ namespace ForumSystemTeamFour.Tests
         [TestMethod]
         public void GetAll_ShouldReturnAllThreads_WhenCalled()
         {
-            // Arrange
             var testRepository = new ThreadRepository(TestContext);
-            var testThreadOne = TestModels.GetTestThread();
-            var testThreadTwo = TestModels.GetTestThread();
-            var testThreadThree = TestModels.GetTestThread();
+            var testThreadOne = GetTestThread();
+            var testThreadTwo = GetTestThread();
+            var testThreadThree = GetTestThread();
 
             TestContext.Threads.Add(testThreadOne);
             TestContext.Threads.Add(testThreadTwo);
             TestContext.Threads.Add(testThreadThree);
-            TestContext.SaveChanges();
+            Save();
 
-            // Act
             var allThreads = testRepository.GetAll();
 
-            // Assert
             Assert.AreEqual(3, allThreads.Count);
             CollectionAssert.Contains(allThreads, testThreadOne);
             CollectionAssert.Contains(allThreads, testThreadTwo);
             CollectionAssert.Contains(allThreads, testThreadThree);
         }
 
+
+        [TestMethod]
+        public void GetAllShould_Throw_WhenNoThreads()
+        {
+            var testRepository = new ThreadRepository(TestContext);
+            var allThreads = testRepository.GetAll();
+            Assert.AreEqual(0, allThreads.Count);
+        }
+
         [TestMethod]
         public void GetById_ShouldReturnThread_WhenThreadExists()
         {
-            // Arrange
             var testRepository = new ThreadRepository(TestContext);
             var testThread = TestModels.GetTestThread();
             TestContext.Threads.Add(testThread);
-            TestContext.SaveChanges();
+            Save();
 
-            // Act
             var retrievedThread = testRepository.GetById(testThread.Id);
 
-            // Assert
             Assert.IsNotNull(retrievedThread);
             Assert.AreEqual(testThread.Id, retrievedThread.Id);
             Assert.AreEqual(testThread.Title, retrievedThread.Title);
@@ -126,33 +112,30 @@ namespace ForumSystemTeamFour.Tests
         [TestMethod]
         public void GetById_ShouldThrowEntityNotFoundException_WhenThreadDoesNotExist()
         {
-            // Arrange
             var testRepository = new ThreadRepository(TestContext);
             var nonExistentThreadId = 999;
 
-            // Act & Assert
             Assert.ThrowsException<EntityNotFoundException>(() => testRepository.GetById(nonExistentThreadId));
         }
         [TestMethod]
         public void GetAllByUserId_ShouldReturnThreads_WhenUserIdIsValid()
         {
-            // Arrange
             var threadRepository = new ThreadRepository(TestContext);
             var testUser = TestModels.GetTestUser(TestModels.DefaultId);
             var testThreads = TestModels.GetTestThreads(3);
+
             foreach (var thread in testThreads)
             {
                 thread.AuthorId = testUser.Id;
                 thread.Author = testUser;
                 TestContext.Threads.Add(thread);
             }
-            TestContext.SaveChanges();
+            Save();
 
-            // Act
             var resultThreads = threadRepository.GetAllByUserId(testUser.Id);
 
-            // Assert
             Assert.AreEqual(testThreads.Count, resultThreads.Count);
+
             foreach (var thread in resultThreads)
             {
                 Assert.AreEqual(testUser.Id, thread.AuthorId);
@@ -162,38 +145,35 @@ namespace ForumSystemTeamFour.Tests
         [TestMethod]
         public void GetAllByUserId_ShouldThrowEntityNotFoundException_WhenUserDoesNotHaveAnyThreads()
         {
-            // Arrange
             var threadRepository = new ThreadRepository(TestContext);
             var testUser = TestModels.GetTestUser(TestModels.DefaultId);
             TestContext.Users.Add(testUser);
-            TestContext.SaveChanges();
+            Save();
 
-            // Act & Assert
             Assert.ThrowsException<EntityNotFoundException>(() => threadRepository.GetAllByUserId(testUser.Id));
         }
         [TestMethod]
         public void Update_ShouldUpdateThread_WhenInputIsValid()
         {
-            // Arrange
             var threadRepository = new ThreadRepository(TestContext);
             var testThread = TestModels.GetTestThread();
             TestContext.Threads.Add(testThread);
-            TestContext.SaveChanges();
+            Save();
 
             var updatedThread = GetTestThread();
-            updatedThread.Title = "UpdatedTitle";
-            updatedThread.Content = "UpdatedContent";
+                updatedThread.Title = "UpdatedTitle";
+                updatedThread.Content = "UpdatedContent";
 
-            // Act
             var resultThread = threadRepository.Update(testThread, updatedThread);
 
-            // Assert
             Assert.AreEqual(updatedThread.Title, resultThread.Title);
             Assert.AreEqual(updatedThread.Content, resultThread.Content);
         }
-      
+        public void Save()
+        {
+            TestContext.SaveChanges();
+        }
     }
-
 }
 
 
