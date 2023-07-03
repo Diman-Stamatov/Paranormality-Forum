@@ -18,23 +18,21 @@ namespace ForumSystemTeamFour.Tests
         {
             var mockThreadRepository = TestModels.GetTestThreadRepositroy().Object;
             var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
-                var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
-                var mockUserServices = new Mock<IUserServices>();
-                var mockReplyService = new Mock<IReplyService>();
+            var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+            var mockUserServices = new Mock<IUserServices>();
+            var mockReplyService = new Mock<IReplyService>();
 
             var testedServices = new ThreadService(mockThreadRepository,
                                                     mockSecurityServices,
                                                     mockThreadMapper,
                                                     mockUserServices.Object,
                                                     mockReplyService.Object);
+            var testCreateDto = TestModels.GetTestThreadCreateDto();
+            var defaultThread = TestModels.GetTestThreadResponseDto();
 
-                    var testCreateDto = TestModels.GetTestThreadCreateDto();
-                    var defaultThread = TestModels.GetTestThreadResponseDto();
-
-                    mockUserServices.Setup(service => service
-                                    .GetById(It
-                                    .IsAny<int>()))
-                                    .Returns(TestModels.GetDefaultUser());
+            mockUserServices.Setup(service => service
+                            .GetById(It.IsAny<int>()))
+                            .Returns(TestModels.GetDefaultUser());
 
                     var createdThread = testedServices
                                     .Create(testCreateDto, DefaultId);
@@ -48,18 +46,18 @@ namespace ForumSystemTeamFour.Tests
         {
             var mockThreadRepository = TestModels.GetTestThreadRepositroy().Object;
             var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
-                var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
-                var mockUserServices = new Mock<IUserServices>().Object;
-                var mockReplyService = new Mock<IReplyService>().Object;
+            var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+            var mockUserServices = new Mock<IUserServices>().Object;
+            var mockReplyService = new Mock<IReplyService>().Object;
 
             var testedServices = new ThreadService(mockThreadRepository,
                                                     mockSecurityServices,
                                                     mockThreadMapper,
                                                     mockUserServices,
                                                     mockReplyService);
-                      int idToUpdate = DefaultId;
-                    int loggedUserId = DefaultId;
-                 var threadUpdateDto = TestModels.GetTestThreadUpdateDto();
+            int idToUpdate = DefaultId;
+            var threadUpdateDto = TestModels.GetTestThreadUpdateDto();
+            int loggedUserId = DefaultId;
 
                    var updatedThread = testedServices
                                     .Update(idToUpdate,
@@ -73,30 +71,29 @@ namespace ForumSystemTeamFour.Tests
         [TestMethod]
         public void Update_ShouldThrow_WhenThreadIsDeleted()
         {
-                var mockThreadRepository = TestModels.GetTestThreadRepositroy();
-                mockThreadRepository.Setup(repository => repository
-                                    .GetById(It
-                                    .IsAny<int>()))
-                                    .Returns(() =>
-                                    {
-                                        var thread = TestModels.GetTestThread();
-                                        thread.IsDeleted = true;
-                                        return thread;
-                                    });
+            var mockThreadRepository = TestModels.GetTestThreadRepositroy();
+            mockThreadRepository.Setup(repository => repository
+                                .GetById(It.IsAny<int>()))
+                                .Returns(() =>
+                                {
+                                    var thread = TestModels.GetTestThread();
+                                    thread.IsDeleted = true;
+                                    return thread;
+                                });
 
             var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
-                var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
-                var mockUserServices = new Mock<IUserServices>().Object;
-                var mockReplyService = new Mock<IReplyService>().Object;
+            var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+            var mockUserServices = new Mock<IUserServices>().Object;
+            var mockReplyService = new Mock<IReplyService>().Object;
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices,
                                                     mockThreadMapper,
                                                     mockUserServices,
                                                     mockReplyService);
-                      int idToUpdate = DefaultId;
-                    int loggedUserId = DefaultId;
-                 var threadUpdateDto = TestModels.GetTestThreadUpdateDto();
+            int idToUpdate = DefaultId;
+            var threadUpdateDto = TestModels.GetTestThreadUpdateDto();
+            int loggedUserId = DefaultId;
 
             Assert.ThrowsException<EntityNotFoundException>(() => testedServices
                                                     .Update(
@@ -109,23 +106,22 @@ namespace ForumSystemTeamFour.Tests
         public void Delete_ShouldThrow_WhenThreadNotFound()
         {
             var mockThreadRepository = TestModels.GetTestThreadRepositroy();
-                mockThreadRepository.Setup(repository => repository
-                                    .GetById(It
-                                    .IsAny<int>()))
-                                    .Throws<EntityNotFoundException>();
+            mockThreadRepository.Setup(repository => repository
+                                .GetById(It.IsAny<int>()))
+                                .Throws<EntityNotFoundException>();
 
             var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
-                var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
-                var mockUserServices = new Mock<IUserServices>().Object;
-                var mockReplyService = new Mock<IReplyService>().Object;
+            var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+            var mockUserServices = new Mock<IUserServices>().Object;
+            var mockReplyService = new Mock<IReplyService>().Object;
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices,
                                                     mockThreadMapper,
                                                     mockUserServices,
                                                     mockReplyService);
-                      int idToDelete = DefaultId;
-                    int loggedUserId = DefaultId;
+            int idToDelete = DefaultId;
+            int loggedUserId = DefaultId;
 
             Assert.ThrowsException<EntityNotFoundException>(() => testedServices
                                                     .Delete(idToDelete,
@@ -137,9 +133,9 @@ namespace ForumSystemTeamFour.Tests
         {
             var mockThreadRepository = TestModels.GetTestThreadRepositroy().Object;
             var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
-                var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
-                var mockUserServices = new Mock<IUserServices>();
-                var mockReplyService = new Mock<IReplyService>();
+            var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+            var mockUserServices = new Mock<IUserServices>();
+            var mockReplyService = new Mock<IReplyService>();
 
             var testedServices = new ThreadService(mockThreadRepository,
                                                     mockSecurityServices,
@@ -149,10 +145,9 @@ namespace ForumSystemTeamFour.Tests
             int loggedUserId = TestModels.DefaultId;
             int IdtoDelete = TestModels.DefaultId;
 
-                    mockUserServices.Setup(service => service
-                                    .GetById(It
-                                    .IsAny<int>()))
-                                    .Returns(TestModels.GetDefaultUser());
+            mockUserServices.Setup(service => service
+                            .GetById(It.IsAny<int>()))
+                            .Returns(TestModels.GetDefaultUser());
 
             var deletedThread = testedServices.Delete(IdtoDelete, loggedUserId);
             var defaultThread = TestModels.GetTestThreadResponseDto();
@@ -165,15 +160,14 @@ namespace ForumSystemTeamFour.Tests
         public void Delete_ShouldThrow_WhenLoggedUserNotFound()
         {
             var mockThreadRepository = TestModels.GetTestThreadRepositroy();
-                mockThreadRepository.Setup(repository => repository
-                                    .GetById(It
-                                    .IsAny<int>()))
-                                    .Throws<EntityNotFoundException>();
+            mockThreadRepository.Setup(repository => repository
+                                .GetById(It.IsAny<int>()))
+                                .Throws<EntityNotFoundException>();
 
             var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
-                var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
-                var mockUserServices = new Mock<IUserServices>().Object;
-                var mockReplyService = new Mock<IReplyService>().Object;
+            var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+            var mockUserServices = new Mock<IUserServices>().Object;
+            var mockReplyService = new Mock<IReplyService>().Object;
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices,
@@ -193,15 +187,14 @@ namespace ForumSystemTeamFour.Tests
         public void Delete_ShouldThrow_WhenThreadToDeleteNotFound()
         {
             var mockThreadRepository = TestModels.GetTestThreadRepositroy();
-                mockThreadRepository.Setup(repository => repository
-                                    .GetById(It
-                                    .IsAny<int>()))
-                                    .Throws<EntityNotFoundException>();
+            mockThreadRepository.Setup(repository => repository
+                                .GetById(It.IsAny<int>()))
+                                .Throws<EntityNotFoundException>();
 
             var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
-                var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
-                var mockUserServices = new Mock<IUserServices>().Object;
-                var mockReplyService = new Mock<IReplyService>().Object;
+            var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+            var mockUserServices = new Mock<IUserServices>().Object;
+            var mockReplyService = new Mock<IReplyService>().Object;
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices,
@@ -220,16 +213,13 @@ namespace ForumSystemTeamFour.Tests
         [TestMethod]
         public void Delete_ShouldThrow_WhenLoggedUserIsNotAuthorized()
         {
-                var mockReplyService = new Mock<IReplyService>().Object;
-                var mockUserServices = new Mock<IUserServices>();
-                    mockUserServices.Setup(s => s
-                                    .GetById(It
-                                    .IsAny<int>()))
-                                    .Returns(TestModels
-                                    .GetUser());
+            var mockUserServices = new Mock<IUserServices>();
+            mockUserServices.Setup(s => s.GetById(It.IsAny<int>()))
+                            .Returns(TestModels.GetUser());
             var mockThreadRepository = TestModels.GetTestThreadRepositroy().Object;
             var mockSecurityServices = TestModels.GetInvalidAuthenticationTestSecurity().Object;
-                var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+            var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+            var mockReplyService = new Mock<IReplyService>().Object;
 
             var testedServices = new ThreadService(mockThreadRepository,
                                                     mockSecurityServices,
@@ -248,11 +238,15 @@ namespace ForumSystemTeamFour.Tests
         [TestMethod]
         public void GetAll_ShouldReturnAllThreads_WhenCalled()
         {
-                var mockUserServices = new Mock<IUserServices>();
-                var mockReplyService = new Mock<IReplyService>();
-            var mockThreadRepository = TestModels.GetTestThreadRepositroy();  
+            var mockThreadRepository = TestModels.GetTestThreadRepositroy();
+            mockThreadRepository.Setup(repository => repository
+                                .GetAll())
+                                .Returns(TestModels.GetTestThreads(3));
+
             var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
-                var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+            var mockThreadMapper = TestModels.GetTestThreadMapper().Object;
+            var mockUserServices = new Mock<IUserServices>();
+            var mockReplyService = new Mock<IReplyService>();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices,
@@ -260,26 +254,30 @@ namespace ForumSystemTeamFour.Tests
                                                     mockUserServices.Object,
                                                     mockReplyService.Object);
 
-            var allThreads = testedServices
-                                    .GetAll();
+            var allThreads = testedServices.GetAll();
 
             Assert.AreEqual(3, allThreads.Count);
             Assert.IsInstanceOfType(allThreads, typeof(List<ThreadResponseDto>));
 
         }
+
         [TestMethod]
         public void GetAll_ShouldReturnEmptyList_WhenNoThreadsExist()
         {
+            var mockThreadRepository = TestModels.GetTestThreadRepositroy();
+            mockThreadRepository.Setup(repository => repository
+                                .GetAll())
+                                .Returns(new List<Models.Thread>());
+            var mockThreadMapper = new Mock<IThreadMapper>();
+                mockThreadMapper.Setup(mapper => mapper
+                                .Map(It.IsAny<List<Models.Thread>>()))
+                                .Returns(TestModels.GetTestListOfThreadResponseDto(0));
+
+
+            var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
             var mockUserServices = new Mock<IUserServices>();
             var mockReplyService = new Mock<IReplyService>();
-            var mockThreadRepository = new Mock<IThreadRepositroy>();
-            var mockSecurityServices = new Mock<ISecurityServices>();
-            var mockThreadMapper = new Mock<IThreadMapper>();
-            mockThreadMapper.Setup(mapper => mapper
-                            .Map(It
-                            .IsAny<List<Models.Thread>>()))
-                            .Returns(TestModels
-                            .GetTestListOfThreadResponseDto(0));
+
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices.Object,
                                                     mockThreadMapper.Object,
@@ -291,18 +289,42 @@ namespace ForumSystemTeamFour.Tests
         }
 
         [TestMethod]
+        public void GetById_ShouldGetThread_WhenThreadIsThere()
+        {
+            var mockThreadRepository = new Mock<IThreadRepositroy>();
+            var mockSecurityServices = new Mock<ISecurityServices>();
+            var mockThreadMapper = new Mock<IThreadMapper>();
+            var mockUserServices = new Mock<IUserServices>();
+            var mockReplyService = new Mock<IReplyService>();
+
+            var testThread = TestModels.GetTestThread();
+            mockThreadRepository.Setup(repository => repository
+                                .GetById(It.IsAny<int>()))
+                                .Returns(testThread);
+
+            var testedServices = new ThreadService(mockThreadRepository.Object,
+                                                   mockSecurityServices.Object,
+                                                   mockThreadMapper.Object,
+                                                   mockUserServices.Object,
+                                                   mockReplyService.Object);
+
+            var foundThread = testedServices.GetById(testThread.Id);
+
+            Assert.AreEqual(testThread, foundThread);
+        }
+
+        [TestMethod]
         public void GetById_ShouldThrow_WhenThreadDoesNotExist()
         {
             var mockThreadRepository = new Mock<IThreadRepositroy>();
             var mockSecurityServices = new Mock<ISecurityServices>();
-                var mockThreadMapper = new Mock<IThreadMapper>();
-                var mockUserServices = new Mock<IUserServices>();
-                var mockReplyService = new Mock<IReplyService>();
+            var mockThreadMapper = new Mock<IThreadMapper>();
+            var mockUserServices = new Mock<IUserServices>();
+            var mockReplyService = new Mock<IReplyService>();
 
-                mockThreadRepository.Setup(repository => repository
-                                    .GetById(It
-                                    .IsAny<int>()))
-                                    .Throws<EntityNotFoundException>();
+            mockThreadRepository.Setup(repository => repository
+                                .GetById(It.IsAny<int>()))
+                                .Throws<EntityNotFoundException>();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                    mockSecurityServices.Object,
@@ -312,64 +334,31 @@ namespace ForumSystemTeamFour.Tests
 
             Assert.ThrowsException<EntityNotFoundException>(() => testedServices.GetById(DefaultId));
         }
-        
-        [TestMethod]
-        public void GetAllByUserId_ShouldReturnThreads_WhenUserIdIsValid()
-        {
-            // Arrange
-                var mockUserServices = new Mock<IUserServices>();
-                var mockReplyService = new Mock<IReplyService>();
-            var mockThreadRepository = TestModels.GetTestThreadRepositroy();
-                mockThreadRepository.Setup(repository => repository
-                                    .GetAllByUserId(It
-                                    .IsAny<int>()))
-                                    .Returns(TestModels
-                                    .GetTestThreads(3));
-
-            var mockSecurityServices = TestModels.GetValidAuthenticationTestSecurity().Object;
-                var mockThreadMapper = TestModels.GetTestThreadMapper();
-
-                    var testedServices = new ThreadService(mockThreadRepository.Object,
-                                                            mockSecurityServices,
-                                                            mockThreadMapper.Object,
-                                                            mockUserServices.Object,
-                                                            mockReplyService.Object);
-
-            int userId = DefaultId;
-
-            // Act
-                        var threads = testedServices
-                                    .GetAllByUserId(userId);
-
-            // Assert
-                Assert.AreEqual(3, threads.Count);
-        }
 
         [TestMethod]
-        public void GetAllByUserId_ShouldThrow_WhenUserNotFound()
+        public void GetById_ShouldThrow_WhenThreadIsDeleted()
         {
-            // Arrange
-                var mockUserServices = new Mock<IUserServices>();
-                var mockReplyService = new Mock<IReplyService>();
-            var mockThreadRepository = TestModels.GetTestThreadRepositroy();
-                mockThreadRepository.Setup(repository => repository
-                                    .GetAllByUserId(It
-                                    .IsAny<int>()))
-                                    .Throws<EntityNotFoundException>();
+            var mockThreadRepository = new Mock<IThreadRepositroy>();
+            var mockSecurityServices = new Mock<ISecurityServices>();
+            var mockThreadMapper = new Mock<IThreadMapper>();
+            var mockUserServices = new Mock<IUserServices>();
+            var mockReplyService = new Mock<IReplyService>();
 
-            var mockSecurityServices = GetValidAuthenticationTestSecurity().Object;
-                var mockThreadMapper = GetTestThreadMapper().Object;
+            var deletedThread = TestModels.GetTestThread();
+            deletedThread.IsDeleted = true;
+
+            mockThreadRepository.Setup(repository => repository
+                                .GetById(It.IsAny<int>()))
+                                .Returns(deletedThread);
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
-                                                    mockSecurityServices,
-                                                    mockThreadMapper,
-                                                    mockUserServices.Object,
-                                                    mockReplyService.Object);
+                                                   mockSecurityServices.Object,
+                                                   mockThreadMapper.Object,
+                                                   mockUserServices.Object,
+                                                   mockReplyService.Object);
 
-            int userId = DefaultId;
-
-            // Act & Assert
-            Assert.ThrowsException<EntityNotFoundException>(() => testedServices.GetAllByUserId(userId));
+            Assert.ThrowsException<InvalidOperationException>(() => testedServices
+                    .GetById(deletedThread.Id));
         }
     }
 }

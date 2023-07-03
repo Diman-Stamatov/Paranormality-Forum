@@ -82,7 +82,11 @@ namespace ForumSystemTeamFour.Services
 
         public ThreadResponseDto GetById(int id)
         {
-            var thread = this.threadRepositroy.GetById(id);         
+            if (IsDeleted(id))
+            {
+                throw new EntityNotFoundException($"Thread with id={id} doesn't exist.");
+            }
+            var thread = this.threadRepositroy.GetById(id);
             var threadResponseDto = this.threadMapper.Map(thread);
             return threadResponseDto;
         }
@@ -92,6 +96,12 @@ namespace ForumSystemTeamFour.Services
             var userThreads = this.threadRepositroy.GetAllByUserId(id);
             var mappedUserThreads = this.threadMapper.Map(userThreads);
             return mappedUserThreads;
+        }
+
+        public bool IsDeleted(int id)
+        {
+            ThreadResponseDto thread = GetById(id);
+            return thread.isDeleted;
         }
     }
 }
