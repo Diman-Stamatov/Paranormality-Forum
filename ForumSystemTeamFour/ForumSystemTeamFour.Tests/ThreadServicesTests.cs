@@ -279,7 +279,7 @@ namespace ForumSystemTeamFour.Tests
             var mockReplyService = new Mock<IReplyService>();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
-                                                    mockSecurityServices.Object,
+                                                    mockSecurityServices,
                                                     mockThreadMapper.Object,
                                                     mockUserServices.Object,
                                                     mockReplyService.Object);
