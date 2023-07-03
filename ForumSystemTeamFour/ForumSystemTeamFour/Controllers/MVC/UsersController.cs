@@ -15,7 +15,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             this.UserServices = userServices;        
         }
 
-        
+        [Authorize]
         [HttpGet]
         public IActionResult Profile([FromRoute] int id)
         {
