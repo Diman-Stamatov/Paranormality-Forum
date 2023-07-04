@@ -29,8 +29,8 @@ namespace ForumSystemTeamFour.Tests
         public void Setup()
         {
             var dbContextOptions = new DbContextOptionsBuilder<ForumDbContext>()
-                .UseInMemoryDatabase(databaseName: "ForumTestDB")
-                .Options;
+                                    .UseInMemoryDatabase(databaseName: "ForumTestDB")
+                                    .Options;
 
             TestContext = new ForumDbContext(dbContextOptions);
         }
@@ -63,35 +63,35 @@ namespace ForumSystemTeamFour.Tests
             Assert.AreEqual(true, deletedThread.IsDeleted);
         }
 
-        //[TestMethod]
-        //public void GetAll_ShouldReturnAllThreads_WhenCalled()
-        //{
-        //    var testRepository = new ThreadRepository(TestContext);
-        //    var testThreadOne = GetTestThread();
-        //    var testThreadTwo = GetTestThread();
-        //    var testThreadThree = GetTestThread();
+        [TestMethod]
+        public void GetAll_ShouldReturnAllThreads_WhenCalled()
+        {
+            var testRepository = new ThreadRepository(TestContext);
+            var listOfThreads = TestModels.GetTestThreads(3);
 
-        //    TestContext.Threads.Add(testThreadOne);
-        //    TestContext.Threads.Add(testThreadTwo);
-        //    TestContext.Threads.Add(testThreadThree);
-        //    Save();
+            TestContext.Threads.Add(listOfThreads[0]);
+            TestContext.Threads.Add(listOfThreads[1]);
+            TestContext.Threads.Add(listOfThreads[2]);
+            Save();
 
-        //    var allThreads = testRepository.GetAll();
+            var allThreads = testRepository.GetAll();
 
-        //    Assert.AreEqual(3, allThreads.Count);
-        //    CollectionAssert.Contains(allThreads, testThreadOne);
-        //    CollectionAssert.Contains(allThreads, testThreadTwo);
-        //    CollectionAssert.Contains(allThreads, testThreadThree);
-        //}
+            Assert.AreEqual(3, allThreads.Count);
+            CollectionAssert.Contains(allThreads, listOfThreads[0]);
+            CollectionAssert.Contains(allThreads, listOfThreads[1]);
+            CollectionAssert.Contains(allThreads, listOfThreads[2]);
+        }
 
 
-        //[TestMethod]
-        //public void GetAllShould_Throw_WhenNoThreads()
-        //{
-        //    var testRepository = new ThreadRepository(TestContext);
-        //    var allThreads = testRepository.GetAll();
-        //    Assert.AreEqual(0, allThreads.Count);
-        //}
+        [TestMethod]
+        public void GetAllShould_Throw_WhenNoThreads()
+        {
+            var testRepository = new ThreadRepository(TestContext);
+
+            Assert.ThrowsException<EntityNotFoundException>(() => testRepository
+                                .GetAll());
+
+        }
 
         [TestMethod]
         public void GetById_ShouldReturnThread_WhenThreadExists()
