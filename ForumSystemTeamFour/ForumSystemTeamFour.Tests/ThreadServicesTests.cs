@@ -80,6 +80,7 @@ namespace ForumSystemTeamFour.Tests
 
                       int IdtoDelete = TestModels.DefaultId;
                     int loggedUserId = TestModels.DefaultId;
+                   var defaultThread = TestModels.GetTestThreadResponseDto();
 
                     mockUserServices.Setup(service => service
                                     .GetById(It
@@ -89,8 +90,6 @@ namespace ForumSystemTeamFour.Tests
 
                   var deletedThread = testedServices
                                     .Delete(IdtoDelete, loggedUserId);
-                  var defaultThread = TestModels
-                                    .GetTestThreadResponseDto();
 
             Assert.AreEqual(defaultThread.Title, deletedThread.Title);
             Assert.AreEqual(defaultThread.Content, deletedThread.Content);
@@ -139,8 +138,7 @@ namespace ForumSystemTeamFour.Tests
                                                     mockUserServices.Object,
                                                     mockReplyService.Object);
 
-                      var allThreads = testedServices.GetAll();
-              var allTreadsToCompare = TestModels.GetTestListOfUserThreadResponseDto(3);
+                      var allThreads = testedServices.GetAll();            
 
             Assert.AreEqual(3, allThreads.Count);
             Assert.IsInstanceOfType(allThreads, typeof(List<ThreadResponseDto>));
@@ -163,6 +161,7 @@ namespace ForumSystemTeamFour.Tests
 
                             int threadId = TestModels.DefaultId;
                       var threadToComape = TestModels.GetTestThreadResponseDto();
+
                               var thread = testedServices
                                         .GetById(threadId);
 
