@@ -168,13 +168,15 @@ namespace ForumSystemTeamFour.Services
         }
         private bool ParentThreadExists(int id)
         {
-            var thread = threadRepositroy.GetById(id);
-            
-            if(thread != null)
+            try
             {
+                var thread = threadRepositroy.GetById(id);
                 return true;
             }
-            return false;
+            catch (EntityNotFoundException)
+            {
+                return false;
+            }
         }
     }
 }

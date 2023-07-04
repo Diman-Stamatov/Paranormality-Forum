@@ -3,6 +3,7 @@ using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.Enums;
 using ForumSystemTeamFour.Models.Interfaces;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
@@ -18,6 +19,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static ForumSystemTeamFour.Models.Enums.VoteType;
 
 
 namespace ForumSystemTeamFour.Tests.TestData
@@ -401,6 +403,18 @@ namespace ForumSystemTeamFour.Tests.TestData
                 GetTestReply(3, creationDates[2], modificationDates[2], GetTestString(ContentMinLength,'c'))
             };
         }
+        public static Reply GetTestUpVotedReply()
+        {
+            var reply = GetTestReply();
+            reply.Votes.Add(GetTestVote(Like));
+            return reply;
+        }
+        public static Reply GetTestDownVotedReply()
+        {
+            var reply = GetTestReply();
+            reply.Votes.Add(GetTestVote(Dislike));
+            return reply;
+        }
         public static ReplyReadDto GetTestReplyReadDto()
         {
             return GetTestReplyReadDtoList()[0];
@@ -423,6 +437,26 @@ namespace ForumSystemTeamFour.Tests.TestData
                 Dislikes = 0
             };
         }
+        public static ReplyReadDto GetTestUpVotedReplyReadDto()
+        {
+            var replyReadDto = GetTestReplyReadDtoList()[0];
+            replyReadDto.Likes += 1;
+            return replyReadDto;
+        }
+        public static ReplyReadDto GetTestDownVotedReplyReadDto()
+        {
+            var replyReadDto = GetTestReplyReadDtoList()[0];
+            replyReadDto.Dislikes += 1;
+            return replyReadDto;
+        }
+        public static ReplyCreateDto GetTestReplyCreateDto()
+        {
+            return new ReplyCreateDto()
+            {
+                Content = GetTestString(ContentMinLength),
+                ThreadId = ValidThreadId
+            };
+        }
         public static List<ReplyReadDto> GetTestReplyReadDtoList()
         {
             List<DateTime> creationDates = GetValidDates(ValidCreationDates);
@@ -433,6 +467,16 @@ namespace ForumSystemTeamFour.Tests.TestData
                 GetTestReplyReadDto(1, creationDates[0], modificationDates[0], GetTestString(ContentMinLength,'a')),
                 GetTestReplyReadDto(2, creationDates[1], modificationDates[1], GetTestString(ContentMinLength,'b')),
                 GetTestReplyReadDto(3, creationDates[2], modificationDates[2], GetTestString(ContentMinLength,'c'))
+            };
+        }
+        public static ReplyVote GetTestVote(VoteType voteType)
+        {
+            return new ReplyVote()
+            {
+                Id = DefaultId,
+                ReplyId = DefaultReplyId,
+                VoterUsername = ValidUsername,
+                VoteType = voteType
             };
         }
         public static Mock<IRepliesRepository> GetTestRepliesRepository()
@@ -451,9 +495,9 @@ namespace ForumSystemTeamFour.Tests.TestData
             mockRepository.Setup(repository => repository.Delete(It.IsAny<int>()))
                 .Returns(GetTestReply());
             mockRepository.Setup(repository => repository.UpVote(It.IsAny<int>(), It.IsAny<string>()))
-                .Returns(GetTestReply());
+                .Returns(GetTestUpVotedReply());
             mockRepository.Setup(repository => repository.DownVote(It.IsAny<int>(), It.IsAny<string>()))
-                .Returns(GetTestReply());
+                .Returns(GetTestDownVotedReply());
             mockRepository.Setup(repository => repository.ChangeVote(It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(GetTestReply());
 
