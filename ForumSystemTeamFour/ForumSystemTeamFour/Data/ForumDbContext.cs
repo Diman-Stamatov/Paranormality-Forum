@@ -41,7 +41,7 @@ namespace ForumSystemTeamFour.Data
                 LastName = "LastNameTwo",
                 Username = "UsernameTwo",
                 Email = "FirstnameTwo@Lastname.com",
-                Password = "cGFzc3dvcmRUd28K", //passwordTwo in plain text
+                Password = "cGFzc3dvcmRUd28=", //passwordTwo in plain text
                 IsBlocked = true 
                 },
                 new User {
@@ -50,7 +50,7 @@ namespace ForumSystemTeamFour.Data
                 LastName = "LastNameThree",
                 Username = "UsernameThree",
                 Email = "FirstnameThree@Lastname.com",
-                Password = "cGFzc3dvcmRUaHJlZQo=" //passwordThree in plain text etc.
+                Password = "cGFzc3dvcmRUaHJlZQ==" //passwordThree in plain text etc.
                 },
                 new User {
                 Id = 4,
@@ -58,7 +58,7 @@ namespace ForumSystemTeamFour.Data
                 LastName = "LastNameFour",
                 Username = "UsernameFour",
                 Email = "FirstnameFour@Lastname.com",
-                Password = "cGFzc3dvcmRGb3VyCg=="
+                Password = "cGFzc3dvcmRGb3Vy"
                 },
                 new User {
                 Id = 5,

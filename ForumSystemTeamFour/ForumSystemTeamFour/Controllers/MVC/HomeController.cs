@@ -1,6 +1,7 @@
 ﻿using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -10,9 +11,11 @@ namespace ForumSystemTeamFour.Controllers.MVC
     public class HomeController : Controller
     {
         private readonly IThreadService ThreadService;
-        public HomeController(IThreadService threadService)
+        private readonly IHttpContextAccessor ContextAccessor;
+        public HomeController(IThreadService threadService, IHttpContextAccessor contextAccessor)
         {
             this.ThreadService = threadService;
+            this.ContextAccessor = contextAccessor;
         }
 
         [AllowAnonymous]
@@ -21,7 +24,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             try
             {
-                if (!User.Identity.IsAuthenticated)
+                if (!HttpContext.Session.Keys.Contains("loggedUser"))
                 {
 
                     var threads = this.ThreadService.GetAll().OrderBy(thread => thread.Replies.Count).ToList();
@@ -29,6 +32,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 }
                 else
                 {
+                    
                     return this.View("UserHome");
                 }
             }
@@ -41,19 +45,14 @@ namespace ForumSystemTeamFour.Controllers.MVC
             
         }
 
+
         [AllowAnonymous]
         [HttpGet]
         public IActionResult Error404()
         {
             return this.View("Error404");
         }
-        [Authorize]
-        [HttpGet]
-        public IActionResult Logout()
-        {
-            Response.Cookies.Append("Cookie_JWT", "noToken");
-            return this.View("LogoutPage");
-        }
+        
 
 
     }

@@ -1,4 +1,5 @@
-﻿
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor ContextAccessor
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,14 +18,18 @@
         <h2 class="appHeadingText">P A R A N O R M A L I T Y</h2>
         <div class="topnav">
             @{
-                var loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+                var loggedUserId = ContextAccessor.HttpContext.Session.GetString("userId");
             }
             <a asp-controller="Home" asp-action="Index">Home</a>
             <a asp-controller="Threads" asp-action="Index">All discussions</a>
             <a asp-controller="Threads" asp-action="Create">Start topic</a>
             <a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUserId">Your profile</a>
             <a asp-controller="Home" asp-action="Logout">Logout</a>
-            <a href="/api/swagger" style="left:50%;">Admin API access</a>
+            @if (ContextAccessor.HttpContext.Session.GetString("isAdmin") == "True")
+            {
+                <a href="/api/swagger" style="left:50%;">Admin API access</a>
+            }
+            
         </div>
     </header>
 

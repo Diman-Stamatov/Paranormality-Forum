@@ -21,14 +21,14 @@
     <header>
         <h2 class="appHeadingText">PARANORMALITY</h2>
     </header>
-        <div class = "appBelowHeading">
+        <div class = "appBelowHeader">
             @if (ViewData["ErrorMessage"] != null)
             {
                 @ViewData["ErrorMessage"]
                 ;
             }
         </div>
-    <form class="appCentered" style="transform: translate(0%, -50%); left:42%" asp-controller="Users" asp-action="Create" method="post">
+    <form class="appCentered" style="transform: translate(0%, -50%); left:42%" asp-controller="Users" asp-action="Register" method="post">
         
         <div>
             <br>

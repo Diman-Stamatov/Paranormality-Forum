@@ -133,7 +133,7 @@ namespace ForumSystemTeamFour.Tests
             string testUsername = "testLogin";
             string testPassword = "testPassword";
 
-            var result = testedApi.CreateToken(testUsername, testPassword) as ObjectResult;
+            var result = testedApi.Login(testUsername, testPassword) as ObjectResult;
             var expectedCode = StatusCodes.Status201Created;
             Assert.AreEqual(expectedCode, result.StatusCode);
         }
@@ -152,7 +152,7 @@ namespace ForumSystemTeamFour.Tests
             string testUsername = "testLogin";
             string testPassword = "testPassword";
 
-            var result = testedApi.CreateToken(testUsername, testPassword) as ObjectResult;
+            var result = testedApi.Login(testUsername, testPassword) as ObjectResult;
             var expectedCode = StatusCodes.Status404NotFound;
             Assert.AreEqual(expectedCode, result.StatusCode);
         }
@@ -171,7 +171,7 @@ namespace ForumSystemTeamFour.Tests
             string testUsername = " ";
             string testPassword = "testPassword";
 
-            var result = testedApi.CreateToken(testUsername, testPassword) as ObjectResult;
+            var result = testedApi.Login(testUsername, testPassword) as ObjectResult;
             var expectedCode = StatusCodes.Status400BadRequest;
             Assert.AreEqual(expectedCode, result.StatusCode);
         }

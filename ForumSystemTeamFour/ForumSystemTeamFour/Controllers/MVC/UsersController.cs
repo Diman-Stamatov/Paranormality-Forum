@@ -13,14 +13,16 @@ namespace ForumSystemTeamFour.Controllers.MVC
     public class UsersController : Controller
     {
         private readonly IUserServices UserServices;
+        private readonly ISecurityServices SecurityServices;
         private readonly IUserMapper UserMapper;
-        public UsersController(IUserServices userServices, IUserMapper userMapper) 
+        public UsersController(IUserServices userServices, IUserMapper userMapper, ISecurityServices securityServices) 
         {
             this.UserServices = userServices;
-            this.UserMapper = userMapper;            
+            this.UserMapper = userMapper; 
+            this.SecurityServices = securityServices;
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Profile([FromRoute] int id)
         {
@@ -41,16 +43,16 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Register()
         {
             var userCreateVM = new UserCreateVM();
-            return this.View("Create", userCreateVM);
+            return this.View("Register", userCreateVM);
 
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Create(UserCreateVM userCreateVM)
+        public IActionResult Register(UserCreateVM userCreateVM)
         {
             if (!ModelState.IsValid)
             {
@@ -70,7 +72,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             catch (DuplicateEntityException exception)
             {
                 this.ViewData["ErrorMessage"] = exception.Message;
-                
+                this.HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
                 return this.View(userCreateVM);
             }
             
@@ -82,16 +84,64 @@ namespace ForumSystemTeamFour.Controllers.MVC
         [HttpGet]
         public IActionResult Login()
         {
-            return this.View("Login");
+            var loginVM = new LoginVM();
+            return this.View("Login", loginVM);
         }
 
-        private string ShortenErrorMessage(string errorMessage)
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult Login(LoginVM loginVM)
         {
-            string messageStart = "must";
-            string shortenedMessage = errorMessage.Substring(errorMessage.IndexOf(messageStart));
-            return shortenedMessage;
+            if (!ModelState.IsValid)
+            {
+                return this.View(loginVM);
+            }            
+
+            try
+            {
+                string loginUsername = loginVM.Username;
+                string loginPassword = loginVM.Password;
+                
+                var loggedUser = SecurityServices.Authenticate(loginUsername, loginPassword);
+                if (loggedUser.IsAdmin)
+                {
+                    SecurityServices.CreateApiToken(loginUsername, loginPassword);
+                }
+                this.HttpContext.Session.SetString("loggedUser",loggedUser.Username);
+                this.HttpContext.Session.SetString("isAdmin", loggedUser.IsAdmin.ToString());
+                this.HttpContext.Session.SetString("userId", loggedUser.Id.ToString());
+
+                return RedirectToAction("Index", "Home");
+            }
+            catch (EntityNotFoundException exception)
+            {
+                this.ViewData["ErrorMessage"] = exception.Message;
+                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+
+                return this.View(loginVM);
+            }
+            catch (InvalidUserInputException exception)
+            {
+                this.HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                this.ViewData["ErrorMessage"] = exception.Message;
+
+                return this.View(loginVM);
+            }
+
+            
+
         }
 
-        
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("loggedUser");
+            Response.Cookies.Append("Cookie_JWT", "noToken");
+            return this.View("LogoutPage");
+        }
+
+
+
     }
 }

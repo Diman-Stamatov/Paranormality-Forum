@@ -73,7 +73,7 @@ namespace ForumSystemTeamFour.Controllers.API
 
         [AllowAnonymous]
         [HttpPost("/security/login")]
-        public IActionResult CreateToken([FromQuery] string username, string password)
+        public IActionResult Login([FromQuery] string username, string password)
         {
             try
             {

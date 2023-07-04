@@ -121,21 +121,22 @@ a:active {
     white-space: nowrap;
     text-shadow: 0 20px 15px black;
     color: ghostwhite;
-    letter-spacing: 35px;
+    letter-spacing: 35px;    
 }
 
 .appCentered {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);    
 }
 
-.appBelowHeading {
+.appBelowHeader {
     position: absolute;
     top: 20%;
     left: 50%;
     transform: translate(-50%, 0%);
+    color: #FFFF33;
 }
 
 input[type="text"], textarea {

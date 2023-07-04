@@ -1,4 +1,7 @@
-﻿
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using ForumSystemTeamFour.Models.ViewModels;
+@model LoginVM;
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,10 +17,39 @@
 <body class="forum-body">
 
     <header>
-        <h2 class="appHeadingText">PARANORMALITY</h2>
+        <h1><a asp-controller="Home" asp-action="Index" class="appHeadingText" style="text-decoration:none;">PARANORMALITY</a></h1>
     </header>
+    <div class="appBelowHeader">
+        @if (ViewData["ErrorMessage"] != null)
+        {
+            @ViewData["ErrorMessage"]
+            ;
+        }
+    </div>
 
+    <form class="appCentered" style="transform: translate(0%, -50%); left:42%" asp-controller="Users" asp-action="Login" method="post">
 
+        <div>
+            <br>
+            <label asp-for="Username">Username:</label>
+            <br>
+            <input asp-for="Username" type="text" value="@Model.Username" placeholder="John">
+            <span asp-validation-for="Username" class="form-error" style="color:#FFFF33;"></span>
+        </div>
+
+        <div>
+            <label asp-for="Password">LastName:</label><br>
+            <input asp-for="Password" type="password" value="@Model.Password" placeholder="123">
+            <span asp-validation-for="Password" class="form-error" style="color:#FFFF33"></span>
+        </div>       
+        <br />
+        <div>
+            <input type="submit" value="Login"
+                         class="btn appbtn-outline" style="text-decoration:none">&nbsp
+            <a asp-controller="Users" asp-action="Register"
+               type="button" class="btn appbtn-outline" style="text-decoration:none">Register</a>
+        </div>
+    </form>
     <footer>
 
         <div style="text-align:center;padding:10px;margin-top:7px;">

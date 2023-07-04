@@ -44,7 +44,14 @@ namespace ForumSystemTeamFour
 
             builder.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "ForumSystemAPI", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "ForumSystemAPI", Version = "v1" });                
+            });
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
             });
 
             // Repositories
@@ -65,7 +72,8 @@ namespace ForumSystemTeamFour
             builder.Services.AddScoped<ISecurityServices, SecurityServices>();
             builder.Services.AddScoped<IReplyMapper, ReplyMapper>();
             builder.Services.AddScoped<IThreadMapper, ThreadMapper>();
-            
+
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -95,6 +103,7 @@ namespace ForumSystemTeamFour
             var app = builder.Build();
 
             app.UseRouting();
+            app.UseSession();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
