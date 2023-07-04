@@ -2,6 +2,7 @@
 @using ForumSystemTeamFour.Models.ViewModels;
 @model UserCreateVM;
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,42 +28,44 @@
                 ;
             }
         </div>
-    <form class="appCentered" asp-controller="Users" asp-action="Create" method="post">
+    <form class="appCentered" style="transform: translate(0%, -50%); left:42%" asp-controller="Users" asp-action="Create" method="post">
         
         <div>
-            <label asp-for="FirstName">First name:</label><br>
-            <input asp-for="FirstName" type="text" value="@Model.FirstName">
-            <span asp-validation-for="FirstName" class="form-error"></span>
+            <br>
+            <label asp-for="FirstName">First name:</label>
+            <br>
+            <input asp-for="FirstName" type="text" value="@Model.FirstName" placeholder="John">
+            <span asp-validation-for="FirstName" class="form-error" style="color:#FFFF33;"></span>
         </div>
-
-        <div>
+        
+        <div>            
             <label asp-for="LastName">LastName:</label><br>
-            <input asp-for="LastName" type="text" value="@Model.LastName">
-            <span asp-validation-for="LastName" class="form-error"></span>
+            <input asp-for="LastName" type="text" value="@Model.LastName" placeholder="Doe">
+            <span asp-validation-for="LastName" class="form-error" style="color:#FFFF33"></span>
         </div>
 
-        <div>
+        <div>            
             <label asp-for="Email">E-Mail:</label><br>
-            <input asp-for="Email" type="text" value="@Model.Email">
-            <span asp-validation-for="Email" class="form-error"></span>
+            <input asp-for="Email" type="text" value="@Model.Email" placeholder="John@Doe.com">
+            <span asp-validation-for="Email" class="form-error" style="color:#FFFF33;"></span>
         </div>
 
-        <div>
+        <div>            
             <label asp-for="Username">Username:</label><br>
-            <input asp-for="Username" type="text" value="@Model.Username">
-            <span asp-validation-for="Username" class="form-error"></span>
+            <input asp-for="Username" type="text" value="@Model.Username" placeholder="Doejon69">
+            <span asp-validation-for="Username" class="form-error" style="color:#FFFF33;"></span>
         </div>
 
-        <div>
+        <div>            
             <label asp-for="Password">Password:</label><br>
-            <input asp-for="Password" type="password" value="@Model.Password">
-            <span asp-validation-for="Password" class="form-error"></span>
+            <input asp-for="Password" type="password" value="@Model.Password" placeholder="123">
+            <span asp-validation-for="Password" class="form-error" style="color:#FFFF33;"></span>
         </div>
 
-        <div>
-            <label asp-for="Password">Confirm password:</label><br>
-            <input asp-for="Password" type="password" value="@Model.Password">
-            <span asp-validation-for="Password" class="form-error"></span>
+        <div>            
+            <label asp-for="ConfirmPassword">Confirm password:</label><br>
+            <input asp-for="ConfirmPassword" type="password" value="@Model.ConfirmPassword" placeholder="123">
+            <span asp-validation-for="ConfirmPassword" class="form-error" style="color:#FFFF33;left:10%;"></span>
         </div>
 
         <div>

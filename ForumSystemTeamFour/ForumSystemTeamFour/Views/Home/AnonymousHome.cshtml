@@ -24,15 +24,13 @@
         <script src='https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js'></script>
         <script src="~/js/application.js"></script>
     </header>
-    <p>
-        <a asp-controller="Users" asp-action="Create"
-           type="button" class="btn appbtn-outline" style="text-decoration:none;position:absolute;top:15%;right:5%;">Register</a>
-        
-    </p>
-    <p>
-        <a asp-controller="Users" asp-action="Login"
-           type="button" class="btn appbtn-outline" style="text-decoration:none;position:absolute;top:20%;right:5%;">Login</a>
-    </p>
+    <div style ="text-decoration:none;position:absolute;top:15%;right:5%;">
+        <div><a asp-controller="Users" asp-action="Create"
+           type="button" class="btn appbtn-outline" style= "margin-bottom: 5px">Register</a></div>
+        <div><a asp-controller="Users" asp-action="Login"
+           type="button" class="btn appbtn-outline">Login</a></div>
+    </div>
+    
 
     <div> 
         <div style="position: absolute;top: 5%;left: 50%;transform: translate(-50%, 0%);width:70%">

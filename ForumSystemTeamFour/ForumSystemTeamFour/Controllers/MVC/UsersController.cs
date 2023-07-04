@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ForumSystemTeamFour.Mappers.Interfaces;
+using System;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
@@ -31,6 +32,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             catch (EntityNotFoundException exception)
             {
                 this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+
                 this.ViewData["ErrorMessage"] = exception.Message;
                 return this.View("Error404");
             }
@@ -52,6 +54,11 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             if (!ModelState.IsValid)
             {
+                return this.View(userCreateVM);
+            }
+            if (userCreateVM.Password != userCreateVM.ConfirmPassword)
+            {
+                this.ModelState.AddModelError("Password", "The provided passwords do not match!");
                 return this.View(userCreateVM);
             }
 
@@ -76,6 +83,13 @@ namespace ForumSystemTeamFour.Controllers.MVC
         public IActionResult Login()
         {
             return this.View("Login");
+        }
+
+        private string ShortenErrorMessage(string errorMessage)
+        {
+            string messageStart = "must";
+            string shortenedMessage = errorMessage.Substring(errorMessage.IndexOf(messageStart));
+            return shortenedMessage;
         }
 
         
