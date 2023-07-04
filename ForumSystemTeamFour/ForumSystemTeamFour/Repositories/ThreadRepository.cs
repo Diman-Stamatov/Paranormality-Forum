@@ -10,6 +10,8 @@ namespace ForumSystemTeamFour.Repositories
 {
     public class ThreadRepository : IThreadRepositroy
     {
+        private const string NotFoundErrorMessage = "Thread with id {0} doesn't exist!";
+
         private readonly ForumDbContext context;
 
         public ThreadRepository(ForumDbContext context)
@@ -46,6 +48,10 @@ namespace ForumSystemTeamFour.Repositories
                             .Include(thread => thread.Replies)
                             .Include(thread => thread.Author)
                             .ToList();
+            if (threads.Count == 0 || !threads.Any())
+            {
+                throw new EntityNotFoundException(NotFoundErrorMessage);
+            }
 
             return threads;
         }

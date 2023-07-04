@@ -10,7 +10,6 @@ namespace ForumSystemTeamFour.Services
     public class ThreadService : IThreadService
     {
         private const string UnauthorizedErrorMessage = "Only author or admin can modify a comment.";
-        private const string NotFoundErrorMessage = "Thread with id {0} doesn't exist!";
 
         private readonly IThreadRepositroy threadRepositroy;
         private readonly ISecurityServices forumSecurity;
@@ -53,7 +52,7 @@ namespace ForumSystemTeamFour.Services
         {
             var loggedUser = userServices.GetById(loggedUserId);
             var threadToDelete = this.threadRepositroy.GetById(id);
-
+    
             if (threadToDelete.Author.Equals(loggedUser) || loggedUser.IsAdmin)
             {
                 var deletedThread = this.threadRepositroy.Delete(threadToDelete);
@@ -68,11 +67,7 @@ namespace ForumSystemTeamFour.Services
         public List<ThreadResponseDto> GetAll()
         {
             var allThreads = this.threadRepositroy.GetAll();
-            var result = this.threadMapper.Map(allThreads);
-            if (result.Count == 0)
-            {
-                throw new EntityNotFoundException(NotFoundErrorMessage);
-            }
+            var result = this.threadMapper.Map(allThreads);          
             return result;
         }
 
