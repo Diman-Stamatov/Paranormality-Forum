@@ -47,7 +47,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             return this.View("Error404");
         }
-
+        [Authorize]
         [HttpPost]
         public IActionResult Logout()
         {

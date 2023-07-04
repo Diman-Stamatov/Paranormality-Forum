@@ -17,6 +17,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace ForumSystemTeamFour.Tests.TestData
@@ -472,6 +473,53 @@ namespace ForumSystemTeamFour.Tests.TestData
                 .Returns(GetTestReply());
 
             return mockMapper;
+        }
+        public static Mock<IReplyService> GetTestReplyService()
+        {
+            var loggedUserId = DefaultId;
+            var replyCreationTime = GetValidDates(ValidCreationDates)[0];
+            var replyModificationTime = GetValidDates(ValidModificationDates)[0];
+            var replyContent = GetTestString(ContentMinLength);
+
+            var replyReadDto = GetTestReplyReadDto(DefaultReplyId, replyCreationTime, replyModificationTime, replyContent);
+            var replyCreatDto = new ReplyCreateDto()
+            {
+                Content = replyContent,
+                ThreadId = ValidThreadId
+            };
+            var replyUpdateDto = new ReplyUpdateDto()
+            {
+                Content = replyContent
+            };
+            var replyReadDtoList = GetTestReplyReadDtoList();
+            var votesDto = new VotesDto()
+            {
+                Likes = new List<string>(),
+                Dislikes = new List<string>()
+            };
+
+            var mockService = new Mock<IReplyService>();
+
+            //Create
+            mockService.Setup(service => service.Create(replyCreatDto, loggedUserId)).Returns(replyReadDto);
+            //FilterBy
+            mockService.Setup(service => service.FilterBy(It.IsAny<ReplyQueryParameters>())).Returns(replyReadDtoList);
+            //GetById
+            mockService.Setup(service => service.GetById(It.IsAny<int>())).Returns(replyReadDto);
+            //GetByThreadId
+            mockService.Setup(service => service.GetByThreadId(It.IsAny<int>())).Returns(replyReadDtoList);
+            //Update
+            mockService.Setup(service => service.Update(It.IsAny<int>(), replyUpdateDto, loggedUserId)).Returns(replyReadDto);
+            //Delete
+            mockService.Setup(service => service.Delete(DefaultReplyId, loggedUserId)).Returns(replyReadDto);
+            //UpVote
+            mockService.Setup(service => service.UpVote(DefaultReplyId, loggedUserId)).Returns(replyReadDto);
+            //DownVote
+            mockService.Setup(service => service.DownVote(DefaultReplyId, loggedUserId)).Returns(replyReadDto);
+            //GetReplyVotes
+            mockService.Setup(service => service.GetReplyVotes(DefaultReplyId)).Returns(votesDto);
+
+            return mockService;
         }
         #endregion Replies
 
