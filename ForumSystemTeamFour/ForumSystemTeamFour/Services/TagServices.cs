@@ -20,9 +20,9 @@ namespace ForumSystemTeamFour.Services
             return this.repository.Create(name);
         }
 
-        public Tag Delete(string login, int id)
+        public Tag Delete(string username, string password, int id)
         {
-           var loggedUser = this.forumSecurity.Authenticate(login);
+           var loggedUser = this.forumSecurity.Authenticate(username, password);
            this.forumSecurity.CheckAdminAuthorization(loggedUser);
            return this.repository.Delete(id);
         }

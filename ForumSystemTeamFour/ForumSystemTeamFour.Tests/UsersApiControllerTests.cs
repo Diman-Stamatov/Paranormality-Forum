@@ -130,45 +130,48 @@ namespace ForumSystemTeamFour.Tests
             var testedApi = new UsersApiController(mockUserServices, mockSecurityServices);
             SetControllerContext(testedApi);
             
-            string testLogin = "testLogin";
+            string testUsername = "testLogin";
+            string testPassword = "testPassword";
 
-            var result = testedApi.CreateToken(testLogin) as ObjectResult;
+            var result = testedApi.CreateToken(testUsername, testPassword) as ObjectResult;
             var expectedCode = StatusCodes.Status201Created;
             Assert.AreEqual(expectedCode, result.StatusCode);
         }
 
         [TestMethod]
-        public void CreateToken_ShouldThrow_WhenLoginUsernameIsWrong()
+        public void CreateToken_ShouldThrow_WhenLoginUsernameIsNotRegistered()
         {
             var mockUserServices = GetTestUserServices().Object;
             var mockSecurityServices = GetValidAuthenticationTestSecurity();
-            mockSecurityServices.Setup(services => services.CreateToken(It.IsAny<string>()))
+            mockSecurityServices.Setup(services => services.CreateApiToken(It.IsAny<string>(), It.IsAny<string>()))
             .Throws<EntityNotFoundException>();
 
             var testedApi = new UsersApiController(mockUserServices, mockSecurityServices.Object);
             SetControllerContext(testedApi);
             
-            string testLogin = "testLogin";
+            string testUsername = "testLogin";
+            string testPassword = "testPassword";
 
-            var result = testedApi.CreateToken(testLogin) as ObjectResult;
+            var result = testedApi.CreateToken(testUsername, testPassword) as ObjectResult;
             var expectedCode = StatusCodes.Status404NotFound;
             Assert.AreEqual(expectedCode, result.StatusCode);
         }
 
         [TestMethod]
-        public void CreateToken_ShouldThrow_WhenLoginIsInWrongFormat()
+        public void CreateToken_ShouldThrow_WhenInputIsEmpty()
         {
             var mockUserServices = GetTestUserServices().Object;
             var mockSecurityServices = GetValidAuthenticationTestSecurity();
-            mockSecurityServices.Setup(services => services.CreateToken(It.IsAny<string>()))
+            mockSecurityServices.Setup(services => services.CreateApiToken(It.IsAny<string>(), It.IsAny<string>()))
             .Throws<InvalidUserInputException>();
 
             var testedApi = new UsersApiController(mockUserServices, mockSecurityServices.Object);
             SetControllerContext(testedApi);
             
-            string testLogin = "testLogin";
+            string testUsername = " ";
+            string testPassword = "testPassword";
 
-            var result = testedApi.CreateToken(testLogin) as ObjectResult;
+            var result = testedApi.CreateToken(testUsername, testPassword) as ObjectResult;
             var expectedCode = StatusCodes.Status400BadRequest;
             Assert.AreEqual(expectedCode, result.StatusCode);
         }

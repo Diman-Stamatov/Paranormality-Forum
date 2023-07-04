@@ -9,6 +9,6 @@ namespace ForumSystemTeamFour.Services.Interfaces
         Tag GetById(int id);
         Tag GetByName(string name);
         Tag Create(string name);
-        Tag Delete(string login, int id);
+        Tag Delete(string username, string password, int id);
     }
 }

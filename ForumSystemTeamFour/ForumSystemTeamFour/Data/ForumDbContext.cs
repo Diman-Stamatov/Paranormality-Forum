@@ -32,7 +32,7 @@ namespace ForumSystemTeamFour.Data
                 LastName = "LastNameOne",
                 Username = "UsernameOne",
                 Email = "FirstnameOne@Lastname.com",
-                Password = "passwordOne",
+                Password = "cGFzc3dvcmRPbmU=", //passwordOne in plain text
                 IsAdmin = true 
                 },
                 new User {
@@ -41,7 +41,7 @@ namespace ForumSystemTeamFour.Data
                 LastName = "LastNameTwo",
                 Username = "UsernameTwo",
                 Email = "FirstnameTwo@Lastname.com",
-                Password = "passwordTwo",
+                Password = "cGFzc3dvcmRUd28K", //passwordTwo in plain text
                 IsBlocked = true 
                 },
                 new User {
@@ -50,7 +50,7 @@ namespace ForumSystemTeamFour.Data
                 LastName = "LastNameThree",
                 Username = "UsernameThree",
                 Email = "FirstnameThree@Lastname.com",
-                Password = "passwordThree" 
+                Password = "cGFzc3dvcmRUaHJlZQo=" //passwordThree in plain text etc.
                 },
                 new User {
                 Id = 4,
@@ -58,7 +58,7 @@ namespace ForumSystemTeamFour.Data
                 LastName = "LastNameFour",
                 Username = "UsernameFour",
                 Email = "FirstnameFour@Lastname.com",
-                Password = "passwordFour"
+                Password = "cGFzc3dvcmRGb3VyCg=="
                 },
                 new User {
                 Id = 5,
@@ -66,7 +66,7 @@ namespace ForumSystemTeamFour.Data
                 LastName = "LastNameFive",
                 Username = "UsernameFive",
                 Email = "FirstnameFive@Lastname.com",
-                Password = "passwordFive"
+                Password = "cGFzc3dvcmRGaXZl"
                 }
             };            
             modelBuilder.Entity<User>().HasData(users);

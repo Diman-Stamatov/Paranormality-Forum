@@ -39,6 +39,7 @@ namespace ForumSystemTeamFour.Services
         public UserResponseDto Create(UserCreateDto userDto)
         {
             var user = this.userMapper.Map(userDto);
+            user.Password = this.forumSecurity.EncodePassword(userDto.Password);
             var createdUser = this.repository.Create(user);
 
             return userMapper.Map(createdUser);

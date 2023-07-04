@@ -329,12 +329,12 @@ namespace ForumSystemTeamFour.Tests.TestData
         public static Mock<ISecurityServices> GetValidAuthenticationTestSecurity()
         {
             var mockSecurity = new Mock<ISecurityServices>();
-            mockSecurity.Setup(security => security.Authenticate(It.IsAny<string>()))
+            mockSecurity.Setup(security => security.Authenticate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(GetDefaultUser()); ;
             mockSecurity.Setup(security => security.CheckAdminAuthorization(It.IsAny<User>()));
             mockSecurity.Setup(security => security.CheckAuthorAuthorization(It.IsAny<User>(), It.IsAny<IPost>()));
             mockSecurity.Setup(security => security.CheckUserAuthorization(It.IsAny<User>(), It.IsAny<User>()));
-            mockSecurity.Setup(security => security.CreateToken(It.IsAny<string>()))
+            mockSecurity.Setup(security => security.CreateApiToken(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(GetTestString(10));
 
             return mockSecurity;

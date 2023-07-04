@@ -7,10 +7,11 @@ namespace ForumSystemTeamFour.Services.Interfaces
 {
     public interface ISecurityServices
     {
-        User Authenticate(string login);
+        User Authenticate(string username, string password);
         void CheckAdminAuthorization(User user);
         void CheckAuthorAuthorization(User user, IPost post);
         void CheckUserAuthorization(User loggedUser, User targetUser);
-        string CreateToken(string login);
+        string CreateApiToken(string username, string password);
+        string EncodePassword(string password);
     }
 }

@@ -25,22 +25,16 @@ namespace ForumSystemTeamFour.Services
             this.configManager = configManager;
         }
 
-        public User Authenticate(string login)
+        public User Authenticate(string username, string password)
         {
-            if (login == null)
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 throw new InvalidUserInputException("Please provide your login information!");
             }
-
-            var loginData = login.Split(":");
-            if (loginData.Length == 1)
-            {
-                throw new InvalidUserInputException("Please provide your login information!");
-            }
-            string loginUsername = loginData[0];
-            string loginPassword = loginData[1];
-            var authenticatedUser = usersRepository.GetByUsername(loginUsername);
-            if (authenticatedUser.Password != loginPassword)
+            
+            string encodedPassword = EncodePassword(password);
+            var authenticatedUser = usersRepository.GetByUsername(username);
+            if (authenticatedUser.Password != encodedPassword)
             {
                 throw new InvalidUserInputException("The provided password is invalid!");
             }
@@ -70,9 +64,9 @@ namespace ForumSystemTeamFour.Services
             }
 
         }
-        public string CreateToken(string login)
+        public string CreateApiToken(string username, string password)
         {
-            var loggedUser = this.Authenticate(login);
+            var loggedUser = this.Authenticate(username, password);
             var claims = new[] {
                 new Claim("LoggedUserId", loggedUser.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, loggedUser.Username),
@@ -90,6 +84,12 @@ namespace ForumSystemTeamFour.Services
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string EncodePassword(string password)
+        {
+            var encodedPassword = Encoding.UTF8.GetBytes(password);
+            return Convert.ToBase64String(encodedPassword);
         }
 
 

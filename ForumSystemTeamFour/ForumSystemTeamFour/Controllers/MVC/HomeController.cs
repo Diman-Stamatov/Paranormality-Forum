@@ -48,7 +48,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             return this.View("Error404");
         }
         [Authorize]
-        [HttpPost]
+        [HttpGet]
         public IActionResult Logout()
         {
             Response.Cookies.Append("Cookie_JWT", "noToken");

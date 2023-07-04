@@ -73,11 +73,11 @@ namespace ForumSystemTeamFour.Controllers.API
 
         [AllowAnonymous]
         [HttpPost("/security/login")]
-        public IActionResult CreateToken([FromHeader] string login)
+        public IActionResult CreateToken([FromQuery] string username, string password)
         {
             try
             {
-                var token = securityServices.CreateToken(login);
+                var token = securityServices.CreateApiToken(username, password);
                 Response.Cookies.Append("Cookie_JWT", token);
                 return StatusCode(StatusCodes.Status201Created, token);
             }
