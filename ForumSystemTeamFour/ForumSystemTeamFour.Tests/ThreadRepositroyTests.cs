@@ -115,7 +115,8 @@ namespace ForumSystemTeamFour.Tests
             var testRepository = new ThreadRepository(TestContext);
             var nonExistentThreadId = 2;
 
-            Assert.ThrowsException<EntityNotFoundException>(() => testRepository.GetById(nonExistentThreadId));
+            Assert.ThrowsException<EntityNotFoundException>(() => testRepository
+                                    .GetById(nonExistentThreadId));
         }
         [TestMethod]
         public void GetAllByUserId_ShouldReturnThreads_WhenUserIdIsValid()

@@ -50,7 +50,6 @@ namespace ForumSystemTeamFour.Repositories
                             .ToList();
             if (threads.Count == 0 || !threads.Any())
             {
-                int a = 2;
                 throw new EntityNotFoundException(NotFoundErrorMessage);
             }
 

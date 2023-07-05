@@ -69,8 +69,8 @@ namespace ForumSystemTeamFour.Tests
                 var mockReplyService = new Mock<IReplyService>();
                 var mockUserServices = new Mock<IUserServices>();
             var mockSecurityServices = new Mock<ISecurityServices>();
-                var mockThreadMapper = TestModels.GetTestThreadMapper();
             var mockThreadRepository = TestModels.GetTestThreadRepositroy();
+                var mockThreadMapper = TestModels.GetTestThreadMapper();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices.Object,
