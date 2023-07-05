@@ -7,15 +7,14 @@ using System.Linq;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
-    
+
     public class HomeController : Controller
     {
         private readonly IThreadService ThreadService;
-        private readonly IHttpContextAccessor ContextAccessor;
-        public HomeController(IThreadService threadService, IHttpContextAccessor contextAccessor)
+
+        public HomeController(IThreadService threadService)
         {
             this.ThreadService = threadService;
-            this.ContextAccessor = contextAccessor;
         }
 
         [AllowAnonymous]
@@ -24,7 +23,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             try
             {
-                if (!HttpContext.Session.Keys.Contains("loggedUser"))
+                if (!User.Identity.IsAuthenticated)
                 {
 
                     var threads = this.ThreadService.GetAll().OrderBy(thread => thread.Replies.Count).ToList();

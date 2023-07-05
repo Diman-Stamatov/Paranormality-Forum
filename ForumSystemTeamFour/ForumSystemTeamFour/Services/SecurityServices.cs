@@ -69,7 +69,8 @@ namespace ForumSystemTeamFour.Services
             var loggedUser = this.Authenticate(username, password);
             var claims = new[] {
                 new Claim("LoggedUserId", loggedUser.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, loggedUser.Username),
+                new Claim("Username", loggedUser.Username),
+                new Claim("IsAdmin", loggedUser.IsAdmin.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, loggedUser.Email),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
             };

@@ -96,7 +96,7 @@ namespace ForumSystemTeamFour.Controllers.API
         [HttpPost("/security/logout")]
         public IActionResult DeleteToken()
         {
-            Response.Cookies.Append("Cookie_JWT", "noToken");
+            Response.Cookies.Delete("Cookie_JWT");
             return StatusCode(StatusCodes.Status200OK, "You have successfully logged out!");
         }
 
