@@ -717,7 +717,7 @@ namespace ForumSystemTeamFour.Tests.TestData
             return mockMapper;
         }
 
-        public static Mock<IThreadService> GetTestThreadService()
+        public static Mock<IThreadService> GetTestThreadServices()
         {
             var mockServices = new Mock<IThreadService>();
 

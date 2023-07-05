@@ -36,7 +36,7 @@ namespace ForumSystemTeamFour.Controllers.API
         }
         [Authorize]
         [HttpPost("")]
-        public IActionResult Create([FromBody] ThreadCreateDto threadCreateDto)
+        public IActionResult CreateThread([FromBody] ThreadCreateDto threadCreateDto)
         {
             try
             {
