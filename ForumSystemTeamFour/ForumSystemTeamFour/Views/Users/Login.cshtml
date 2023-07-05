@@ -14,10 +14,11 @@
     </style>
 </head>
 
-<body class="forum-body">
+<body >
 
     <header>
-        <h1><a asp-controller="Home" asp-action="Index" class="appHeadingText" style="text-decoration:none;">PARANORMALITY</a></h1>
+        <h1><a asp-controller="Home" asp-action="Index" class="appHeadingText" 
+            style="text-decoration:none;">PARANORMALITY</a></h1>
     </header>
     <div class="appBelowHeader">
         @if (ViewData["ErrorMessage"] != null)
@@ -27,7 +28,8 @@
         }
     </div>
 
-    <form class="appCentered" style="transform: translate(0%, -50%); left:42%" asp-controller="Users" asp-action="Login" method="post">
+    <form class="appCentered" style="transform: translate(0%, -50%); left:42%" 
+    asp-controller="Users" asp-action="Login" method="post">
 
         <div>
             <br>
