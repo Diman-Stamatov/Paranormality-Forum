@@ -72,8 +72,7 @@ namespace ForumSystemTeamFour
             builder.Services.AddScoped<ISecurityServices, SecurityServices>();
             builder.Services.AddScoped<IReplyMapper, ReplyMapper>();
             builder.Services.AddScoped<IThreadMapper, ThreadMapper>();
-
-            builder.Services.AddHttpContextAccessor();
+            
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -102,8 +101,7 @@ namespace ForumSystemTeamFour
 
             var app = builder.Build();
 
-            app.UseRouting();
-            app.UseSession();
+            app.UseRouting();            
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {

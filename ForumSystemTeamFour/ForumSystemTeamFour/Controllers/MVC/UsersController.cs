@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ForumSystemTeamFour.Mappers.Interfaces;
 using System;
+using ForumSystemTeamFour.Services;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
@@ -22,7 +23,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             this.SecurityServices = securityServices;
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet]
         public IActionResult Profile([FromRoute] int id)
         {
@@ -99,17 +100,8 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
             try
             {
-                string loginUsername = loginVM.Username;
-                string loginPassword = loginVM.Password;
-                
-                var loggedUser = SecurityServices.Authenticate(loginUsername, loginPassword);
-                if (loggedUser.IsAdmin)
-                {
-                    SecurityServices.CreateApiToken(loginUsername, loginPassword);
-                }
-                this.HttpContext.Session.SetString("loggedUser",loggedUser.Username);
-                this.HttpContext.Session.SetString("isAdmin", loggedUser.IsAdmin.ToString());
-                this.HttpContext.Session.SetString("userId", loggedUser.Id.ToString());
+                var token = SecurityServices.CreateApiToken(loginVM.Username, loginVM.Password);
+                Response.Cookies.Append("Cookie_JWT", token);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -127,21 +119,13 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
                 return this.View(loginVM);
             }
-
-            
-
         }
-
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet]
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("loggedUser");
-            Response.Cookies.Append("Cookie_JWT", "noToken");
+            Response.Cookies.Delete("Cookie_JWT");            
             return this.View("LogoutPage");
         }
-
-
-
     }
 }
