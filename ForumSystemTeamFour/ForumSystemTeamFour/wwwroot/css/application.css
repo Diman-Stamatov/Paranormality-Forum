@@ -1,5 +1,5 @@
 ﻿
-:root {
+body {
     color: ghostwhite;
     background-color: #212529;
 }
@@ -101,7 +101,7 @@ a:active {
 
     .topnav a {
       float: left;
-      color: #f2f2f2;
+      color: ghostwhite;
       text-align: center;
       padding: 14px 16px;
       text-decoration: none;
@@ -120,14 +120,14 @@ a:active {
     transform: translate(-50%, -50%);
     font-family: monospace;
     font-size: 60px;
-    white-space: nowrap;
+    
     text-shadow: 0 20px 15px black;
     color: ghostwhite;
     letter-spacing: 35px;    
 }
 
 .appCentered {
-    position: absolute;
+    position: absolute;    
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);    
@@ -135,10 +135,17 @@ a:active {
 
 .appBelowHeader {
     position: absolute;
-    top: 20%;
+    text-align:center;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, 0%);    
+}
+
+.appAboveFooter {
+    position: absolute;
+    bottom: 15%;
     left: 50%;
     transform: translate(-50%, 0%);
-    color: #FFFF33;
 }
 
 input[type="text"], textarea {
@@ -149,4 +156,13 @@ input[type="text"], textarea {
 input[type="password"], textarea {
     background-color: #212529;
     color: ghostwhite;
+}
+
+.appProfilePicture {
+    height: 170px;
+    max-height: 170px;
+    width: 170px;
+    max-width: 170px;
+    margin-left: auto;
+    margin-right: auto;
 }

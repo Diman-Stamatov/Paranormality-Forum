@@ -107,7 +107,12 @@ namespace ForumSystemTeamFour.Repositories
 
         public List<User> GetAll()
         {
-            var allUsers = context.Users.Where(user=>user.IsDeleted == false).ToList();
+            var allUsers = context.Users.Where(user=>user.IsDeleted == false)
+                .Include(user => user.Threads)
+                .ThenInclude(thread => thread.Tags)
+                .Include(user => user.Threads)
+                .ThenInclude(thread => thread.Replies)
+                .ToList();
             return allUsers;
         }
         
@@ -116,9 +121,9 @@ namespace ForumSystemTeamFour.Repositories
             //CaseInsensitive
             /*var foundUser = context.Users.FirstOrDefault(user => user.Username == username && user.IsDeleted == false);*/
 
-             foreach (var user in context.Users)
+            foreach (var user in this.GetAll())
             {
-                if (user.Username == username && user.IsDeleted == false)
+                if (user.Username == username)
                 {
                     return user;
                 }
@@ -128,7 +133,12 @@ namespace ForumSystemTeamFour.Repositories
         }
         public User GetById(int id)
         {
-            var foundUser = context.Users.FirstOrDefault(user => user.Id == id);
+            var foundUser = context.Users
+                .Include(user => user.Threads)
+                .ThenInclude(thread => thread.Tags)
+                .Include(user => user.Threads)
+                .ThenInclude(thread => thread.Replies)
+                .FirstOrDefault(user => user.Id == id);
             if (foundUser == null || foundUser.IsDeleted == true)
             {
                 throw new EntityNotFoundException($"No user with the ID number {id} exists on the forum!");

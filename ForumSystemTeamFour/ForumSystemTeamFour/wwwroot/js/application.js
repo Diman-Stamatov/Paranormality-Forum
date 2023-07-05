@@ -8,8 +8,8 @@
         m.message = 0;
         m.current_length = 0;
         m.fadeBuffer = false;
-        m.messages = [
-            'PARANORMALITY'
+        m.messages = [    
+            'PARANORMALITY' //Final message
         ];
 
         //How fast the initial message appears on the screen, lower is faster
