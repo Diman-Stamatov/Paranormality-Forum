@@ -1,14 +1,15 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@using ForumSystemTeamFour.Models;
+﻿@using ForumSystemTeamFour.Models;
 @using System.IO;
-
+@{
+    this.ViewData["Title"] = "Profile";
+}
 @model User;
 @{
     string loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
     string loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
-    bool ownProfile = loggedUsername == Model.Username;   
-    
-    string welcomeMessage = ownProfile ? $"Welcome, {loggedUsername}!": $"{Model.Username}'s profile.";
+    bool ownProfile = loggedUsername == Model.Username;
+
+    string welcomeMessage = ownProfile ? $"Welcome, {loggedUsername}!" : $"{Model.Username}'s profile.";
     string statsMessage = ownProfile ? "Your activity history:" : $"{Model.Username}'s activity history:";
     string userThreadsMessage = ownProfile ? "Show your threads" : $"Show {Model.Username}'s threads";
     string userPostsMessage = ownProfile ? "Show your posts" : $"Show {Model.Username}'s posts";
@@ -20,73 +21,38 @@
 }
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>Paranormality - Main page</title>
-    <link rel="stylesheet" href="~/css/bootstrap.css" />
-    <link rel="stylesheet" href="~/css/application.css" />
-    <style>
+@{
 
-    </style>
-</head>
+}
+<div class="appBelowHeader">
+    @welcomeMessage
+    <div>
+        <img src="/ProfilePictures/@profilePicName" class="appProfilePicture" />
+    </div>
 
-<body >
 
-    <header>
-        <h2 class="appHeadingText">PARANORMALITY</h2>
-        <div class="topnav">
-            
-            <a asp-controller="Home" asp-action="Index">Home</a>
-            <a asp-controller="Threads" asp-action="Index">All discussions</a>
-            <a asp-controller="Threads" asp-action="Create">Start topic</a>
-            <a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUserId">Your profile</a>
-            <a asp-controller="Users" asp-action="Logout">Logout</a>
-            <a href="/api/swagger" style="left:50%;">Admin API access</a>
-        </div>
-    </header>
-    @{
-              
+
+
+
+
+</div>
+
+<div class="appCentered">
+
+    @statsMessage<br />
+    Threads created: @totalThreads<br />
+    Total posts: @totalPosts <br />
+
+</div>
+<div class="appAboveFooter">
+    @if (totalThreads > 0)
+    {
+        <a asp-controller="" asp-action="">@userThreadsMessage</a>
+
     }
-    <div class="appBelowHeader">
-        @welcomeMessage
-        <div>
-            <img src="/ProfilePictures/@profilePicName" class="appProfilePicture" />
-        </div>
-        
-        
-            
-            
-         
-    
-    </div>
-    
-    <div class="appCentered" >
-        
-        @statsMessage<br />
-        Threads created: @totalThreads<br />
-        Total posts: @totalPosts <br />
-
-    </div>
-    <div class="appAboveFooter">
-        @if (totalThreads > 0)
-        {
-            <a asp-controller="" asp-action="">@userThreadsMessage</a>
-
-        }
-        <br />
-        @if (totalPosts > 0)
-        {
-            <a asp-controller="" asp-action="">@userPostsMessage</a>
-        }
-    </div>
-    <footer>
-
-        <div style="text-align:center;padding:10px;margin-top:7px;">
-            © copyright Paranormality.com
-        </div>
-    </footer>
-
-</body>
-</html>
+    <br />
+    @if (totalPosts > 0)
+    {
+        <a asp-controller="" asp-action="">@userPostsMessage</a>
+    }
+</div>

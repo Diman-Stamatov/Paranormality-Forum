@@ -1,4 +1,174 @@
-﻿
+﻿.grid-logo {
+    grid-area: logo;
+}
+
+.grid-header {
+    grid-area: header;
+}
+
+.grid-user {
+    grid-area: user;
+}
+
+.grid-menu {
+    grid-area: menu;
+}
+
+.grid-main {
+    grid-area: main;
+}
+
+.grid-right {
+    grid-area: right;
+}
+
+.grid-footer {
+    grid-area: footer;
+}
+
+html, body {
+    color: ghostwhite;
+    background-color: #212529;
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+        'logo header header header header user'
+        'menu main main main right right'
+        'footer footer footer footer footer footer';
+    gap: 10px;
+    color: ghostwhite;
+    /* background-color: #212529; */
+    background-color: #2196F3;
+    padding: 10px;
+    height: 100%;
+    min-height: 100vh;
+}
+
+    .grid-container > div {
+        background-color: rgba(255, 255, 255, 0.8);
+        text-align: center;
+        padding: 20px 0;
+        font-size: 30px;
+    }
+
+.grid-logo {
+    height: fit-content;
+    width: fit-content;
+}
+
+.grid-header {
+    display: flex;
+    height: inherit;
+    width: auto;
+}
+
+.grid-user {
+    height: inherit;
+    width: auto;
+}
+
+.grid-main div {
+    font-size: 0.5em;
+}
+
+.grid-footer {
+    height: auto;
+}
+    .grid-footer p {
+        font-size: small;
+    }
+
+.site-title {
+    font-size: larger;
+    letter-spacing: 0.7em;
+    font-family: monospace;
+    text-transform: uppercase;
+    text-align: center;
+    color: ghostwhite;
+    padding-left: 1em;
+}
+
+.nav {
+
+    width: fit-content;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: inherit;
+}
+
+li {
+    float: left;
+    font-size:medium
+}
+
+    li a {
+        display: block;
+        color: ghostwhite;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+        li a:hover {
+            background-color: #111;
+        }
+  
+/* Dropdown menu styles */
+
+.dropbtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 1em;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    left: -1em;
+}
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+
+/* Original CSS */
+
+/*
 body {
     color: ghostwhite;
     background-color: #212529;
@@ -166,3 +336,4 @@ input[type="password"], textarea {
     margin-left: auto;
     margin-right: auto;
 }
+*/
