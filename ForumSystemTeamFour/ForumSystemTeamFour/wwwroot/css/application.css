@@ -1,4 +1,17 @@
-﻿.grid-logo {
+﻿body {
+    color: ghostwhite;
+    background-color: #212529;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 99.5%;
+    padding: 10px 0px 10px 0px;
+    border-top: 1px solid black;
+}
+
+.grid-logo {
     grid-area: logo;
 }
 
@@ -25,12 +38,6 @@
 .grid-footer {
     grid-area: footer;
 }
-
-html, body {
-    color: ghostwhite;
-    background-color: #212529;
-}
-
 
 .grid-container {
     display: grid;
@@ -89,6 +96,17 @@ html, body {
     text-align: center;
     color: ghostwhite;
     padding-left: 1em;
+}
+.appHeadingText {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: monospace;
+    font-size: 60px;
+    text-shadow: 0 20px 15px black;
+    color: ghostwhite;
+    letter-spacing: 35px;
 }
 
 .nav {
@@ -168,11 +186,8 @@ li {
 
 /* Original CSS */
 
-/*
-body {
-    color: ghostwhite;
-    background-color: #212529;
-}
+/**/
+
 
 #messenger {
     position: absolute;
@@ -187,7 +202,7 @@ body {
     letter-spacing: 35px;
 }
 
-.forum-table {
+.appTable {
     position: center;
     margin-left: auto;
     margin-right: auto;
@@ -196,13 +211,7 @@ body {
 
 
 
-footer {
-    position: absolute;
-    bottom: 0;
-    width: 99.5%;
-    padding: 10px 0px 10px 0px;
-    border-top: 1px solid black;
-}
+
 
 a:link {
     color: ghostwhite;
@@ -244,7 +253,7 @@ a:active {
     font-size:46px
 }
 
-.appbtn-outline {
+.appBtn-outline {
     --bs-btn-color: #fff;
     --bs-btn-border-color: ghostwhite;
     --bs-btn-hover-color: #fff;
@@ -283,18 +292,7 @@ a:active {
             color: ghostwhite;
         }
 
-.appHeadingText {
-    position: absolute;
-    top: 8%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: monospace;
-    font-size: 60px;
-    
-    text-shadow: 0 20px 15px black;
-    color: ghostwhite;
-    letter-spacing: 35px;    
-}
+
 
 .appCentered {
     position: absolute;    
@@ -336,4 +334,4 @@ input[type="password"], textarea {
     margin-left: auto;
     margin-right: auto;
 }
-*/
+

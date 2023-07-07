@@ -2,13 +2,14 @@
 @using System.IO;
 @{
     this.ViewData["Title"] = "Profile";
+    
 }
 @model User;
 @{
     string loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
     string loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
     bool ownProfile = loggedUsername == Model.Username;
-
+    
     string welcomeMessage = ownProfile ? $"Welcome, {loggedUsername}!" : $"{Model.Username}'s profile.";
     string statsMessage = ownProfile ? "Your activity history:" : $"{Model.Username}'s activity history:";
     string userThreadsMessage = ownProfile ? "Show your threads" : $"Show {Model.Username}'s threads";

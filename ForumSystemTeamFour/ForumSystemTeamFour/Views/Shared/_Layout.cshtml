@@ -19,22 +19,23 @@
 
 <body>
     <div class="grid-container">
+
         <div class="grid-logo">
             <img src="~/images/truthisoutthere.jpg" alt="Picture saying the truth is out there.">
         </div>
+
         <div class="grid-header">
             <div class="topnav">
-                <div class="site-title">
-                    <h1>PARANORMALITY</h1>
+                <div >
+                    <h1 class="appHeadingText">PARANORMALITY</h1>
                 </div>
                 <nav>
                     <ul>
                         <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                         <li><a asp-controller="Threads" asp-action="Index">All discussions</a></li>
-                        <li><a asp-controller="Threads" asp-action="Create">Start topic</a></li>
-                        <li><a href="/api/swagger" style="left:50%;">Admin API access</a></li>
-
-                        <li><a asp-controller="Home" asp-action="About">About</a></li>                    
+                        <li><a asp-controller="Threads" asp-action="Create">Start topic</a></li>  
+                        <li><a asp-controller="Home" asp-action="About">About</a></li>
+                        <li><a href="/api/swagger" style="right:10%;">Admin API access</a></li>
                     </ul>
                 </nav>
             </div>

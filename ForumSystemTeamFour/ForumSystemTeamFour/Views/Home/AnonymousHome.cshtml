@@ -1,4 +1,4 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿
 @using ForumSystemTeamFour.Models.DTOs
 @model List<ThreadResponseDto>
 
@@ -28,14 +28,16 @@
     </header>
     <div style ="text-decoration:none;position:absolute;top:15%;right:5%;">
         <div><a asp-controller="Users" asp-action="Register"
-           type="button" class="btn appbtn-outline" style= "margin-bottom: 5px">Register</a></div>
+               type="button" class="btn appBtn-outline" style="margin-bottom: 5px">Register</a>
+        </div>
         <div><a asp-controller="Users" asp-action="Login"
-           type="button" class="btn appbtn-outline">Login</a></div>
+               type="button" class="btn appBtn-outline">Login</a>
+        </div>
     </div>
     <div> 
         <div style="position: absolute;top: 5%;left: 50%;transform: translate(-50%, 0%);width:70%">
             <h3 style ="text-align:center;margin-top:15%">Popular discussions:</h3>
-            <table class="table forum-table table-hover table-dark">
+            <table class="table appTable table-hover table-dark">
                 @*ToDo Make each thread title link to the Thread in the table*@
                 <thead>
                     <tr>
