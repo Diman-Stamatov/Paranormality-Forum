@@ -43,32 +43,74 @@
             <a asp-controller="Threads" asp-action="Create">Start topic</a>
             <a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUserId">Your profile</a>
             <a asp-controller="Users" asp-action="Logout">Logout</a>
-            <a href="/api/swagger" style="left:50%;">Admin API access</a>
+            <a href="/api/swagger" style="right:10%;">Admin API access</a>
         </div>
     </header>
-    @{
-              
-    }
+    
     <div class="appBelowHeader">
         @welcomeMessage
         <div>
-            <img src="/ProfilePictures/@profilePicName" class="appProfilePicture" />
+            <img src="/ProfilePictures/@profilePicName" class="appProfilePicture" /><br />
+            @statsMessage<br />
+            Threads created: @totalThreads<br />
+            Total posts: @totalPosts <br />
         </div>
         
-        
+        <form class="appCentered" style="transform: translate(0%, -50%); left:42%" 
+        asp-controller="Users" asp-action="Register" method="post">
+
+            <div>
+                <br>
+                <label asp-for="FirstName">First name:</label>
+                <br>
+                <input asp-for="FirstName" type="text" value="@Model.FirstName" placeholder="John">
+                <span asp-validation-for="FirstName" class="form-error" style="color:#FFFF33;"></span>
+            </div>
+
+            <div>
+                <label asp-for="LastName">LastName:</label><br>
+                <input asp-for="LastName" type="text" value="@Model.LastName" placeholder="Doe">
+                <span asp-validation-for="LastName" class="form-error" style="color:#FFFF33"></span>
+            </div>
+
+            <div>
+                <label asp-for="Email">E-Mail:</label><br>
+                <input asp-for="Email" type="text" value="@Model.Email" placeholder="John@Doe.com">
+                <span asp-validation-for="Email" class="form-error" style="color:#FFFF33;"></span>
+            </div>
+
+            <div>
+                <label asp-for="Username">Username:</label><br>
+                <input asp-for="Username" type="text" value="@Model.Username" placeholder="Doejon69">
+                <span asp-validation-for="Username" class="form-error" style="color:#FFFF33;"></span>
+            </div>
+
+            <div>
+                <label asp-for="Password">Password:</label><br>
+                <input asp-for="Password" type="password" value="@Model.Password" placeholder="123">
+                <span asp-validation-for="Password" class="form-error" style="color:#FFFF33;"></span>
+            </div>
+
+            <div>
+                <label asp-for="ConfirmPassword">Confirm password:</label><br>
+                <input asp-for="ConfirmPassword" type="password" value="@Model.ConfirmPassword" placeholder="123">
+                <span asp-validation-for="ConfirmPassword" class="form-error" style="color:#FFFF33;left:10%;"></span>
+            </div>
+
+            <div>
+                <br /><input type="submit" value="Register"
+                             class="btn appbtn-outline" style="text-decoration:none">&nbsp
+                <a asp-controller="Home" asp-action="Index"
+                   type="button" class="btn appbtn-outline" style="text-decoration:none">Reconsider...</a>
+            </div>
+        </form>
             
             
          
     
     </div>
     
-    <div class="appCentered" >
-        
-        @statsMessage<br />
-        Threads created: @totalThreads<br />
-        Total posts: @totalPosts <br />
-
-    </div>
+    
     <div class="appAboveFooter">
         @if (totalThreads > 0)
         {

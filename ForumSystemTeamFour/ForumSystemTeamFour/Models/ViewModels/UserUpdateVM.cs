@@ -1,20 +1,19 @@
-﻿using ForumSystemTeamFour.Models.DTOs;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
 
 namespace ForumSystemTeamFour.Models.ViewModels
 {
-    public class UserCreateVM 
-    {        
+    public class UserUpdateVM
+    {
         private const string StringEmptyMessage = "Please specify a {0}!";
-        private const string StringMinLengthMessage = "Your {0} must be at least {1} characters long!";        
+        private const string StringMinLengthMessage = "Your {0} must be at least {1} characters long!";
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please specify a First Name!")]
+        [Remote("CheckEmptyString", "Validation")]
         [MinLength(4, ErrorMessage = "Your First name must be at least {1} characters long!")]
         [MaxLength(32)]
         public string FirstName { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please specify a Last name!")]
+        [Remote("CheckEmptyString", "Validation")]
         [MinLength(4, ErrorMessage = "Your Last name must be at least {1} characters long!")]
         [MaxLength(32)]
         public string LastName { get; set; }
@@ -25,17 +24,16 @@ namespace ForumSystemTeamFour.Models.ViewModels
 
         [Required(AllowEmptyStrings = false, ErrorMessage = StringEmptyMessage)]
         [MinLength(4, ErrorMessage = StringMinLengthMessage)]
-        [MaxLength(20)]
-        public string Username { get; set; }
-
-        [Required(AllowEmptyStrings = false, ErrorMessage = StringEmptyMessage)]
-        [MinLength(10, ErrorMessage = StringMinLengthMessage)]
-        [MaxLength(40)]
+        [MaxLength(20)]        
         public string Password { get; set; }
 
-        
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please specify a Password!")]
         [MinLength(10, ErrorMessage = "Your Password must be at least {1} characters long!")]
         [MaxLength(40)]
         public string ConfirmPassword { get; set; }
+
+        [MinLength(9, ErrorMessage = StringMinLengthMessage)]
+        [MaxLength(16)]
+        public string PhoneNumber { get; set; }
     }
 }
