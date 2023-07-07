@@ -41,9 +41,11 @@ footer {
 
 .grid-container {
     display: grid;
+    grid-template-columns: min-content;
+    grid-template-rows: min-content;
     grid-template-areas:
         'logo header header header header user'
-        'menu main main main right right'
+        'menu main main main main right'
         'footer footer footer footer footer footer';
     gap: 10px;
     color: ghostwhite;
