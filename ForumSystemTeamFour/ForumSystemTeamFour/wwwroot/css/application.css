@@ -88,10 +88,10 @@ footer {
     left: 50%;
     transform: translate(-50%, -50%);*/
     font-family: monospace;
-    font-size: 4vw;
+    font-size: 3.7rem;
     text-shadow: 0 20px 15px black;
     color: ghostwhite;
-    letter-spacing: 35px;
+    letter-spacing: 2.2rem;
 }
 
 .nav {
@@ -276,6 +276,28 @@ a:active {
             color: ghostwhite;
         }
 
+.register-form-table {
+    table-layout: fixed;
+    width: 100%;
+    border-spacing: 1em;
+    border-collapse: inherit;
+}
+
+    .register-form-table tbody tr td label.form-label {
+        width: 100%;
+        text-align: right;
+    }
+
+    .register-form-table tbody tr td input {
+        width: 90%
+    }
+
+    .register-form-table tbody tr td span.form-error {
+        display: block;
+        width: 100%;
+        text-align: left;
+        color: #FFFF33;
+    }
 
 
 .appCentered {

@@ -13,45 +13,51 @@
 </div>
 <div>
     <form class="appCentered" asp-controller="Users" asp-action="Register" method="post">
+        <table class="register-form-table">
+            <tr>
 
-        <div>
-            <br>
-            <label asp-for="FirstName">First name:</label>
-            <br>
-            <input asp-for="FirstName" type="text" value="@Model.FirstName" placeholder="John">
-            <span asp-validation-for="FirstName" class="form-error" style="color:#FFFF33;"></span>
-        </div>
+                <td></td>
+                <td>
+                    <h2>Register</h2>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><label asp-for="FirstName" class="form-label">First name:</label></td>
+                <td><input asp-for="FirstName" type="text" value="@Model.FirstName" placeholder="John"></td>
+                <td><span asp-validation-for="FirstName" class="form-error"></span></td>
+            </tr>
 
-        <div>
-            <label asp-for="LastName">LastName:</label><br>
-            <input asp-for="LastName" type="text" value="@Model.LastName" placeholder="Doe">
-            <span asp-validation-for="LastName" class="form-error" style="color:#FFFF33"></span>
-        </div>
+            <tr>
+                <td><label asp-for="LastName" class="form-label">LastName:</label><br></td>
+                <td><input asp-for="LastName" type="text" value="@Model.LastName" placeholder="Doe"></td>
+                <td><span asp-validation-for="LastName" class="form-error"></span></td>
+            </tr>
 
-        <div>
-            <label asp-for="Email">E-Mail:</label><br>
-            <input asp-for="Email" type="text" value="@Model.Email" placeholder="John@Doe.com">
-            <span asp-validation-for="Email" class="form-error" style="color:#FFFF33;"></span>
-        </div>
+            <tr>
+                <td><label asp-for="Email" class="form-label">E-Mail:</label><br></td>
+                <td><input asp-for="Email" type="text" value="@Model.Email" placeholder="John@Doe.com"></td>
+                <td><span asp-validation-for="Email" class="form-error"></span></td>
+            </tr>
 
-        <div>
-            <label asp-for="Username">Username:</label><br>
-            <input asp-for="Username" type="text" value="@Model.Username" placeholder="Doejon69">
-            <span asp-validation-for="Username" class="form-error" style="color:#FFFF33;"></span>
-        </div>
+            <tr>
+                <td><label asp-for="Username" class="form-label">Username:</label><br></td>
+                <td><input asp-for="Username" type="text" value="@Model.Username" placeholder="Doejon69"></td>
+                <td><span asp-validation-for="Username" class="form-error"></span></td>
+            </tr>
 
-        <div>
-            <label asp-for="Password">Password:</label><br>
-            <input asp-for="Password" type="password" value="@Model.Password" placeholder="123">
-            <span asp-validation-for="Password" class="form-error" style="color:#FFFF33;"></span>
-        </div>
+            <tr>
+                <td><label asp-for="Password" class="form-label">Password:</label><br></td>
+                <td><input asp-for="Password" type="password" value="@Model.Password" placeholder="123"></td>
+                <td><span asp-validation-for="Password" class="form-error"></span></td>
+            </tr>
 
-        <div>
-            <label asp-for="ConfirmPassword">Confirm password:</label><br>
-            <input asp-for="ConfirmPassword" type="password" value="@Model.ConfirmPassword" placeholder="123">
-            <span asp-validation-for="ConfirmPassword" class="form-error" style="color:#FFFF33;left:10%;"></span>
-        </div>
-
+            <tr>
+                <td><label asp-for="ConfirmPassword" class="form-label">Confirm password:</label><br></td>
+                <td><input asp-for="ConfirmPassword" type="password" value="@Model.ConfirmPassword" placeholder="123"></td>
+                <td><span asp-validation-for="ConfirmPassword" class="form-error"></span></td>
+            </tr>
+        </table>
         <div>
             <br /><input type="submit" value="Register"
                          class="btn appBtn-outline" style="text-decoration:none">&nbsp
