@@ -56,15 +56,15 @@ footer {
         'footer footer footer footer footer footer';
     gap: 10px;
     color: ghostwhite;
-    /* background-color: #212529; */
-    background-color: #2196F3;
+    background-color: #212529;
+    /*background-color: #2196F3;*/
     padding: 10px;
     height: 100%;
     min-height: 100vh;
 }
 
     .grid-container > div {
-        background-color: rgba(255, 255, 255, 0.8);
+        /*background-color: rgba(255, 255, 255, 0.8);*/
         text-align: center;
         padding: 20px 0;
         font-size: 1em;
@@ -83,12 +83,12 @@ footer {
 }
 
 .appHeadingText {
-    position: absolute;
+    /*position: absolute;
     top: 8%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);*/
     font-family: monospace;
-    font-size: 60px;
+    font-size: 4vw;
     text-shadow: 0 20px 15px black;
     color: ghostwhite;
     letter-spacing: 35px;
@@ -256,9 +256,10 @@ a:active {
 
 .topnav {
     overflow: hidden;
-    position: absolute;
+    padding: 0 1em;
+    /*position: absolute;
     top: 15%;
-    left: 29%
+    left: 29%*/
 }
 
     .topnav a {
