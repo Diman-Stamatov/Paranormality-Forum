@@ -11,27 +11,28 @@
         ;
     }
 </div>
+<div>
+    <form class="appCentered" asp-controller="Users" asp-action="Login" method="post">
 
-<form class="appCentered" asp-controller="Users" asp-action="Login" method="post">
+        <div>
+            <br>
+            <label asp-for="Username">Username:</label>
+            <br>
+            <input asp-for="Username" type="text" value="@Model.Username" placeholder="John">
+            <span asp-validation-for="Username" class="form-error" style="color:#FFFF33;"></span>
+        </div>
 
-    <div>
-        <br>
-        <label asp-for="Username">Username:</label>
-        <br>
-        <input asp-for="Username" type="text" value="@Model.Username" placeholder="John">
-        <span asp-validation-for="Username" class="form-error" style="color:#FFFF33;"></span>
-    </div>
-
-    <div>
-        <label asp-for="Password">LastName:</label><br>
-        <input asp-for="Password" type="password" value="@Model.Password" placeholder="123">
-        <span asp-validation-for="Password" class="form-error" style="color:#FFFF33"></span>
-    </div>
-    <br />
-    <div>
-        <input type="submit" value="Login"
-               class="btn appBtn-outline" style="text-decoration:none">&nbsp
-        <a asp-controller="Users" asp-action="Register"
-           type="button" class="btn appBtn-outline" style="text-decoration:none">Register</a>
-    </div>
-</form>
+        <div>
+            <label asp-for="Password">LastName:</label><br>
+            <input asp-for="Password" type="password" value="@Model.Password" placeholder="123">
+            <span asp-validation-for="Password" class="form-error" style="color:#FFFF33"></span>
+        </div>
+        <br />
+        <div>
+            <input type="submit" value="Login"
+                   class="btn appBtn-outline" style="text-decoration:none">&nbsp
+            <a asp-controller="Users" asp-action="Register"
+               type="button" class="btn appBtn-outline" style="text-decoration:none">Register</a>
+        </div>
+    </form>
+</div>

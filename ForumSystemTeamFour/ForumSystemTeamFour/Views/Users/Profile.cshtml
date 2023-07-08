@@ -2,14 +2,14 @@
 @using System.IO;
 @{
     this.ViewData["Title"] = "Profile";
-    
+
 }
 @model User;
 @{
     string loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
     string loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
     bool ownProfile = loggedUsername == Model.Username;
-    
+
     string welcomeMessage = ownProfile ? $"Welcome, {loggedUsername}!" : $"{Model.Username}'s profile.";
     string statsMessage = ownProfile ? "Your activity history:" : $"{Model.Username}'s activity history:";
     string userThreadsMessage = ownProfile ? "Show your threads" : $"Show {Model.Username}'s threads";
@@ -25,35 +25,31 @@
 @{
 
 }
-<div class="appBelowHeader">
-    @welcomeMessage
-    <div>
-        <img src="/ProfilePictures/@profilePicName" class="appProfilePicture" />
+<div class="user-profile">
+    <div class="appBelowHeader">
+        @welcomeMessage
+        <div>
+            <img src="/ProfilePictures/@profilePicName" class="appProfilePicture" />
+        </div>
     </div>
 
+    <div class="appCentered">
 
+        @statsMessage<br />
+        Threads created: @totalThreads<br />
+        Total posts: @totalPosts <br />
 
+    </div>
+    <div class="appAboveFooter">
+        @if (totalThreads > 0)
+        {
+            <a asp-controller="" asp-action="">@userThreadsMessage</a>
 
-
-
-</div>
-
-<div class="appCentered">
-
-    @statsMessage<br />
-    Threads created: @totalThreads<br />
-    Total posts: @totalPosts <br />
-
-</div>
-<div class="appAboveFooter">
-    @if (totalThreads > 0)
-    {
-        <a asp-controller="" asp-action="">@userThreadsMessage</a>
-
-    }
-    <br />
-    @if (totalPosts > 0)
-    {
-        <a asp-controller="" asp-action="">@userPostsMessage</a>
-    }
+        }
+        <br />
+        @if (totalPosts > 0)
+        {
+            <a asp-controller="" asp-action="">@userPostsMessage</a>
+        }
+    </div>
 </div>
