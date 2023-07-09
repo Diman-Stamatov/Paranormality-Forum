@@ -9,8 +9,10 @@ namespace ForumSystemTeamFour.Services.Interfaces
     {
         List<UserResponseDto> FilterBy(int loggedUserId, UserQueryParameters filterParameters);
         User GetById(int id);
+        User GetByUsername(string username);
         UserResponseDto Create(UserCreateDto userDto);
         UserResponseDto Update(int loggedUserId, int idToUpdate, UserUpdateDto updateData);
+        UserResponseDto Update(int loggedUserId, string usernameToUpdate, UserUpdateDto updateData);
         UserResponseDto Delete(int loggedUserId, int idToDelete);
         UserResponseDto Block(int loggedUserId, int idToBlock);
         UserResponseDto Unblock(int loggedUserId, int idToUnblock);

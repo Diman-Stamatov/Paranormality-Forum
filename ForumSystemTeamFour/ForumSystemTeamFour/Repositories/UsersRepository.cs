@@ -148,7 +148,7 @@ namespace ForumSystemTeamFour.Repositories
         public User Update(User userToUpdate, UserUpdateDto updateData)
         {
             CheckDuplicateUsername(updateData.Username);
-            CheckDuplicateEmail(updateData.Email);
+            CheckDuplicateEmail(userToUpdate, updateData.Email);
 
             userToUpdate.FirstName = updateData.FirstName ?? userToUpdate.FirstName;
             userToUpdate.LastName = updateData.LastName ?? userToUpdate.LastName;
@@ -248,6 +248,14 @@ namespace ForumSystemTeamFour.Repositories
         {
             var foundUser = context.Users.FirstOrDefault(user => user.Email == email);
             if (foundUser != null)
+            {
+                throw new DuplicateEntityException($"The email \"{email}\" is already in use!");
+            }
+        }
+        private void CheckDuplicateEmail(User originalUser, string email)
+        {
+            var foundUser = context.Users.FirstOrDefault(user => user.Email == email);
+            if (foundUser != null && foundUser != originalUser)
             {
                 throw new DuplicateEntityException($"The email \"{email}\" is already in use!");
             }

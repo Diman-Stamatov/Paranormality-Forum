@@ -1,10 +1,8 @@
-﻿@{
-    string loggedUserId = "0";
+﻿@{    
     string loggedUser = "Anonymous";
     bool loggedIn = User.Identity.IsAuthenticated;
     if (loggedIn)
-    {
-        loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+    {        
         loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
     }
     bool hasProfilePic = File.Exists($"wwwroot/ProfilePictures/{loggedUser}.jpg");
@@ -61,7 +59,6 @@
                             {
                                 <li><a href="/api/swagger">API access</a></li>
                             }
-
                         }
                     </ul>
                 </nav>
@@ -76,7 +73,7 @@
                              src="/ProfilePictures/@profilePicName" class="appProfilePicture" /></div>
                     if (this.ViewData["Title"].ToString() != "Profile")
                     {
-                        <div><a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUserId">Your profile</a></div>
+                        <div><a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUser">Your profile</a></div>
                     }                    
                     <div><a asp-controller="Users" asp-action="Logout">Logout</a>  </div>
                                       

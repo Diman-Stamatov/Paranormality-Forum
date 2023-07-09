@@ -26,6 +26,10 @@ namespace ForumSystemTeamFour.Services
         {
             return repository.GetById(id);
         }
+        public User GetByUsername(string username)
+        {
+            return repository.GetByUsername(username);
+        }
 
         public UserResponseDto Block(int loggedUserId, int idToBlock)
         {
@@ -94,6 +98,16 @@ namespace ForumSystemTeamFour.Services
         {
             var loggedUser = this.repository.GetById(loggedUserId);
             var userToUpdate = this.repository.GetById(idToUpdate);
+            forumSecurity.CheckUserAuthorization(loggedUser, userToUpdate);
+            var updatedUser = this.repository.Update(userToUpdate, updateData);
+
+            return userMapper.Map(updatedUser);
+        }
+
+        public UserResponseDto Update(int loggedUserId, string usernameToUpdate, UserUpdateDto updateData)
+        {
+            var loggedUser = this.repository.GetById(loggedUserId);
+            var userToUpdate = this.repository.GetByUsername(usernameToUpdate);
             forumSecurity.CheckUserAuthorization(loggedUser, userToUpdate);
             var updatedUser = this.repository.Update(userToUpdate, updateData);
 
