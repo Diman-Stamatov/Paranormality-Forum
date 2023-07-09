@@ -2,6 +2,8 @@
 using ForumSystemTeamFour.Models;
 using System.Collections.Generic;
 using System;
+using System.Linq;
+using ForumSystemTeamFour.Models.Enums;
 
 namespace ForumSystemTeamFour.Mappers.Interfaces
 {
@@ -9,12 +11,19 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
     {
         public Thread Map(ThreadCreateDto threadDto, User author);
 
-        public ThreadResponseDto Map(Thread thread);
+        public LargeThreadResponseDto MapLarge(Thread thread);
 
         public Thread Map(Thread threadToUpdate, ThreadUpdateDto threadUpdateDto);
 
-        public List<ThreadResponseDto> Map(List<Thread> threads);
+        public ShortThreadResponseDto Map(Thread thread);
 
-        List<UserThreadResponseDto> MapForUser(List<Thread> threads);
+        public PaginatedList<ShortThreadResponseDto> Map(PaginatedList<Thread> threads);
+
+        public List<ShortThreadResponseDto> Map(List<Thread> thread);
+
+        public UserThreadResponseDto MapForUser(Thread thread);
+
+        public List<UserThreadResponseDto> MapForUser(List<Thread> threads);
     }
 }
+

@@ -44,7 +44,7 @@ namespace ForumSystemTeamFour.Repositories
             return thread;
         }
 
-        public List<Thread> FilterBy(User loggedUser, ThreadQueryParameters filterParameters)
+        public PaginatedList<Thread> FilterBy(User loggedUser, ThreadQueryParameters filterParameters)
         {
             var filteredThreads = context.Threads
                 .Where(thread => thread.IsDeleted == false)
@@ -53,13 +53,13 @@ namespace ForumSystemTeamFour.Repositories
                 .Include(thread => thread.ModificationDate)
                 .Include(thread => thread.Tags)
                 .Include(thread => thread.Votes)
-                .Include(thread => thread.Replies.Count)
+                .Include(thread => thread.Replies)
                 .ToList();
 
-            if (IsNotEmpty(filterParameters.Author.Username))
+            if (IsNotEmpty(filterParameters.UserName))
             {
                 filteredThreads = filteredThreads
-                    .FindAll(thread => thread.Author.Username == filterParameters.Author.Username);
+                    .FindAll(thread => thread.Author.Username == filterParameters.UserName);
             }
 
             if (filterParameters.Tags != null && filterParameters.Tags.Any())
@@ -67,28 +67,29 @@ namespace ForumSystemTeamFour.Repositories
                 foreach (var tag in filterParameters.Tags)
                 {
                     filteredThreads = filteredThreads
-                        .Where(thread => thread.Tags.Any(t => t.Name == tag.Name)).ToList();
+                        .Where(thread => thread.Tags.Any(t => t.Name == tag)).ToList();
                 }
             }
 
-            if (IsNotEmpty(filterParameters.Author.FirstName))
+            if (IsNotEmpty(filterParameters.FirstName))
             {
                 filteredThreads = filteredThreads
-                    .FindAll(user => user.Author.FirstName == filterParameters.Author.FirstName);
+                    .FindAll(user => user.Author.FirstName == filterParameters.FirstName);
             }
 
-            if (IsNotEmpty(filterParameters.Author.FirstName))
+            if (IsNotEmpty(filterParameters.LastName))
             {
                 filteredThreads = filteredThreads
-                    .FindAll(user => user.Author.LastName == filterParameters.Author.FirstName);
+                    .FindAll(user => user.Author.LastName == filterParameters.LastName);
             }
-            if (IsNotEmpty(filterParameters.Author.Email))
+            if (IsNotEmpty(filterParameters.Email))
             {
                 if (!loggedUser.IsAdmin)
                 {
                     throw new UnauthorizedAccessException("Only an administrator can search by E-mail!");
                 }
-                filteredThreads = filteredThreads.FindAll(thread => thread.Author.Email == filterParameters.Author.Email);
+                filteredThreads = filteredThreads
+                    .FindAll(thread => thread.Author.Email == filterParameters.Email);
             }
 
             if (IsNotEmpty(filterParameters.SortBy))
@@ -114,8 +115,23 @@ namespace ForumSystemTeamFour.Repositories
             {
                 throw new EntityNotFoundException("No thread correspond to the specified search parameters!");
             }
-            return filteredThreads;
+
+            int totalPages = (filteredThreads.Count() + 1) / filterParameters.PageSize;
+
+            filteredThreads = Paginate(filteredThreads, filterParameters.PageNumber, filterParameters.PageSize);
+
+            return new PaginatedList<Thread>(filteredThreads, totalPages, filterParameters.PageNumber);
+
         }
+
+        public static List<Thread> Paginate(List<Thread> filteredThreads, int pageNumber, int pageSize)
+        {
+            return filteredThreads
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+        }
+
 
         public List<Thread> GetAll()
         {
@@ -132,7 +148,7 @@ namespace ForumSystemTeamFour.Repositories
             return threads;
         }
 
-        public Thread GetById(int id)
+        public Thread Details(int id)
         {
                     var thread = this.context.Threads
                             .Where(thread => !thread.IsDeleted && thread.Id ==id)
@@ -155,10 +171,12 @@ namespace ForumSystemTeamFour.Repositories
             }
             return threads;
         }
+
         private void Save()
         {
             context.SaveChanges();
         }
+
         private bool IsNotEmpty(string value)
         {
             return !string.IsNullOrEmpty(value);

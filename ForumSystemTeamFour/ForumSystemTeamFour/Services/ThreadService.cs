@@ -1,6 +1,7 @@
 ﻿using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Mappers.Interfaces;
+using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
@@ -16,12 +17,14 @@ namespace ForumSystemTeamFour.Services
         private readonly IThreadRepositroy threadRepositroy;
         private readonly ISecurityServices forumSecurity;
         private readonly IThreadMapper threadMapper;
+        private readonly ITagMapper tagMapper;
         private readonly IUserServices userServices;
         private readonly IReplyService replyService;
 
         public ThreadService(IThreadRepositroy threadRepositroy,
                             ISecurityServices securityServices,
                             IThreadMapper threadMapper,
+                            ITagMapper tagMapper,
                             IUserServices userServices,
                             IReplyService replyService)
         {
@@ -30,9 +33,10 @@ namespace ForumSystemTeamFour.Services
             this.threadMapper = threadMapper;
             this.userServices = userServices;
             this.replyService = replyService;
+            this.tagMapper= tagMapper;
         }
 
-        public ThreadResponseDto Create(ThreadCreateDto threadCreateDto, int loggedUserId)
+        public ShortThreadResponseDto Create(ThreadCreateDto threadCreateDto, int loggedUserId)
         {
             var loggedUser = this.userServices.GetById(loggedUserId);
             var newThread = this.threadMapper.Map(threadCreateDto, loggedUser);
@@ -41,19 +45,19 @@ namespace ForumSystemTeamFour.Services
             return threadResponseDto;
         }
 
-        public ThreadResponseDto Update(int id, ThreadUpdateDto threadUpdateDto, int loggedUserId)
+        public ShortThreadResponseDto Update(int id, ThreadUpdateDto threadUpdateDto, int loggedUserId)
         {
-            var threadToUpdate = this.threadRepositroy.GetById(id);            
+            var threadToUpdate = this.threadRepositroy.Details(id);            
             var mappedThread = this.threadMapper.Map(threadToUpdate, threadUpdateDto);
             var updatedThread = this.threadRepositroy.Update(threadToUpdate, mappedThread);
             var resultThread = this.threadMapper.Map(updatedThread);
             return resultThread;
         }
 
-        public ThreadResponseDto Delete(int id, int loggedUserId)
+        public ShortThreadResponseDto Delete(int id, int loggedUserId)
         {
             var loggedUser = userServices.GetById(loggedUserId);
-            var threadToDelete = this.threadRepositroy.GetById(id);
+            var threadToDelete = this.threadRepositroy.Details(id);
     
             if (threadToDelete.Author.Equals(loggedUser) || loggedUser.IsAdmin)
             {
@@ -67,33 +71,27 @@ namespace ForumSystemTeamFour.Services
         }
 
 
-        public List<ThreadResponseDto> FilterBy(int loggedUserId, ThreadQueryParameters filterParameters)
+        public PaginatedList<ShortThreadResponseDto> FilterBy(int loggedUserId, ThreadQueryParameters filterParameters)
         {
             var loggedUser = this.userServices.GetById(loggedUserId);            
             var filteredThreads = this.threadRepositroy.FilterBy(loggedUser, filterParameters);
+            
+            return this.threadMapper.Map(filteredThreads);
+        }        
 
-            return threadMapper.Map(filteredThreads);
-        }
-
-        public List<ThreadResponseDto> GetAll()
+        public List<ShortThreadResponseDto> GetAll()
         {
             var allThreads = this.threadRepositroy.GetAll();
-            var result = this.threadMapper.Map(allThreads);          
+            var result = this.threadMapper.Map(allThreads);
+            int a = 1;
             return result;
         }
 
-        public ThreadResponseDto GetById(int id)
+        public ShortThreadResponseDto Details(int id)
         {
-            var thread = this.threadRepositroy.GetById(id);            
+            var thread = this.threadRepositroy.Details(id);            
             var threadResponseDto = this.threadMapper.Map(thread);
             return threadResponseDto;
-        }
-
-        public List<ThreadResponseDto> GetAllByUserId(int id)
-        {
-            var userThreads = this.threadRepositroy.GetAllByUserId(id);
-            var mappedUserThreads = this.threadMapper.Map(userThreads);
-            return mappedUserThreads;
-        }    
+        }        
     }
 }

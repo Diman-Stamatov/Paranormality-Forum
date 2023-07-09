@@ -26,7 +26,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 if (!User.Identity.IsAuthenticated)
                 {
 
-                    var threads = this.ThreadService.GetAll().OrderBy(thread => thread.Replies.Count).ToList();
+                    var threads = this.ThreadService.GetAll().OrderBy(thread => thread.Replies).ToList();
                     return this.View("AnonymousHome", threads);
                 }
                 else

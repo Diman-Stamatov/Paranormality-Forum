@@ -620,24 +620,22 @@ namespace ForumSystemTeamFour.Tests.TestData
             };
         }
 
-        public static ThreadResponseDto GetTestThreadResponseDto()
+        public static ShortThreadResponseDto GetTestThreadResponseDto()
         {
-            return new ThreadResponseDto
+            return new ShortThreadResponseDto
             {
                 Title = ValidThreadTitle,
                 Content = ValidThreadContent,
                 Likes = 0,
                 Dislikes = 0,
-                isDeleted = false,
-                CreationDate = DateTime.Now,
-                ModificationDate = DateTime.Now
+                CreationDate = DateTime.Now
                 //ToDo Add list<ReplyReadDto> when test model for Reply is ready 
             };
         }
 
-        public static List<ThreadResponseDto> GetTestListOfThreadResponseDto(int count)
+        public static List<ShortThreadResponseDto> GetTestListOfThreadResponseDto(int count)
         {
-            var listOfThreadResponseDto = new List<ThreadResponseDto>();
+            var listOfThreadResponseDto = new List<ShortThreadResponseDto>();
             for (int i = 1; i <= count; i++)
             {
                 listOfThreadResponseDto.Add(GetTestThreadResponseDto());
@@ -689,7 +687,7 @@ namespace ForumSystemTeamFour.Tests.TestData
                 .Returns(GetTestThreads(3));
             mockRepository.Setup(repository => repository.GetAllByUserId(It.IsAny<int>()))
                 .Returns(GetTestThreads(3));
-            mockRepository.Setup(repository => repository.GetById(It.IsAny<int>()))
+            mockRepository.Setup(repository => repository.Details(It.IsAny<int>()))
                 .Returns(GetTestDefaultThread());
             mockRepository.Setup(repository => repository.Update(It.IsAny<Models.Thread>(), It.IsAny<Models.Thread>()))
                 .Returns(GetTestDefaultThread());
@@ -729,10 +727,8 @@ namespace ForumSystemTeamFour.Tests.TestData
                 .Returns(GetTestThreadResponseDto());
             mockServices.Setup(services => services.GetAll())
                 .Returns(GetTestListOfThreadResponseDto(0));
-            mockServices.Setup(services => services.GetById(It.IsAny<int>()))
+            mockServices.Setup(services => services.Details(It.IsAny<int>()))
                 .Returns(GetTestThreadResponseDto());
-            mockServices.Setup(services => services.GetAllByUserId(It.IsAny<int>()))
-                .Returns(GetTestListOfThreadResponseDto(3));
 
             return mockServices;
         }

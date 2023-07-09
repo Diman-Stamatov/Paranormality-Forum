@@ -170,7 +170,7 @@ namespace ForumSystemTeamFour.Services
         {
             try
             {
-                var thread = threadRepositroy.GetById(id);
+                var thread = threadRepositroy.Details(id);
                 return true;
             }
             catch (EntityNotFoundException)

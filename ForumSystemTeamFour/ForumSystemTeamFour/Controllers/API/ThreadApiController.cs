@@ -37,13 +37,13 @@ namespace ForumSystemTeamFour.Controllers.API
 
         [Authorize]
         [HttpGet("")]
-        public IActionResult FilterUsers([FromQuery] ThreadQueryParameters filterParameters)
+        public IActionResult FilterBy([FromQuery] ThreadQueryParameters filterParameters)
         {
             try
             {
                 int loggedUserId = LoggedUserIdFromClaim();
 
-                List<ThreadResponseDto> filterResult = threadService.FilterBy(loggedUserId, filterParameters);
+                var filterResult = threadService.FilterBy(loggedUserId, filterParameters);
                 return StatusCode(StatusCodes.Status200OK, filterResult);
             }
             catch (EntityNotFoundException exception)
@@ -58,12 +58,12 @@ namespace ForumSystemTeamFour.Controllers.API
 
         [Authorize]
         [HttpPost("")]
-        public IActionResult CreateThread([FromBody] ThreadCreateDto threadCreateDto)
+        public IActionResult Create([FromBody] ThreadCreateDto threadCreateDto)
         {
             try
             {
                 int loggedUserId = LoggedUserIdFromClaim();
-                ThreadResponseDto threadResponseDto = this.threadService.Create(threadCreateDto, loggedUserId);                
+                var threadResponseDto = this.threadService.Create(threadCreateDto, loggedUserId);                
                 return StatusCode(StatusCodes.Status201Created, threadResponseDto);
             }
             catch (BadHttpRequestException exception)
@@ -83,7 +83,7 @@ namespace ForumSystemTeamFour.Controllers.API
             try
             {
                 int loggedUserId = LoggedUserIdFromClaim();
-                ThreadResponseDto threadResponseDto = this.threadService.Update(id, threadCreateDto, loggedUserId);
+                var threadResponseDto = this.threadService.Update(id, threadCreateDto, loggedUserId);
                 return StatusCode(StatusCodes.Status201Created, threadResponseDto);
             }
             catch (BadHttpRequestException exception)
@@ -99,7 +99,7 @@ namespace ForumSystemTeamFour.Controllers.API
             try
             {
                 int loggedUserId = LoggedUserIdFromClaim();
-                ThreadResponseDto threadResponseDto = this.threadService.Delete(id, loggedUserId);
+                var threadResponseDto = this.threadService.Delete(id, loggedUserId);
                 return StatusCode(StatusCodes.Status201Created, threadResponseDto);
             }
             catch (EntityNotFoundException exception)
@@ -119,7 +119,7 @@ namespace ForumSystemTeamFour.Controllers.API
             try
             {
                 int loggedUserId = LoggedUserIdFromClaim();          
-                List<ThreadResponseDto> threds = this.threadService.GetAll();
+                var threds = this.threadService.GetAll();
                 return StatusCode(StatusCodes.Status200OK, threds);
             }
             catch (EntityNotFoundException exception)
@@ -135,24 +135,8 @@ namespace ForumSystemTeamFour.Controllers.API
             try
             {
                 int loggedUserId = LoggedUserIdFromClaim();
-                ThreadResponseDto thread = this.threadService.GetById(id);
+                var thread = this.threadService.Details(id);
                 return StatusCode(StatusCodes.Status201Created, thread);
-            }
-            catch (EntityNotFoundException exception)
-            {
-                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
-            }
-        }
-
-        [Authorize]
-        [HttpGet("{userId}")]
-        public IActionResult GetAllByUserId(int userId)
-        {
-            try
-            {
-                int loggedUserId = LoggedUserIdFromClaim();
-                List<ThreadResponseDto> threds = this.threadService.GetAllByUserId(userId);
-                return StatusCode(StatusCodes.Status200OK, threds);
             }
             catch (EntityNotFoundException exception)
             {

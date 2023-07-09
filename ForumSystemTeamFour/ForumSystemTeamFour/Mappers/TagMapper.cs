@@ -1,17 +1,18 @@
 ﻿using ForumSystemTeamFour.Models;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using ForumSystemTeamFour.Mappers.Interfaces;
 
 namespace ForumSystemTeamFour.Mappers
 {
-    public class TagMapper
+    public class TagMapper :ITagMapper
     {
-        public static string Map(Tag tag)
+        public string Map(Tag tag)
         {
             return tag.Name;
         }
 
-        public static List<string> Map(List<Tag> tags)
+        public List<string> Map(List<Tag> tags)
         {
             var tagNamesList = new List<string>();
             foreach (var tag in tags)

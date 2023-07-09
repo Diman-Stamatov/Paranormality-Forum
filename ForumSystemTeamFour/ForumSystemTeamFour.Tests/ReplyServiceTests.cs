@@ -57,7 +57,7 @@ namespace ForumSystemTeamFour.Tests
             var replyCreateDto = GetTestReplyCreateDto();
 
             var mockThreadRepository = new Mock<IThreadRepositroy>();
-            mockThreadRepository.Setup(repository => repository.GetById(It.IsAny<int>()))
+            mockThreadRepository.Setup(repository => repository.Details(It.IsAny<int>()))
                 .Throws<EntityNotFoundException>();
 
             var mockRepliesRepository = GetTestRepliesRepository();

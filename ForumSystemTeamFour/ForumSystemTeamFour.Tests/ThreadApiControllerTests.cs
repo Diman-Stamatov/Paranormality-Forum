@@ -43,7 +43,7 @@ namespace ForumSystemTeamFour.Tests
 
             var testCreateDto = GetTestThreadCreateDto();
 
-            var result = testedApi.CreateThread(testCreateDto) as ObjectResult;
+            var result = testedApi.Create(testCreateDto) as ObjectResult;
             var expectedCode = StatusCodes.Status201Created;
             Assert.AreEqual(expectedCode, result.StatusCode);
         }
@@ -62,7 +62,7 @@ namespace ForumSystemTeamFour.Tests
 
             var testCreateDto = GetTestThreadCreateDto();
 
-            var result = testedApi.CreateThread(testCreateDto) as ObjectResult;
+            var result = testedApi.Create(testCreateDto) as ObjectResult;
             var expectedCode = StatusCodes.Status409Conflict;
             Assert.AreEqual(expectedCode, result.StatusCode);
         }

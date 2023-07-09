@@ -10,7 +10,7 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
     {
         public Thread Create(Thread thread);
 
-        List<Thread> FilterBy(User loggedUser, ThreadQueryParameters filterParameters);
+        PaginatedList<Thread> FilterBy(User loggedUser, ThreadQueryParameters filterParameters);
 
         public Thread Update(Thread threadToUpdate, Thread updatedThread);
 
@@ -18,7 +18,7 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
 
         public List<Thread> GetAll();
 
-        public Thread GetById(int id);
+        public Thread Details(int id);
 
         public List<Thread> GetAllByUserId(int id);
     }

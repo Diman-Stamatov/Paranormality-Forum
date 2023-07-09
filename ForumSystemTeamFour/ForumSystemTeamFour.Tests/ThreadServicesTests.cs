@@ -20,11 +20,13 @@ namespace ForumSystemTeamFour.Tests
                 var mockReplyService = new Mock<IReplyService>();
             var mockThreadRepository = new Mock<IThreadRepositroy>();
             var mockSecurityServices = new Mock<ISecurityServices>();
+                   var mockTagMapper = new Mock<ITagMapper>();
                 var mockThreadMapper = TestModels.GetTestThreadMapper();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices.Object,
                                                     mockThreadMapper.Object,
+                                                    mockTagMapper.Object,
                                                     mockUserServices.Object,
                                                     mockReplyService.Object);
 
@@ -40,19 +42,21 @@ namespace ForumSystemTeamFour.Tests
 
         [TestMethod]
         public void Update_ShouldUpdateThread_WhenInputIsValid()
-        {           
+        {
                 var mockUserServices = new Mock<IUserServices>();
                 var mockReplyService = new Mock<IReplyService>();
             var mockThreadRepository = new Mock<IThreadRepositroy>();
             var mockSecurityServices = new Mock<ISecurityServices>();
+                   var mockTagMapper = new Mock<ITagMapper>();
                 var mockThreadMapper = TestModels.GetTestThreadMapper();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices.Object,
                                                     mockThreadMapper.Object,
+                                                    mockTagMapper.Object,
                                                     mockUserServices.Object,
                                                     mockReplyService.Object);
-                      int idToUpdate = DefaultId;
+            int idToUpdate = DefaultId;
                     int loggedUserId = DefaultId;
                  var threadUpdateDto = TestModels.GetTestThreadUpdateDto();
 
@@ -66,19 +70,21 @@ namespace ForumSystemTeamFour.Tests
         [TestMethod]
         public void Delete_ShouldDeleteThread_WhenInputIsValid()
         {
-                var mockReplyService = new Mock<IReplyService>();
                 var mockUserServices = new Mock<IUserServices>();
+                var mockReplyService = new Mock<IReplyService>();
             var mockSecurityServices = new Mock<ISecurityServices>();
+                   var mockTagMapper = new Mock<ITagMapper>();
             var mockThreadRepository = TestModels.GetTestThreadRepositroy();
                 var mockThreadMapper = TestModels.GetTestThreadMapper();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices.Object,
                                                     mockThreadMapper.Object,
+                                                    mockTagMapper.Object,
                                                     mockUserServices.Object,
                                                     mockReplyService.Object);
 
-                      int IdtoDelete = TestModels.DefaultId;
+            int IdtoDelete = TestModels.DefaultId;
                     int loggedUserId = TestModels.DefaultId;
                    var defaultThread = TestModels.GetTestThreadResponseDto();
 
@@ -98,19 +104,21 @@ namespace ForumSystemTeamFour.Tests
         [TestMethod]
         public void Delete_ShouldThrow_WhenUnauthorized()
         {
-                var mockReplyService = new Mock<IReplyService>();
                 var mockUserServices = new Mock<IUserServices>();
+                var mockReplyService = new Mock<IReplyService>();
             var mockSecurityServices = new Mock<ISecurityServices>();
+                   var mockTagMapper = new Mock<ITagMapper>();
                 var mockThreadMapper = TestModels.GetTestThreadMapper();
             var mockThreadRepository = TestModels.GetTestThreadRepositroy();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices.Object,
                                                     mockThreadMapper.Object,
+                                                    mockTagMapper.Object,
                                                     mockUserServices.Object,
                                                     mockReplyService.Object);
 
-                     int IdtoDelete2 = TestModels.DefaultId;
+            int IdtoDelete2 = TestModels.DefaultId;
                     int loggedUserId = TestModels.DefaultId;
            var nonAdminNonAuthorUser = TestModels.GetUser();
 
@@ -129,68 +137,48 @@ namespace ForumSystemTeamFour.Tests
                 var mockUserServices = new Mock<IUserServices>();
                 var mockReplyService = new Mock<IReplyService>();
             var mockThreadRepository = new Mock<IThreadRepositroy>();
-            var mockSecurityServices = new Mock<ISecurityServices>(); ;
+            var mockSecurityServices = new Mock<ISecurityServices>();
+                   var mockTagMapper = new Mock<ITagMapper>();
                 var mockThreadMapper = TestModels.GetTestThreadMapper();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices.Object,
                                                     mockThreadMapper.Object,
+                                                    mockTagMapper.Object,
                                                     mockUserServices.Object,
                                                     mockReplyService.Object);
 
-                      var allThreads = testedServices.GetAll();            
+            var allThreads = testedServices.GetAll();            
 
             Assert.AreEqual(3, allThreads.Count);
-            Assert.IsInstanceOfType(allThreads, typeof(List<ThreadResponseDto>));
+            Assert.IsInstanceOfType(allThreads, typeof(List<ShortThreadResponseDto>));
         }     
 
         [TestMethod]
         public void GetById_ShouldReturnThread_WhenIdIsValid()
         {
-                    var mockUserServices = new Mock<IUserServices>();
-                    var mockReplyService = new Mock<IReplyService>();
-                var mockThreadRepository = new Mock<IThreadRepositroy>();
-                var mockSecurityServices = new Mock<ISecurityServices>();
-                    var mockThreadMapper = TestModels.GetTestThreadMapper();
-
-            var testedServices = new ThreadService(mockThreadRepository.Object,
-                                                    mockSecurityServices.Object,
-                                                    mockThreadMapper.Object,
-                                                    mockUserServices.Object,
-                                                    mockReplyService.Object);
-
-                            int threadId = TestModels.DefaultId;
-                      var threadToComape = TestModels.GetTestThreadResponseDto();
-
-                              var thread = testedServices
-                                        .GetById(threadId);
-
-            Assert.AreEqual(threadToComape.Title, thread.Title);
-            Assert.AreEqual(threadToComape.Content, thread.Content);
-        }
-
-        [TestMethod]
-        public void GetAllByUserId_ShouldReturnListOfThreads()
-        {
                 var mockUserServices = new Mock<IUserServices>();
                 var mockReplyService = new Mock<IReplyService>();
             var mockThreadRepository = new Mock<IThreadRepositroy>();
             var mockSecurityServices = new Mock<ISecurityServices>();
+                   var mockTagMapper = new Mock<ITagMapper>();
                 var mockThreadMapper = TestModels.GetTestThreadMapper();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
                                                     mockSecurityServices.Object,
                                                     mockThreadMapper.Object,
+                                                    mockTagMapper.Object,
                                                     mockUserServices.Object,
                                                     mockReplyService.Object);
 
-                        int threadId = TestModels.DefaultId;
+            int threadId = TestModels.DefaultId;
+                      var threadToComape = TestModels.GetTestThreadResponseDto();
 
-                          var thread = testedServices
-                                    .GetAllByUserId(threadId);
+                              var thread = testedServices
+                                        .Details(threadId);
 
-            Assert.AreEqual(3, thread.Count);
-            Assert.IsInstanceOfType(thread, typeof(List<ThreadResponseDto>));
-        }
+            Assert.AreEqual(threadToComape.Title, thread.Title);
+            Assert.AreEqual(threadToComape.Content, thread.Content);
+        }       
     }
 }

@@ -101,7 +101,7 @@ namespace ForumSystemTeamFour.Tests
             TestContext.Threads.Add(testThread);
             Save();
 
-            var retrievedThread = testRepository.GetById(testThread.Id);
+            var retrievedThread = testRepository.Details(testThread.Id);
 
             Assert.IsNotNull(retrievedThread);
             Assert.AreEqual(testThread.Id, retrievedThread.Id);
@@ -116,7 +116,7 @@ namespace ForumSystemTeamFour.Tests
             var nonExistentThreadId = 2;
 
             Assert.ThrowsException<EntityNotFoundException>(() => testRepository
-                                    .GetById(nonExistentThreadId));
+                                    .Details(nonExistentThreadId));
         }
         [TestMethod]
         public void GetAllByUserId_ShouldReturnThreads_WhenUserIdIsValid()

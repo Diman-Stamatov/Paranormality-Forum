@@ -6,15 +6,26 @@ using ForumSystemTeamFour.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
+
 
 namespace ForumSystemTeamFour.Mappers
 {
     public class ThreadMapper : IThreadMapper
     {
         private readonly IReplyMapper ReplyMapper;
-        public ThreadMapper(IReplyMapper replyMapper) 
+        private readonly ITagMapper TagMapper;
+        private readonly IThreadVoteMapper ThreadVoteMapper;
+        private readonly IUserMapper userMapper;
+        public ThreadMapper(IReplyMapper replyMapper,
+                            ITagMapper tagMapper,
+                            IThreadVoteMapper ThreadVoteMapper,
+                            IUserMapper userMapper) 
         { 
             this.ReplyMapper = replyMapper;
+            this.TagMapper = tagMapper;
+            this.ThreadVoteMapper = ThreadVoteMapper;
+            this.userMapper = userMapper;
         }
 
         public Thread Map(ThreadCreateDto threadDto, User author)
@@ -29,26 +40,19 @@ namespace ForumSystemTeamFour.Mappers
             };
         }
 
-
-        public ThreadResponseDto Map(Thread thread)
+        public LargeThreadResponseDto MapLarge(Thread thread)
         {
-            return new ThreadResponseDto
+            return new LargeThreadResponseDto
             {
-
                 Title = thread.Title,
-                CreationDate = DateTime.Now,
-                ModificationDate = thread.ModificationDate,
-                Author = new UserResponseDto
-                {
-                    FirstName = thread.Author.FirstName,
-                    LastName = thread.Author.LastName,
-                    Username = thread.Author.Username,
-                    Email = thread.Author.Email,
-                },
                 Content = thread.Content,
+                isDeleted = thread.IsDeleted,
+                CreationDate = thread.CreationDate,
+                ModificationDate = thread.ModificationDate,
                 Replies = ReplyMapper.Map(thread.Replies),
-                Likes = thread.Votes.Count(v => v.VoteType == VoteType.Like),
-                Dislikes = thread.Votes.Count(v => v.VoteType == VoteType.Dislike)
+                Tags = TagMapper.Map(thread.Tags),
+                Votes = ThreadVoteMapper.Map(thread.Votes),
+                Author = userMapper.Map(thread.Author),
             };
         }
 
@@ -60,32 +64,48 @@ namespace ForumSystemTeamFour.Mappers
             return threadToUpdate;
         }
 
-        public List<ThreadResponseDto> Map (List<Thread> threads)
+        public ShortThreadResponseDto Map(Thread thread)
         {
-            var mappedThreads = new List<ThreadResponseDto>();
-            foreach (var thread in threads)
+            return new ShortThreadResponseDto
             {
-                var newThread = this.Map(thread);
-                mappedThreads.Add(newThread);
-            }
-            return mappedThreads;
+                Title = thread.Title,
+                Content = thread.Content,
+                Likes = thread.Votes.Count(v => v.VoteType == VoteType.Like),
+                Dislikes = thread.Votes.Count(v => v.VoteType == VoteType.Dislike),
+                CreationDate = DateTime.Now,
+                Replies = thread.Replies.Count,
+                Tags = TagMapper.Map(thread.Tags),    
+            };
+        }
+        public List<ShortThreadResponseDto> Map(List<Thread> threads)
+        {
+            return threads.Select(this.Map).ToList();
+        }
+
+        public PaginatedList<ShortThreadResponseDto> Map(PaginatedList<Thread> threads)
+        {
+            var mappedThreads = threads.Select(this.Map).ToList();
+            return new PaginatedList<ShortThreadResponseDto>(mappedThreads, 
+                                                            threads.TotalPages, 
+                                                            threads.PageNumber);
+        }
+
+        public UserThreadResponseDto MapForUser(Thread thread)
+        {
+            return new UserThreadResponseDto
+            {
+                Title = thread.Title,
+                CreationDate = thread.CreationDate.ToString(),
+                Author = thread.Author.Username,
+                NumberOfReplies = thread.Replies.Count,
+                Tags = TagMapper.Map(thread.Tags)
+            };
         }
 
         public List<UserThreadResponseDto> MapForUser(List<Thread> threads)
         {
-            var mappedThreads = new List<UserThreadResponseDto>();
-            foreach (var thread in threads)
-            {
-                mappedThreads.Add(new UserThreadResponseDto
-                {
-                    Title = thread.Title,
-                    CreationDate = thread.CreationDate.ToString(),
-                    Author = thread.Author.Username,
-                    NumberOfReplies = thread.Replies.Count,
-                    Tags = TagMapper.Map(thread.Tags)
-                });
-            }
-            return mappedThreads;
+            var x = threads.Select(this.MapForUser).ToList();
+            return x;
         }
     }
 }
