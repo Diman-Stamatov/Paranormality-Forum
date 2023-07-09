@@ -1,11 +1,7 @@
-﻿@using ForumSystemTeamFour.Models;
-@using System.IO;
-@{
-    this.ViewData["Title"] = "Profile";
-
-}
+﻿
 @model User;
 @{
+    this.ViewData["Title"] = "Profile";
     string loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
     string loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
     bool ownProfile = loggedUsername == Model.Username;
@@ -21,25 +17,18 @@
 
 }
 
-
-@{
-
-}
 <div class="user-profile">
     <div class="appBelowHeader">
         @welcomeMessage
         <div>
             <img src="/ProfilePictures/@profilePicName" class="appProfilePicture" />
         </div>
-    </div>
-
-    <div class="appCentered">
-
         @statsMessage<br />
         Threads created: @totalThreads<br />
         Total posts: @totalPosts <br />
-
     </div>
+
+    
     <div class="appAboveFooter">
         @if (totalThreads > 0)
         {

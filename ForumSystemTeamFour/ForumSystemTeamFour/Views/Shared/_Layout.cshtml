@@ -1,9 +1,14 @@
 ﻿@{
     string loggedUserId = "0";
-    if (User.Identity.IsAuthenticated)
+    string loggedUser = "Anonymous";
+    bool loggedIn = User.Identity.IsAuthenticated;
+    if (loggedIn)
     {
         loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+        loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
     }
+    bool hasProfilePic = File.Exists($"wwwroot/ProfilePictures/{loggedUser}.jpg");
+    string profilePicName = hasProfilePic ? $"{loggedUser}.jpg" : "default.jpg";
 }
 
 <!DOCTYPE html>
@@ -20,55 +25,77 @@
 <body>
     <div class="grid-container">
 
-        <div class="grid-logo">
-            <img src="~/images/truthisoutthere.jpg" alt="Picture saying the truth is out there.">
+        <div class="grid-logo" >
+            <img style="width:100%"src="~/images/truthisoutthere.jpg" alt="Picture saying the truth is out there.">
         </div>
 
-        <div class="grid-header">
+        <div class="grid-header grid-centered">
             <div class="topnav">
                 <div class="appHeadingText">
-                    <h1>PARANORMALITY</h1>
+                    <div>PARANORMALITY</div>
                 </div>
-                <nav>
+                <nav class="grid-centered">
                     <ul>
-                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li><a asp-controller="Threads" asp-action="Index">All discussions</a></li>
-                        <li><a asp-controller="Threads" asp-action="Create">Start topic</a></li>  
-                        <li><a asp-controller="Home" asp-action="About">About</a></li>
-                        <li><a href="/api/swagger" style="right:10%;">Admin API access</a></li>
+                        @{
+                            if (this.ViewData["Title"].ToString() != "Home")
+                            {
+                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                            }
+
+                            if (loggedIn)
+                            {
+                                if (this.ViewData["Title"].ToString() != "All discussions")
+                                {
+                                    <li><a asp-controller="Threads" asp-action="Index">All discussions</a></li>
+                                }
+                                if (this.ViewData["Title"].ToString() != "Start topic")
+                                {
+                                    <li><a asp-controller="Threads" asp-action="Create">Start topic</a></li>
+                                }                                
+                            }
+                            if (this.ViewData["Title"].ToString() != "About")
+                            {
+                                <li><a asp-controller="Home" asp-action="About">About</a></li>
+                            }                            
+                            if (loggedIn)
+                            {
+                                <li><a href="/api/swagger">API access</a></li>
+                            }
+
+                        }
                     </ul>
                 </nav>
             </div>
         </div>
         <div class="grid-user">
             @{
-                if (User.Identity.IsAuthenticated)
+                if (loggedIn)
                 {
-                    <div class="dropdown">
-                        <button class="dropbtn">User Menu</button>
-                        <div class="dropdown-content">
-                            <a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUserId">Your profile</a>
-                            <a asp-controller="Users" asp-action="Logout">Logout</a>
-                        </div>
-                    </div>
+                    <div>
+                        <img style="width:50px;height:auto;margin-bottom:20px;margin-top:20px"
+                             src="/ProfilePictures/@profilePicName" class="appProfilePicture" /></div>
+                    if (this.ViewData["Title"].ToString() != "Profile")
+                    {
+                        <div><a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUserId">Your profile</a></div>
+                    }                    
+                    <div><a asp-controller="Users" asp-action="Logout">Logout</a>  </div>
+                                      
                 }
-                else
-                {
-                    <p>Anonynous</p>
-                }
+                
             }
         </div>
 
-        <div class="grid-menu">Menu</div>
+        <div class="grid-menu">Forum stats:</div>
+
         <div class="grid-main">
             @RenderBody()
         </div>
-        <div class="grid-right">Right</div>
-        <div class="grid-footer">
-            <div>
-                <p>
-                    © Copyright Paranormality.com
-                </p>
+
+        <div class="grid-right"></div>
+
+        <div class="grid-footer grid-centered">
+            <div class="grid-centered" style="text-align:center;">
+                © copyright @DateTime.Now.Year Paranormality.com
             </div>
         </div>
     </div>

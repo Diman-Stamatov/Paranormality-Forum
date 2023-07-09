@@ -4,7 +4,7 @@
     this.ViewData["Title"] = "Login";
 }
 
-<div class="appBelowHeader">
+<div class="appBelowHeader" style="color: #FFFF33;">
     @if (ViewData["ErrorMessage"] != null)
     {
         @ViewData["ErrorMessage"]
@@ -12,7 +12,8 @@
     }
 </div>
 <div>
-    <form class="appCentered" asp-controller="Users" asp-action="Login" method="post">
+    <form style="text-align:left;position:absolute; transform: translate(0%, -50%); top:50%;left:44%" 
+    asp-controller="Users" asp-action="Login" method="post">
 
         <div>
             <br>
@@ -30,7 +31,8 @@
         <br />
         <div>
             <input type="submit" value="Login"
-                   class="btn appBtn-outline" style="text-decoration:none">&nbsp
+                   class="btn appBtn-outline" style="text-decoration:none">
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
             <a asp-controller="Users" asp-action="Register"
                type="button" class="btn appBtn-outline" style="text-decoration:none">Register</a>
         </div>
