@@ -1,6 +1,8 @@
 ﻿using ForumSystemTeamFour.Exceptions;
+using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
 using System.Collections.Generic;
@@ -62,6 +64,15 @@ namespace ForumSystemTeamFour.Services
             }
 
             throw new UnauthorizedOperationException(UnauthorizedErrorMessage);
+        }
+
+
+        public List<ThreadResponseDto> FilterBy(int loggedUserId, ThreadQueryParameters filterParameters)
+        {
+            var loggedUser = this.userServices.GetById(loggedUserId);            
+            var filteredThreads = this.threadRepositroy.FilterBy(loggedUser, filterParameters);
+
+            return threadMapper.Map(filteredThreads);
         }
 
         public List<ThreadResponseDto> GetAll()

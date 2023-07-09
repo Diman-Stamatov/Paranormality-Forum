@@ -34,6 +34,28 @@ namespace ForumSystemTeamFour.Controllers.API
             this.threadService = threadService;
             this.securityServices = securityServices;
         }
+
+        [Authorize]
+        [HttpGet("")]
+        public IActionResult FilterUsers([FromQuery] ThreadQueryParameters filterParameters)
+        {
+            try
+            {
+                int loggedUserId = LoggedUserIdFromClaim();
+
+                List<ThreadResponseDto> filterResult = threadService.FilterBy(loggedUserId, filterParameters);
+                return StatusCode(StatusCodes.Status200OK, filterResult);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, exception.Message);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, exception.Message);
+            }
+        }
+
         [Authorize]
         [HttpPost("")]
         public IActionResult CreateThread([FromBody] ThreadCreateDto threadCreateDto)

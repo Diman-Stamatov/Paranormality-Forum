@@ -10,6 +10,8 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
     {
         public Thread Create(Thread thread);
 
+        List<Thread> FilterBy(User loggedUser, ThreadQueryParameters filterParameters);
+
         public Thread Update(Thread threadToUpdate, Thread updatedThread);
 
         public Thread Delete(Thread thread);

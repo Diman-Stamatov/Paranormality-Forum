@@ -10,6 +10,7 @@ namespace ForumSystemTeamFour.Services.Interfaces
 {
     public interface IThreadService
     {
+        List<ThreadResponseDto> FilterBy(int loggedUserId, ThreadQueryParameters filterParameters);
         public ThreadResponseDto Create(ThreadCreateDto threadCreateDto, int loggedUserId);
 
         public ThreadResponseDto Update(int id, ThreadUpdateDto threadUpdateDto, int loggedUserId);

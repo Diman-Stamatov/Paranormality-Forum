@@ -29,15 +29,22 @@ namespace ForumSystemTeamFour.Mappers
             };
         }
 
+
         public ThreadResponseDto Map(Thread thread)
-        {            
+        {
             return new ThreadResponseDto
             {
-                
+
                 Title = thread.Title,
                 CreationDate = DateTime.Now,
                 ModificationDate = thread.ModificationDate,
-                Author = thread.Author.Username,
+                Author = new UserResponseDto
+                {
+                    FirstName = thread.Author.FirstName,
+                    LastName = thread.Author.LastName,
+                    Username = thread.Author.Username,
+                    Email = thread.Author.Email,
+                },
                 Content = thread.Content,
                 Replies = ReplyMapper.Map(thread.Replies),
                 Likes = thread.Votes.Count(v => v.VoteType == VoteType.Like),
