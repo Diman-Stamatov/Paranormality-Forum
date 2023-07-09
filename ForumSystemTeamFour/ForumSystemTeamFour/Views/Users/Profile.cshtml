@@ -1,8 +1,6 @@
-﻿
-@model User;
+﻿@model User;
 @{
-    this.ViewData["Title"] = "Profile";
-    string loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+    this.ViewData["Title"] = "Profile";    
     string loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
     bool ownProfile = loggedUsername == Model.Username;
 
@@ -19,14 +17,31 @@
 
 <div class="user-profile">
     <div class="appBelowHeader">
+        <div style="color: #FFFF33;">
+            @if (ViewData["ErrorMessage"] != null)
+            {
+                @ViewData["ErrorMessage"]
+                ;
+            }
+        </div>
         @welcomeMessage
         <div>
             <img src="/ProfilePictures/@profilePicName" class="appProfilePicture" />
         </div>
         @statsMessage<br />
         Threads created: @totalThreads<br />
-        Total posts: @totalPosts <br />
+        Total posts: @totalPosts
+        @if (ownProfile)
+        {
+            <div style="position:absolute; top:120%; left:22%">
+                <a asp-controller="Users" asp-action="Update" asp-route-id="@loggedUsername"
+                   type="button" class="btn appBtn-outline" style="text-decoration:none">Edit profile</a>
+            </div>
+        }
+        
     </div>
+
+    
 
     
     <div class="appAboveFooter">

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using ForumSystemTeamFour.Mappers.Interfaces;
 using System;
 using ForumSystemTeamFour.Services;
+using System.Linq;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
@@ -25,12 +26,13 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
         [Authorize]
         [HttpGet]
-        public IActionResult Profile([FromRoute] int id)
+        public IActionResult Profile([FromRoute] string id)
         {
             try
             {
-                var specifiedUser = UserServices.GetById(id);
-                return this.View(specifiedUser);
+                var profileOwner = UserServices.GetByUsername(id);               
+                
+                return this.View(profileOwner);
             }
             catch (EntityNotFoundException exception)
             {
@@ -38,8 +40,64 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
                 this.ViewData["ErrorMessage"] = exception.Message;
                 return this.View("Error404");
+            }            
+        }
+        
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult Update([FromRoute] string id)
+        {
+            var originalUserData = UserServices.GetByUsername(id);
+            var userUpdateVM = new UserUpdateVM(originalUserData);
+            return this.View("Update", userUpdateVM);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Update([FromRoute] string id, UserUpdateVM userUpdateVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                
+                return this.View(userUpdateVM);
+            }
+            if (userUpdateVM.Password != userUpdateVM.ConfirmPassword)
+            {
+                this.ModelState.AddModelError("Password", "The provided passwords do not match!");
+                return this.View(userUpdateVM);
+            }
+
+            try
+            {
+                int loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
+                var userToUpdate = UserServices.GetByUsername(id);
+                var userUpdateDTO = UserMapper.Map(userUpdateVM);
+                var updatedUser = UserServices.Update(loggedUserId, userToUpdate.Id, userUpdateDTO);
+            }
+            catch (DuplicateEntityException exception)
+            {
+                this.ViewData["ErrorMessage"] = exception.Message;
+                this.HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                return this.View(userUpdateVM);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                
+                this.ViewData["ErrorMessage"] = exception.Message;
+                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                return this.View(userUpdateVM);
             }
             
+            catch (UnauthorizedAccessException exception)
+            {
+                this.ViewData["ErrorMessage"] = exception.Message;
+                this.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return this.View(userUpdateVM);                
+            }
+
+            return RedirectToAction("Profile", "Users", new { id = id });
+
         }
 
         [AllowAnonymous]
@@ -80,6 +138,10 @@ namespace ForumSystemTeamFour.Controllers.MVC
             return RedirectToAction("Login", "Users");
 
         }
+
+       
+
+        
 
         [AllowAnonymous]
         [HttpGet]

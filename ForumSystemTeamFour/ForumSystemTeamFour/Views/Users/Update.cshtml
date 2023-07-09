@@ -1,18 +1,19 @@
 ﻿
-@model UserCreateVM;
+@model UserUpdateVM
 @{
-    this.ViewData["Title"] = "Register";
+    this.ViewData["Title"] = "Update";
+    bool isAdmin = User.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin").Value == "True";
+    string loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
 }
 
 <div class="appBelowHeader" style="color: #FFFF33;">
     @if (ViewData["ErrorMessage"] != null)
     {
-        @ViewData["ErrorMessage"]
-        ;
+        @ViewData["ErrorMessage"];
     }
 </div>
 <div style="text-align:left;position:absolute; transform: translate(0%, -50%); top:60%;left:44%">
-    <form  asp-controller="Users" asp-action="Register" method="post">
+    <form asp-controller="Users" asp-action="Update" method="post">
         <div>
             <label asp-for="FirstName">First name:</label><br>
             <input asp-for="FirstName" type="text" value="@Model.FirstName" placeholder="John">
@@ -28,11 +29,7 @@
             <input asp-for="Email" type="text" value="@Model.Email" placeholder="John@Doe.com">
             <span asp-validation-for="Email" class="form-error" style="color:#FFFF33;"></span>
         </div>
-        <div>
-            <label asp-for="Username">Username:</label><br>
-            <input asp-for="Username" type="text" value="@Model.Username" placeholder="Doejon69">
-            <span asp-validation-for="Username" class="form-error" style="color:#FFFF33;"></span>
-        </div>
+        
         <div>
             <label asp-for="Password">Password:</label><br>
             <input asp-for="Password" type="password" value="@Model.Password" placeholder="123">
@@ -43,12 +40,23 @@
             <input asp-for="ConfirmPassword" type="password" value="@Model.ConfirmPassword" placeholder="123">
             <span asp-validation-for="ConfirmPassword" class="form-error" style="color:#FFFF33;left:10%;"></span>
         </div>
+        @if (isAdmin)
+        {
+            <div>
+                <label asp-for="PhoneNumber">Phone number:</label><br>
+                <input asp-for="PhoneNumber" type="text" value="@Model.PhoneNumber" placeholder="0888 123 456 ">
+                <span asp-validation-for="PhoneNumber" class="form-error" style="color:#FFFF33;"></span>
+            </div>
+        }
+            
+            
+        
         <div>
-            <br /><input type="submit" value="Register"
+            <br /><input type="submit" value="Update"
                          class="btn appBtn-outline" style="text-decoration:none">
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            <a asp-controller="Users" asp-action="Login"
-               type="button" class="btn appBtn-outline" style="text-decoration:none">Login</a>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            <a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUser"
+               type="button" class="btn appBtn-outline" style="text-decoration:none">Back</a>
         </div>
 
     </form>

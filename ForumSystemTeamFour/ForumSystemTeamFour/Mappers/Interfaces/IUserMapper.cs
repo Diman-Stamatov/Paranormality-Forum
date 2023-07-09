@@ -10,6 +10,7 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
         User Map(UserCreateDto userDto);
         UserCreateDto Map(UserCreateVM userVM);
         UserResponseDto Map(User user);
+        UserUpdateDto Map(UserUpdateVM updatedUser);
         List<UserResponseDto> Map(List<User> users);
     }
 }

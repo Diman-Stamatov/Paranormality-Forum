@@ -33,7 +33,7 @@ namespace ForumSystemTeamFour.Models.ViewModels
         [MaxLength(40)]
         public string Password { get; set; }
 
-        
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please confirm your Password!")]
         [MinLength(10, ErrorMessage = "Your Password must be at least {1} characters long!")]
         [MaxLength(40)]
         public string ConfirmPassword { get; set; }

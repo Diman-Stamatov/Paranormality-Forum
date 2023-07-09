@@ -53,6 +53,18 @@ namespace ForumSystemTeamFour.Mappers
                 IsBlocked = user.IsBlocked,
             };
         }
+
+        public UserUpdateDto Map(UserUpdateVM updatedUser)
+        {
+            return new UserUpdateDto
+            {
+                FirstName = updatedUser.FirstName,
+                LastName = updatedUser.LastName,
+                Email = updatedUser.Email,
+                Password = updatedUser.Password,
+                PhoneNumber = updatedUser.PhoneNumber
+            };
+        }
         public List<UserResponseDto> Map(List<User> users)
         {
             var mappedUsers = new List<UserResponseDto>();
@@ -63,6 +75,8 @@ namespace ForumSystemTeamFour.Mappers
             }
             return mappedUsers;
         }
+
+
         
     }
     
