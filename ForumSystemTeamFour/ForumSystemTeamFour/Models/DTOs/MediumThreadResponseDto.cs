@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using ForumSystemTeamFour.Models.DTOs.UserDTOs;
 
 namespace ForumSystemTeamFour.Models.DTOs
 {

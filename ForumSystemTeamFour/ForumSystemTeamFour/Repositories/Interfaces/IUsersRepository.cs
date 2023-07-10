@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ForumSystemTeamFour.Models;
-using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.DTOs.UserDTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 
 namespace ForumSystemTeamFour.Repositories.Interfaces

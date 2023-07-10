@@ -1,20 +1,21 @@
 ﻿using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
-using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.DTOs.UserDTOs;
 using ForumSystemTeamFour.Models.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ForumSystemTeamFour.Mappers
 {
     public class UserMapper : IUserMapper
     {
-        private readonly IThreadMapper ThreadMapper; 
+        private readonly ITagMapper TagMapper; 
         
         public UserMapper()
         { }
-        public UserMapper(IThreadMapper threadMapper)
+        public UserMapper(ITagMapper tagMapper)
         {
-            this.ThreadMapper = threadMapper;
+            this.TagMapper = tagMapper;
         }
 
         public User Map(UserCreateDto userDto) 
@@ -48,7 +49,7 @@ namespace ForumSystemTeamFour.Mappers
                 LastName = user.LastName,
                 Email = user.Email,
                 Username = user.Username,
-                Threads = ThreadMapper.MapForUser(user.Threads),
+                Threads = this.MapThreadsForUser(user.Threads),
                 IsAdmin = user.IsAdmin,
                 IsBlocked = user.IsBlocked,
             };
@@ -76,9 +77,23 @@ namespace ForumSystemTeamFour.Mappers
             return mappedUsers;
         }
 
+        public List<UserThreadResponseDto> MapThreadsForUser(List<Thread> threads)
+        {
+            var returnList = new List<UserThreadResponseDto>();
+            foreach (var thread in threads)
+            {
+                var mappedThread = new UserThreadResponseDto
+                {
+                    Title = thread.Title,
+                    CreationDate = thread.CreationDate.ToString(),
+                    Author = thread.Author.Username,
+                    NumberOfReplies = thread.Replies.Count,
+                    Tags = TagMapper.Map(thread.Tags)
+                };
+                returnList.Add(mappedThread);
+            }
+            return returnList;
+        }
 
-        
     }
-    
-    
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ForumSystemTeamFour.Models.DTOs
+namespace ForumSystemTeamFour.Models.DTOs.UserDTOs
 {
     public class UserThreadResponseDto
     {

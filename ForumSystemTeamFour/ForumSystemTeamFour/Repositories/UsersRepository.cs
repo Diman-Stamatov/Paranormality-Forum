@@ -4,7 +4,7 @@ using System.Linq;
 using ForumSystemTeamFour.Data;
 using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Models;
-using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.DTOs.UserDTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,5 @@
 ﻿using ForumSystemTeamFour.Exceptions;
+using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -10,11 +11,11 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
     public class HomeController : Controller
     {
-        private readonly IThreadService ThreadService;
+        private readonly IThreadRepositroy ThreadRepository;
 
-        public HomeController(IThreadService threadService)
+        public HomeController(IThreadRepositroy threadRepository)
         {
-            this.ThreadService = threadService;
+            this.ThreadRepository = threadRepository;
         }
 
         [AllowAnonymous]
@@ -26,7 +27,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 if (!User.Identity.IsAuthenticated)
                 {
 
-                    var threads = this.ThreadService.GetAll().OrderBy(thread => thread.Replies).ToList();
+                    var threads = this.ThreadRepository.GetAll().OrderBy(thread => thread.Replies.Count).ToList();
                     return this.View("AnonymousHome", threads);
                 }
                 else

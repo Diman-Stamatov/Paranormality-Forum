@@ -1,7 +1,7 @@
-﻿using ForumSystemTeamFour.Models.DTOs;
-using ForumSystemTeamFour.Models;
+﻿using ForumSystemTeamFour.Models;
 using System.Collections.Generic;
 using ForumSystemTeamFour.Models.ViewModels;
+using ForumSystemTeamFour.Models.DTOs.UserDTOs;
 
 namespace ForumSystemTeamFour.Mappers.Interfaces
 {
@@ -12,5 +12,6 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
         UserResponseDto Map(User user);
         UserUpdateDto Map(UserUpdateVM updatedUser);
         List<UserResponseDto> Map(List<User> users);
+        List<UserThreadResponseDto> MapThreadsForUser(List<Thread> threads);
     }
 }

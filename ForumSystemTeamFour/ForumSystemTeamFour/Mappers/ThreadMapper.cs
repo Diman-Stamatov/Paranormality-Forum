@@ -90,22 +90,6 @@ namespace ForumSystemTeamFour.Mappers
                                                             threads.PageNumber);
         }
 
-        public UserThreadResponseDto MapForUser(Thread thread)
-        {
-            return new UserThreadResponseDto
-            {
-                Title = thread.Title,
-                CreationDate = thread.CreationDate.ToString(),
-                Author = thread.Author.Username,
-                NumberOfReplies = thread.Replies.Count,
-                Tags = TagMapper.Map(thread.Tags)
-            };
-        }
-
-        public List<UserThreadResponseDto> MapForUser(List<Thread> threads)
-        {
-            var x = threads.Select(this.MapForUser).ToList();
-            return x;
-        }
+        
     }
 }

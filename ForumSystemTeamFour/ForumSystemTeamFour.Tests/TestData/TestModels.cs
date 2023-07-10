@@ -20,7 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static ForumSystemTeamFour.Models.Enums.VoteType;
-
+using ForumSystemTeamFour.Models.DTOs.UserDTOs;
 
 namespace ForumSystemTeamFour.Tests.TestData
 {
@@ -709,8 +709,7 @@ namespace ForumSystemTeamFour.Tests.TestData
                 .Returns(GetTestDefaultThread());
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<List<Models.Thread>>()))
                 .Returns(GetTestListOfThreadResponseDto(3));
-            mockMapper.Setup(mapper => mapper.MapForUser(It.IsAny<List<Models.Thread>>()))
-                .Returns(GetTestListOfUserThreadResponseDto(3));
+            
 
             return mockMapper;
         }

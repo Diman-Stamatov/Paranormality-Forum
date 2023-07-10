@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ForumSystemTeamFour.Models.DTOs
+namespace ForumSystemTeamFour.Models.DTOs.UserDTOs
 {
     public class UserCreateDto
     {

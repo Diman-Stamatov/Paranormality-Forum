@@ -66,13 +66,15 @@ namespace ForumSystemTeamFour
             builder.Services.AddScoped<ITagServices, TagServices>();
             builder.Services.AddScoped<IReplyService, ReplyService>();
             builder.Services.AddScoped<IThreadService, ThreadService>();
-            
+
             // Helpers
+            builder.Services.AddScoped<ITagMapper, TagMapper>();
             builder.Services.AddScoped<IUserMapper, UserMapper>();
-            builder.Services.AddScoped<ISecurityServices, SecurityServices>();
+            
             builder.Services.AddScoped<IReplyMapper, ReplyMapper>();
             builder.Services.AddScoped<IThreadMapper, ThreadMapper>();
-            
+            builder.Services.AddScoped<IThreadVoteMapper, ThreadVoteMapper>();
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {

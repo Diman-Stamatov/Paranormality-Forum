@@ -1,7 +1,7 @@
 ﻿using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
-using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.DTOs.UserDTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;

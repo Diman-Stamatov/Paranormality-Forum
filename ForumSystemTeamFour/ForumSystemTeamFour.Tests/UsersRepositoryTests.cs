@@ -3,7 +3,7 @@ using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories;
-using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.DTOs.UserDTOs;
 using ForumSystemTeamFour.Services;
 using ForumSystemTeamFour.Tests.TestData;
 using Microsoft.EntityFrameworkCore;
