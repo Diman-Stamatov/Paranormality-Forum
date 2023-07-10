@@ -24,10 +24,16 @@ namespace ForumSystemTeamFour.Data
         {
             base.OnModelCreating(modelBuilder);
 
+
+            Random random = new Random();                       
+            int nextUserId = 1;
+            int nextThreadId = 1;
+            int nextReplyId = 1;
+
             var users = new List<User>() 
             {
                 new User {
-                Id = 1,
+                Id = nextUserId++,
                 FirstName = "FirstNameOne",
                 LastName = "LastNameOne",
                 Username = "UsernameOne",
@@ -36,7 +42,7 @@ namespace ForumSystemTeamFour.Data
                 IsAdmin = true 
                 },
                 new User {
-                Id = 2,
+                Id = nextUserId++,
                 FirstName = "FirstNameTwo",
                 LastName = "LastNameTwo",
                 Username = "UsernameTwo",
@@ -45,7 +51,7 @@ namespace ForumSystemTeamFour.Data
                 IsBlocked = true 
                 },
                 new User {
-                Id = 3,
+                Id = nextUserId++,
                 FirstName = "FirstNameThree",
                 LastName = "LastNameThree",
                 Username = "UsernameThree",
@@ -53,7 +59,7 @@ namespace ForumSystemTeamFour.Data
                 Password = "cGFzc3dvcmRUaHJlZQ==" //passwordThree in plain text etc.
                 },
                 new User {
-                Id = 4,
+                Id = nextUserId++,
                 FirstName = "FirstNameFour",
                 LastName = "LastNameFour",
                 Username = "UsernameFour",
@@ -61,7 +67,7 @@ namespace ForumSystemTeamFour.Data
                 Password = "cGFzc3dvcmRGb3Vy"
                 },
                 new User {
-                Id = 5,
+                Id = nextUserId++,
                 FirstName = "FirstNameFive",
                 LastName = "LastNameFive",
                 Username = "UsernameFive",
@@ -87,21 +93,34 @@ namespace ForumSystemTeamFour.Data
             var threads = new List<Thread>()
             {
                 new Thread {
-                Id = 1,
-                AuthorId = 2,
+                Id = nextThreadId++,
+                AuthorId = random.Next(1,6), //Random UserId
                 Title = "First lol",
-                CreationDate = DateTime.Now.AddMinutes(1),
-                Content = "Hey guys, check out this cool new forum I found!"
+                CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)), //random before/after 2 months in minutes  
+            Content = "Hey guys, check out this cool new forum I found!"
                 },
                 new Thread {
-                Id = 2,
-                AuthorId = 1,
+                Id = nextThreadId++,
+                AuthorId = random.Next(1,6),
                 Title = "Welcome to Paranormality.",
-                CreationDate = DateTime.Now.AddMinutes(2),
+                CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)),
                 Content = "This is not a forum for the faint of heart." +
                             " If you need something to get started with, see the pinned threads for some basic resources." +
                             " We hope you enjoy your venture into the spooks, the creeps and the unknown."
-                }
+                },
+                new Thread {
+                Id = nextThreadId++,
+                AuthorId = random.Next(1,6),
+                Title = "How have you accepted death?No matter what happens to us did you find peace?",
+                CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)),
+                Content = "I'm 30 years old, while I do have plenty of time left to enjoy my life, " +
+                "I'm much more aware of my mortality more than ever. I miss being a kid and a teenager, " +
+                "back when I was free spirited and ignorant on this subject. I will never be satisfied with any " +
+                "theories on what happens after death, I believe there is a soul and something happens to us and " +
+                "that's about it. I just hope if I die of old age, it's in my sleep and it's quick. I'm just afraid " +
+                "knowing it's a one way ticket and there's no refunds when my time is up. I am envious of people who have " +
+                "NDEs, they come back completely different people, it's irrelevant if it's real or a hallucination."
+                },
             };
             modelBuilder.Entity<Thread>().HasData(threads);
 
@@ -126,10 +145,10 @@ namespace ForumSystemTeamFour.Data
             var replies = new List<Reply>()
             {
                  new Reply {
-                Id = 1,
-                AuthorId = 1,
+                Id = nextReplyId++,
+                AuthorId = random.Next(1,6),
                 ThreadId = 2,
-                CreationDate = DateTime.Now.AddMinutes(3),
+                CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)),
                 Content = "Some of these lists are still a work in progress, as of this writing." +
                 "\n\nFilm Recommendations" +
                 "\n\nGame Recommendations" +
@@ -139,17 +158,64 @@ namespace ForumSystemTeamFour.Data
                 "\n\nYouTube Videos & Channels"
                 },
                 new Reply{
-                Id = 2,
-                AuthorId = 1,
+                Id = nextReplyId++,
+                AuthorId = random.Next(1,6),
                 ThreadId = 2,
-                CreationDate = DateTime.Now.AddMinutes(4),
+                CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)),
                 Content = "Please note the following:\n\n" +
                 "• This forum desires high quality discussion. High quality posts will be praised.\n\n" +
                 " Low quality posts e.g. \"Is this paranormal?\" or " +
                 "\"I am [insert paranormal entity here] ask me anything,\" etc. will be removed.\n\n" +
                 "• Conspiracy theories are welcome, but please refrain from overly political discussions." +
                 "• For everything else, refer to global and thread-specific rules."
-                }
+                },
+                new Reply{
+                Id = nextReplyId++,
+                AuthorId = random.Next(1,6),
+                ThreadId = 2,
+                CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)),
+                Content = "Please note the following:\n\n" +
+                "• This forum desires high quality discussion. High quality posts will be praised.\n\n" +
+                " Low quality posts e.g. \"Is this paranormal?\" or " +
+                "\"I am [insert paranormal entity here] ask me anything,\" etc. will be removed.\n\n" +
+                "• Conspiracy theories are welcome, but please refrain from overly political discussions." +
+                "• For everything else, refer to global and thread-specific rules."
+                },
+                new Reply{
+                Id = nextReplyId++,
+                AuthorId = random.Next(1,6),
+                ThreadId = 3,
+                CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)),
+                Content = "It just is. I will die sooner or later and there is nothing I can do about it. Why fret over the inevitable? I can't worry myself into immortality."
+                },
+                new Reply{
+                Id = nextReplyId++,
+                AuthorId = random.Next(1,6),
+                ThreadId = 3,
+                CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)),
+                Content = "both paths are correct\r\nboth the one that insists they're the sole path, and the one that says all paths lead to the same place\r\nthey are two sides to the same coin, and they come in go in intervals. Find the truth that feels right, that's the only way, for it is love.\r\nThere could be a pool of non-reincarnated people, deciding if either Jesus or Buddha is correct, for example. Doesn't matter"
+                },
+                new Reply{
+                Id = nextReplyId++,
+                AuthorId = random.Next(1,6),
+                ThreadId = 3,
+                CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)),
+                Content = "idk it’s gonna sound like bullshit but I understood I was going to die at 7 years old and prayed to God it would happen right then. it’s one of my fondest childhood memories.\r\n\r\ndesu I’m excited for it because it’s a total unknown. I’m in my 30s too and life has become exceedingly droll, and it already was to some extent as a 7 year old. just the same tired old spectacular tragedies playing out over and over, the world turning and turning, the sun burning and burning. it’s all so tedious. in death I place my hope that something will truly change. even if I am reincarnated or sent to hell or heaven or whatever, at least it’s not this same messy life that seems to get messier as the years separate me from my good sense\r\n\r\nit helps to accept the unknown that comes after death when you accept that you don’t actually know anything about life either; we all just hop aboard the big lie to cope"
+                },
+                new Reply{
+                Id = nextReplyId++,
+                AuthorId = random.Next(1,6),
+                ThreadId = 3,
+                CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)),
+                Content = "I made sure to do (almost) all the things I wanted to do, so I wouldn’t feel regret when death comes, if for some reason it comes slowly enough to contemplate it."
+                },
+                new Reply{
+                Id = nextReplyId++,
+                AuthorId = random.Next(1,6),
+                ThreadId = 3,
+                CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)),
+                Content = "Pursue the sublime OP. I used to be quite existentially dreadful and suffer but I've learned to accept through wonderful sights that there is little we know and even less we understand. There's too much weird shit going on to be just a single act by my reckoning. There's something going on between time and space and beyond time and space, and the solace I imagine in regards to my death is to be privy to the secrets that cannot be shared. Perhaps I am delusional, and perhaps God has a punchline on the otherside. For the time being, we're actors in a wonderfully strange play, and you even get to choose your parts if you're careful."
+                },
             };
             modelBuilder.Entity<Reply>().HasData(replies);
 

@@ -56,10 +56,10 @@
                             
                                 <td>@thread.Title</td>
                                 <td>@thread.Replies.Count()</td>
-                                <td>@thread.Author</td>
+                                <td>@thread.Author.Username</td>
                                 @if (latestReply != null)
                                 {
-                                    <td>@latestReply.CreationDate</td>
+                                    <td>@latestReply.CreationDate.ToString("g")</td>
                                 }
                                 else
                                 {
