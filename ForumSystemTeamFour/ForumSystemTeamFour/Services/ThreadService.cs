@@ -83,7 +83,6 @@ namespace ForumSystemTeamFour.Services
         {
             var allThreads = this.threadRepositroy.GetAll();
             var result = this.threadMapper.Map(allThreads);
-            int a = 1;
             return result;
         }
 
