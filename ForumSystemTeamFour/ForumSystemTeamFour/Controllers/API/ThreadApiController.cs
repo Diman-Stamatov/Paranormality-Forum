@@ -36,7 +36,7 @@ namespace ForumSystemTeamFour.Controllers.API
         }
 
         [Authorize]
-        [HttpGet("")]
+        [HttpGet("filter")]
         public IActionResult FilterBy([FromQuery] ThreadQueryParameters filterParameters)
         {
             try
