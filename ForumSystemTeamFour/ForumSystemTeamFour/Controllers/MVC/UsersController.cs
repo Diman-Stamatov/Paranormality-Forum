@@ -11,6 +11,7 @@ using System.Linq;
 using System.Web;
 using Microsoft.Extensions.Hosting.Internal;
 using System.IO;
+using System.IO.Pipes;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
@@ -107,34 +108,42 @@ namespace ForumSystemTeamFour.Controllers.MVC
         [HttpGet]
         public IActionResult UploadPicture()
         {
-            return this.View(new ProfilePicVM());
+            var newProfilePic = new ProfilePicVM();
+            return this.View(newProfilePic);
         }
 
         [Authorize]
         [HttpPost]
         public IActionResult UploadPicture(ProfilePicVM picture)
-        {
-            string loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
-            picture.FileName = $"{loggedUsername}.jpg";
-            // do other validations on your model as needed
-            if (picture.ProfilePicture!= null)
+        {       
+            if (!ModelState.IsValid)
             {
-                
-                string savePath = Path.Combine("wwwroot/ProfilePictures",picture.FileName);
-                bool hasProfilePic = System.IO.File.Exists(savePath);
-                if (true)
-                {
-                    System.IO.File.Delete(savePath);
-                    
-                }                
-                picture.ProfilePicture.CopyTo(new FileStream(savePath, FileMode.Create));
-
-                //to do : Save uniqueFileName  to your db table   
+                return this.View(picture);
             }
-            // to do  : Return something
+
+            string loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
+            picture.FileName = $"{loggedUsername}{DateTime.Now.Ticks}.jpg";
+
+            string profilePicDirectory = "wwwroot/ProfilePictures";
+            bool hasProfilePic = Directory.EnumerateFiles(profilePicDirectory, $"{loggedUsername}*").Any();
+
+            if (hasProfilePic)
+            {
+                var directory = new DirectoryInfo(@"wwwroot/ProfilePictures");
+                var fileInfo = directory.GetFiles("*" + loggedUsername + "*.*");
+                string profilePicName = fileInfo[0].Name;
+                string oldProfilePicPath = Path.Combine("wwwroot/ProfilePictures", profilePicName);
+                System.IO.File.Delete(oldProfilePicPath);
+
+            }
+
+            string newPicPath = Path.Combine("wwwroot/ProfilePictures", picture.FileName);
+            using (var fileStream = new FileStream(newPicPath, FileMode.Create)) 
+            {
+                picture.ProfilePicture.CopyTo(fileStream);
+            }
             
-            HttpContext.Response.Headers.Add("Clear-Site-Data", "cache");
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Profile", "Users", new { id = loggedUsername });
         }
         
 

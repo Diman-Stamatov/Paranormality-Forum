@@ -335,3 +335,18 @@ input[type="password"], textarea {
     margin-left: auto;
     margin-right: auto;
 }
+
+
+input[type=file]::file-selector-button {
+    padding:5px;
+    border-color: ghostwhite;
+    background: #212529;
+    border-radius: 20px;
+    color: ghostwhite;
+    cursor: pointer;
+}
+
+    input[type=file]::file-selector-button:hover {
+        background: #3090C7;
+        border-color: ghostwhite;
+    }

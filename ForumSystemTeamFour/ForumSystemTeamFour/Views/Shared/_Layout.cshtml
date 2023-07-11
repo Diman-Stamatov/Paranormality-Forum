@@ -1,12 +1,16 @@
 ﻿@{    
-    string loggedUser = "Anonymous";
+    string loggedUsername = "Anonymous";
     bool loggedIn = User.Identity.IsAuthenticated;
     if (loggedIn)
     {        
-        loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
+        loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
     }
-    bool hasProfilePic = File.Exists($"wwwroot/ProfilePictures/{loggedUser}.jpg");
-    string profilePicName = hasProfilePic ? $"{loggedUser}.jpg" : "default.jpg";
+
+    string profilePicDirectory = "wwwroot/ProfilePictures";
+    bool hasProfilePic = Directory.EnumerateFiles(profilePicDirectory, $"{loggedUsername}*").Any();
+    var directory = new DirectoryInfo(@"wwwroot/ProfilePictures");
+    var fileInfo = directory.GetFiles("*" + loggedUsername + "*.*");
+    string profilePicName = hasProfilePic ? $"{fileInfo[0].Name}" : "default.jpg";
 }
 
 <!DOCTYPE html>
@@ -71,9 +75,11 @@
                                     <div>
                                         <img style="width:50px;height:50px;margin-bottom:20px;margin-top:20px"
                                              src="/ProfilePictures/@profilePicName" class="appProfilePicture" /></div>
-                    if (this.ViewData["Title"].ToString() != "Profile")
+                    if (this.ViewData["Title"].ToString() != "Profile" 
+                    && this.ViewData["Title"].ToString() != "Update profile picture"
+                    && this.ViewData["Title"].ToString() != "Update profile")
                     {
-                                        <div><a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUser">Your profile</a></div>
+                        <div><a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUsername">Your profile</a></div>
                     }                    
                                     <div><a asp-controller="Users" asp-action="Logout">Logout</a>  </div>
                                       

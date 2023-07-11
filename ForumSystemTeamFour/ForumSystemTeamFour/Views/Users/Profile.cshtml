@@ -10,8 +10,12 @@
     string userPostsMessage = ownProfile ? "Show your posts" : $"Show {Model.Username}'s posts";
     int totalThreads = Model.Threads.Count();
     int totalPosts = Model.Replies.Count();
-    bool hasProfilePic = File.Exists($"wwwroot/ProfilePictures/{Model.Username}.jpg");
-    string profilePicName = hasProfilePic ? $"{Model.Username}.jpg" : "default.jpg";
+
+    string profilePicDirectory = "wwwroot/ProfilePictures";
+    bool hasProfilePic = Directory.EnumerateFiles(profilePicDirectory, $"{loggedUsername}*").Any();
+    var directory = new DirectoryInfo(@"wwwroot/ProfilePictures");
+    var fileInfo = directory.GetFiles("*" + loggedUsername + "*.*");
+    string profilePicName = hasProfilePic ? $"{fileInfo[0].Name}" : "default.jpg";
 
 }
 
