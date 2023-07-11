@@ -37,27 +37,27 @@
                         @{
                             if (this.ViewData["Title"].ToString() != "Home")
                             {
-                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                             }
 
                             if (loggedIn)
                             {
                                 if (this.ViewData["Title"].ToString() != "All discussions")
                                 {
-                                    <li><a asp-controller="Threads" asp-action="Index">All discussions</a></li>
+                                                    <li><a asp-controller="Threads" asp-action="Index">All discussions</a></li>
                                 }
                                 if (this.ViewData["Title"].ToString() != "Start topic")
                                 {
-                                    <li><a asp-controller="Threads" asp-action="Create">Start topic</a></li>
+                                                    <li><a asp-controller="Threads" asp-action="Create">Start topic</a></li>
                                 }                                
                             }
                             if (this.ViewData["Title"].ToString() != "About")
                             {
-                                <li><a asp-controller="Home" asp-action="About">About</a></li>
+                                                <li><a asp-controller="Home" asp-action="About">About</a></li>
                             }                            
                             if (loggedIn)
                             {
-                                <li><a href="/api/swagger">API access</a></li>
+                                                <li><a href="/api/swagger">API access</a></li>
                             }
                         }
                     </ul>
@@ -68,14 +68,14 @@
             @{
                 if (loggedIn)
                 {
-                    <div>
-                        <img style="width:50px;height:auto;margin-bottom:20px;margin-top:20px"
-                             src="/ProfilePictures/@profilePicName" class="appProfilePicture" /></div>
+                                    <div>
+                                        <img style="width:50px;height:50px;margin-bottom:20px;margin-top:20px"
+                                             src="/ProfilePictures/@profilePicName" class="appProfilePicture" /></div>
                     if (this.ViewData["Title"].ToString() != "Profile")
                     {
-                        <div><a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUser">Your profile</a></div>
+                                        <div><a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUser">Your profile</a></div>
                     }                    
-                    <div><a asp-controller="Users" asp-action="Logout">Logout</a>  </div>
+                                    <div><a asp-controller="Users" asp-action="Logout">Logout</a>  </div>
                                       
                 }
                 

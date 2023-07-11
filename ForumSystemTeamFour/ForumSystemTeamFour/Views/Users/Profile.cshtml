@@ -28,16 +28,22 @@
         <div>
             <img src="/ProfilePictures/@profilePicName" class="appProfilePicture" />
         </div>
+        <br />
+        @if (ownProfile)
+        {
+            <div>
+                <a asp-controller="Users" asp-action="UploadPicture"
+               type="button" class="btn appBtn-outline" style="text-decoration:none">Change picture</a>
+
+                <a asp-controller="Users" asp-action="Update" asp-route-id="@loggedUsername"
+               type="button" class="btn appBtn-outline" style="text-decoration:none">Edit profile</a>
+            </div>
+            <br />
+        }
         @statsMessage<br />
         Threads created: @totalThreads<br />
         Total posts: @totalPosts
-        @if (ownProfile)
-        {
-            <div style="position:absolute; top:120%; left:22%">
-                <a asp-controller="Users" asp-action="Update" asp-route-id="@loggedUsername"
-                   type="button" class="btn appBtn-outline" style="text-decoration:none">Edit profile</a>
-            </div>
-        }
+        
         
     </div>
 

@@ -8,6 +8,9 @@ using ForumSystemTeamFour.Mappers.Interfaces;
 using System;
 using ForumSystemTeamFour.Services;
 using System.Linq;
+using System.Web;
+using Microsoft.Extensions.Hosting.Internal;
+using System.IO;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
@@ -99,6 +102,41 @@ namespace ForumSystemTeamFour.Controllers.MVC
             return RedirectToAction("Profile", "Users", new { id = id });
 
         }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult UploadPicture()
+        {
+            return this.View(new ProfilePicVM());
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult UploadPicture(ProfilePicVM picture)
+        {
+            string loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
+            picture.FileName = $"{loggedUsername}.jpg";
+            // do other validations on your model as needed
+            if (picture.ProfilePicture!= null)
+            {
+                
+                string savePath = Path.Combine("wwwroot/ProfilePictures",picture.FileName);
+                bool hasProfilePic = System.IO.File.Exists(savePath);
+                if (true)
+                {
+                    System.IO.File.Delete(savePath);
+                    
+                }                
+                picture.ProfilePicture.CopyTo(new FileStream(savePath, FileMode.Create));
+
+                //to do : Save uniqueFileName  to your db table   
+            }
+            // to do  : Return something
+            
+            HttpContext.Response.Headers.Add("Clear-Site-Data", "cache");
+            return RedirectToAction("Index", "Home");
+        }
+        
 
         [AllowAnonymous]
         [HttpGet]

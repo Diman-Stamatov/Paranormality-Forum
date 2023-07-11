@@ -4,6 +4,11 @@
     this.ViewData["Title"] = "Update";
     bool isAdmin = User.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin").Value == "True";
     string loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
+
+    if (loggedUser != Model.Username)
+    {
+        throw new UnauthorizedAccessException("You can only edit your own profile!");
+    } 
 }
 
 <div class="appBelowHeader" style="color: #FFFF33;">

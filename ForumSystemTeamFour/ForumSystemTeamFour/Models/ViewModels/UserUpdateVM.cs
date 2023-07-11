@@ -16,6 +16,8 @@ namespace ForumSystemTeamFour.Models.ViewModels
         [MaxLength(32)]
         public string LastName { get; set; }
 
+        public string Username { get; set; }
+
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please specify an E-mail address!")]
         [EmailAddress(ErrorMessage = "Please specify a valid e-mail address!")]
         public string Email { get; set; }
@@ -42,6 +44,7 @@ namespace ForumSystemTeamFour.Models.ViewModels
         {            
             this.FirstName = user.FirstName;
             this.LastName = user.LastName;
+            this.Username = user.Username;
             this.Email = user.Email;
             this.Password = user.Password;
             this.ConfirmPassword = user.Password;

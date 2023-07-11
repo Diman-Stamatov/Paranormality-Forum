@@ -1,0 +1,13 @@
+﻿@model ProfilePicVM
+@{
+    this.ViewData["Title"] = "Change Profile Picture";
+    
+}
+
+<form asp-controller="Users" asp-action="UploadPicture" enctype="multipart/form-data">
+    
+    <input asp-for="ProfilePicture" />
+
+    <input type="submit" />
+    
+</form>

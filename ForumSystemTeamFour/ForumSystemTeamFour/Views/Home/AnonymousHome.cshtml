@@ -36,7 +36,7 @@
     </div>
     <div> 
         <div style="position: absolute;top: 5%;left: 50%;transform: translate(-50%, 0%);width:70%">
-            <h3 style ="text-align:center;margin-top:15%">Popular discussions:</h3>
+            <h3 style ="text-align:center;margin-top:15%;font-size:2vw">Popular discussions:</h3>
             <table class="table appTable table-hover table-dark">
                 @*ToDo Make each thread title link to the Thread in the table*@
                 <thead>
@@ -47,7 +47,7 @@
                         <th scope="col">Last post:</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody style="font-size:12px">
                     @{
                         foreach (var thread in this.Model)
                         {
@@ -75,9 +75,7 @@
     </div>
 
     <footer>
-        <div style="text-align:center">
-            <a href="/Home/Error404" style="text-align:center;">404</a>
-        </div>
+        
         <div style="text-align:center;padding:10px;margin-top:7px;">            
             © copyright @DateTime.Now.Year Paranormality.com
         </div>
