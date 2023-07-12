@@ -58,6 +58,16 @@ namespace ForumSystemTeamFour.Controllers.MVC
         public IActionResult Create()
         {
             var threadCreateDto = new ThreadCreateDto();
+            try
+            {
+                threadCreateDto.AuthorId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                this.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                this.ViewData["ErrorMessage"] = exception.Message;
+                return RedirectToAction("Login", "Users");
+            }
             threadCreateDto.AuthorId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
             return this.View("Create", threadCreateDto);
         }
@@ -70,11 +80,11 @@ namespace ForumSystemTeamFour.Controllers.MVC
             {
                 return this.View(threadCreateDto);
             }
-
             try
             {
                 int loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
                 var createdThread = this.ThreadServices.Create(threadCreateDto, loggedUserId);
+                return RedirectToAction("Details", new { id = createdThread.Id }); ;
             }
             catch (DuplicateEntityException exception)
             {
@@ -82,7 +92,12 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 this.HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
                 return this.View(threadCreateDto);
             }
-            return RedirectToAction("Index", "Threads");
+            catch (UnauthorizedAccessException exception)
+            {
+                this.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                this.ViewData["ErrorMessage"] = exception.Message;
+                return RedirectToAction("Login", "Users");
+            }
         }
 
         [Authorize]
@@ -122,18 +137,11 @@ namespace ForumSystemTeamFour.Controllers.MVC
             {
                 return this.View(threadUpdateDto);
             }
-
             try
             {
                 int loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
                 var updatedThread = this.ThreadServices.Update(id, threadUpdateDto, loggedUserId);
                 return RedirectToAction("Details", new { id = updatedThread.Id });
-            }
-            catch (DuplicateEntityException exception)
-            {
-                this.ViewData["ErrorMessage"] = exception.Message;
-                this.HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                return this.View(threadUpdateDto);
             }
             catch (EntityNotFoundException exception)
             {
@@ -143,9 +151,9 @@ namespace ForumSystemTeamFour.Controllers.MVC
             }
             catch (UnauthorizedAccessException exception)
             {
-                this.ViewData["ErrorMessage"] = exception.Message;
                 this.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                return this.View(threadUpdateDto);
+                this.ViewData["ErrorMessage"] = exception.Message;
+                return this.View("Error401");
             }
         }
 
@@ -155,7 +163,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             try
             {
-                string loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;                
+                string loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
                 var threadToDelete = this.ThreadServices.Details(id);
                 if (loggedUsername != threadToDelete.Author.Username && !User.IsInRole("Admin"))
                 {
@@ -196,7 +204,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 if (deletedThread.IsDeleted)
                 {
                     throw new EntityNotFoundException("Post can not be found.");
-                }                
+                }
                 return RedirectToAction("Index", "Threads");
             }
             catch (EntityNotFoundException exception)
