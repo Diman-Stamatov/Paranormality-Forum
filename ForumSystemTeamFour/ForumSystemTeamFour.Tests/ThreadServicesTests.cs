@@ -157,11 +157,11 @@ namespace ForumSystemTeamFour.Tests
         [TestMethod]
         public void GetById_ShouldReturnThread_WhenIdIsValid()
         {
-                var mockUserServices = new Mock<IUserServices>();
-                var mockReplyService = new Mock<IReplyService>();
             var mockThreadRepository = new Mock<IThreadRepositroy>();
+                var mockReplyService = new Mock<IReplyService>();
             var mockSecurityServices = new Mock<ISecurityServices>();
                    var mockTagMapper = new Mock<ITagMapper>();
+                var mockUserServices = new Mock<IUserServices>();
                 var mockThreadMapper = TestModels.GetTestThreadMapper();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
@@ -172,7 +172,7 @@ namespace ForumSystemTeamFour.Tests
                                                     mockReplyService.Object);
 
             int threadId = TestModels.DefaultId;
-                      var threadToComape = TestModels.GetTestShortThreadResponseDto();
+                      var threadToComape = TestModels.GetTestDefaultThread();
 
                               var thread = testedServices
                                         .Details(threadId);

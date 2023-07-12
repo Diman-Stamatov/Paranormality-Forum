@@ -636,11 +636,10 @@ namespace ForumSystemTeamFour.Tests.TestData
         {
             return new LargeThreadResponseDto 
             {
+                
                 Title = ValidThreadTitle,
                 Content = ValidThreadContent,
-                isDeleted = false,
-                CreationDate = DateTime.Now,
-                ModificationDate = DateTime.Now,
+                CreationDate = DateTime.Now
 
             };
         }
@@ -717,10 +716,13 @@ namespace ForumSystemTeamFour.Tests.TestData
                 .Returns(GetTestDefaultThread());
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<Models.Thread>()))
                 .Returns(GetTestShortThreadResponseDto());
+            mockMapper.Setup(mapper => mapper.MapLarge(It.IsAny<Models.Thread>()))
+               .Returns(GetTestLargeThreadResponseDto());
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<Models.Thread>(), It.IsAny<ThreadUpdateDto>()))
                 .Returns(GetTestDefaultThread());
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<List<Models.Thread>>()))
                 .Returns(GetTestListOfThreadResponseDto(3));
+           
             
 
             return mockMapper;
