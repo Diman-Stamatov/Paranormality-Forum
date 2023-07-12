@@ -1,13 +1,46 @@
 ﻿@model ProfilePicVM
 @{
-    this.ViewData["Title"] = "Change Profile Picture";
-    
+    this.ViewData["Title"] = "Update profile picture";
+    string loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
+
+    string profilePicDirectory = "wwwroot/ProfilePictures";
+    bool hasProfilePic = Directory.EnumerateFiles(profilePicDirectory, $"{loggedUsername}*").Any();
+    string profilePicName = "Default.jpg";
+    if (hasProfilePic)
+    {
+        var directory = new DirectoryInfo(@"wwwroot/ProfilePictures");
+        var fileInfo = directory.GetFiles("*" + loggedUsername + "*.*");
+        profilePicName = fileInfo[0].Name;
+    }    
 }
+<div class="appBelowHeader">
+    <div>
+        Your current profile picture:<br />
+        <img src="/ProfilePictures/@profilePicName" class="appProfilePicture" />
+    </div><br/>
 
-<form asp-controller="Users" asp-action="UploadPicture" enctype="multipart/form-data">
+    <div >
+        <form asp-controller="Users" asp-action="UploadPicture" enctype="multipart/form-data" >
+            <div>
+                <span asp-validation-for="ProfilePicture" class="form-error" style="color:#FFFF33;"></span>
+                <br />
+                <br />
+                <input asp-for="ProfilePicture" type="file" />
+            </div>
+            <br />
+            <br />
     
-    <input asp-for="ProfilePicture" />
+            <div >
+                
+                <input type="submit" value="Upload"
+                             class="btn appBtn-outline" style="text-decoration:none">
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <a asp-controller="Users" asp-action="Profile" asp-route-id="@loggedUsername"
+                   type="button" class="btn appBtn-outline" style="text-decoration:none">Back</a>
+            </div>
 
-    <input type="submit" />
+        </form>
+    </div>
     
-</form>
+
+</div>

@@ -1,7 +1,7 @@
 ﻿
 @model UserUpdateVM
 @{
-    this.ViewData["Title"] = "Update";
+    this.ViewData["Title"] = "Update profile";
     bool isAdmin = User.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin").Value == "True";
     string loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
 
