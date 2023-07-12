@@ -9,9 +9,9 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
     {
         User Map(UserCreateDto userDto);
         UserCreateDto MapCreateDTO(UserCreateVM userVM);
-        UserResponseDto MapresponseDTO(User user);
-        UserUpdateDto MapUpdateDTO(UserUpdateVM updatedUser);
-        List<UserResponseDto> MapresponseDTOList(List<User> users);
+        UserResponseDto MapResponseDto(User user);
+        UserUpdateDto MapUpdateDTO(UserUpdateVM userUpdateVm);
+        List<UserResponseDto> MapResponseDtoList(List<User> users);
         UserProfileVM MapProfileVM(User user);
         UserUpdateVM MapUpdateVM(User user);
         List<UserThreadResponseDto> MapThreadsForUser(List<Thread> threads);

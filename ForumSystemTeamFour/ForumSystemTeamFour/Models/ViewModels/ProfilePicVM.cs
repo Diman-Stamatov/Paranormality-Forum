@@ -12,7 +12,7 @@ namespace ForumSystemTeamFour.Models.ViewModels
         public string FileName { set; get; }
 
         [Required(ErrorMessage = "Please select a picture!")]
-        [AllowedExtensions(new string[] { ".jpg", ".png" })]
+        [AllowedExtensions(new string[] { ".jpg", ".jpeg", ".png" })]
         [MaxFileSize]
         public IFormFile ProfilePicture { set; get; }
     }

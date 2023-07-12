@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations;
 namespace ForumSystemTeamFour.Models.ViewModels
 {
     public class UserUpdateVM
-    {             
-
+    {            
+       
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please specify a First Name!")]
         [MinLength(4, ErrorMessage = "Your First name must be at least {1} characters long!")]
         [MaxLength(32)]

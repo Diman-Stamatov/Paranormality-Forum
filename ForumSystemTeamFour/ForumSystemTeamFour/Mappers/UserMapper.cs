@@ -41,7 +41,7 @@ namespace ForumSystemTeamFour.Mappers
                 Password = userVM.Password
             };
         }
-        public UserResponseDto MapresponseDTO(User user)
+        public UserResponseDto MapResponseDto(User user)
         {
             return new UserResponseDto
             {
@@ -61,17 +61,18 @@ namespace ForumSystemTeamFour.Mappers
             {
                 FirstName = updatedUser.FirstName,
                 LastName = updatedUser.LastName,
+
                 Email = updatedUser.Email,
                 Password = updatedUser.Password,
                 PhoneNumber = updatedUser.PhoneNumber
             };
         }
-        public List<UserResponseDto> MapresponseDTOList(List<User> users)
+        public List<UserResponseDto> MapResponseDtoList(List<User> users)
         {
             var mappedUsers = new List<UserResponseDto>();
             foreach (var user in users)
             {
-                var mappedUser = this.MapresponseDTO(user);
+                var mappedUser = this.MapResponseDto(user);
                 mappedUsers.Add(mappedUser);
             }
             return mappedUsers;
@@ -88,14 +89,16 @@ namespace ForumSystemTeamFour.Mappers
 
         public UserUpdateVM MapUpdateVM(User user)
         {
-            var profileVM = new UserUpdateVM();
-            profileVM.FirstName = user.FirstName;
-            profileVM.LastName = user.LastName;
-            profileVM.Username = user.Username;
-            profileVM.Email = user.Email;
-            profileVM.Password = user.Password;
-            profileVM.ConfirmPassword = user.Password;
-            profileVM.PhoneNumber = user.PhoneNumber;
+            var profileVM = new UserUpdateVM
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.Username,
+                Email = user.Email,
+                Password = user.Password,
+                ConfirmPassword = user.Password,
+                PhoneNumber = user.PhoneNumber
+            };
             return profileVM;
         }
 

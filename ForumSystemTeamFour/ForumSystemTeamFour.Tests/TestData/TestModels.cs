@@ -303,9 +303,9 @@ namespace ForumSystemTeamFour.Tests.TestData
 
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<UserCreateDto>()))
                 .Returns(GetDefaultUser());
-            mockMapper.Setup(mapper => mapper.MapresponseDTO(It.IsAny<User>()))
+            mockMapper.Setup(mapper => mapper.MapResponseDto(It.IsAny<User>()))
                 .Returns(GetTestUserResponseDto(DefaultId));
-            mockMapper.Setup(mapper => mapper.MapresponseDTOList(It.IsAny<List<User>>()))
+            mockMapper.Setup(mapper => mapper.MapResponseDtoList(It.IsAny<List<User>>()))
                 .Returns(GetTestUserResponseDtoList(3));
 
             return mockMapper;
@@ -347,7 +347,7 @@ namespace ForumSystemTeamFour.Tests.TestData
             var responseDtoList = new List<UserResponseDto>();
             foreach (var user in users)
             {
-                responseDtoList.Add(mapper.MapresponseDTO(user));
+                responseDtoList.Add(mapper.MapResponseDto(user));
             }
 
             return responseDtoList;

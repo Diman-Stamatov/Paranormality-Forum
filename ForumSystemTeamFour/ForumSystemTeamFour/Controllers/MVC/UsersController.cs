@@ -41,7 +41,6 @@ namespace ForumSystemTeamFour.Controllers.MVC
             catch (EntityNotFoundException exception)
             {
                 this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-
                 this.ViewData["ErrorMessage"] = exception.Message;
                 return this.View("Error404");
             }            
@@ -53,8 +52,19 @@ namespace ForumSystemTeamFour.Controllers.MVC
         public IActionResult Update([FromRoute] string id)
         {
             
-            var userUpdateVM = UserServices.GetUserUpdateVM(id);
-            return this.View("Update", userUpdateVM);
+            try
+            {
+                var userUpdateVM = UserServices.GetUserUpdateVM(id);
+                return this.View("Update", userUpdateVM);
+            }
+            catch (EntityNotFoundException exception)
+            {
+
+                this.ViewData["ErrorMessage"] = exception.Message;
+                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                return this.View("Error404");
+            }
+            
         }
 
         [Authorize]
@@ -75,9 +85,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             try
             {
                 int loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
-                var userToUpdate = UserServices.GetByUsername(id);
-                var userUpdateDTO = UserMapper.MapUpdateDTO(userUpdateVM);
-                var updatedUser = UserServices.Update(loggedUserId, userToUpdate.Id, userUpdateDTO);
+                UserServices.Update(loggedUserId, userUpdateVM);
             }
             catch (DuplicateEntityException exception)
             {
@@ -186,10 +194,6 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
         }
 
-       
-
-        
-
         [AllowAnonymous]
         [HttpGet]
         public IActionResult Login()
@@ -229,7 +233,8 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 return this.View(loginVM);
             }
         }
-        [Authorize]
+
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Logout()
         {
