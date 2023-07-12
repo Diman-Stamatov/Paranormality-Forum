@@ -12,6 +12,7 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
         UserResponseDto Map(User user);
         UserUpdateDto Map(UserUpdateVM updatedUser);
         List<UserResponseDto> Map(List<User> users);
+        UserProfileVM MapProfileVM(User user);
         List<UserThreadResponseDto> MapThreadsForUser(List<Thread> threads);
     }
 }

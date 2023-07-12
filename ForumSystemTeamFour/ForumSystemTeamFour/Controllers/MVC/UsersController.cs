@@ -33,9 +33,9 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             try
             {
-                var profileOwner = UserServices.GetByUsername(id);               
+                var profileOwnerVM = UserServices.GetUserProfileVM(id);               
                 
-                return this.View(profileOwner);
+                return this.View(profileOwnerVM);
             }
             catch (EntityNotFoundException exception)
             {

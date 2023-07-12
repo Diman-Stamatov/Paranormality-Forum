@@ -1,4 +1,4 @@
-﻿@model User;
+﻿@model UserProfileVM;
 @{
     this.ViewData["Title"] = "Profile";    
     string loggedUsername = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
@@ -8,8 +8,8 @@
     string statsMessage = ownProfile ? "Your activity history:" : $"{Model.Username}'s activity history:";
     string userThreadsMessage = ownProfile ? "Show your threads" : $"Show {Model.Username}'s threads";
     string userPostsMessage = ownProfile ? "Show your posts" : $"Show {Model.Username}'s posts";
-    int totalThreads = Model.Threads.Count();
-    int totalPosts = Model.Replies.Count();
+    int totalThreads = Model.ThreadsCount;
+    int totalPosts = Model.RepliesCount;
     bool hasProfilePic = File.Exists($"wwwroot/ProfilePictures/{Model.Username}.jpg");
     string profilePicName = hasProfilePic ? $"{Model.Username}.jpg" : "default.jpg";
 

@@ -2,6 +2,7 @@
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs.UserDTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
+using ForumSystemTeamFour.Models.ViewModels;
 
 namespace ForumSystemTeamFour.Services.Interfaces
 {
@@ -10,6 +11,7 @@ namespace ForumSystemTeamFour.Services.Interfaces
         List<UserResponseDto> FilterBy(int loggedUserId, UserQueryParameters filterParameters);
         User GetById(int id);
         User GetByUsername(string username);
+        UserProfileVM GetUserProfileVM(string username);
         UserResponseDto Create(UserCreateDto userDto);
         UserResponseDto Update(int loggedUserId, int idToUpdate, UserUpdateDto updateData);
         UserResponseDto Update(int loggedUserId, string usernameToUpdate, UserUpdateDto updateData);

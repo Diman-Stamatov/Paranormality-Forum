@@ -77,6 +77,15 @@ namespace ForumSystemTeamFour.Mappers
             return mappedUsers;
         }
 
+        public UserProfileVM MapProfileVM(User user)
+        {
+            var profileVM = new UserProfileVM();
+            profileVM.Username = user.Username;
+            profileVM.ThreadsCount = user.Threads.Count;
+            profileVM.RepliesCount = user.Replies.Count;
+            return profileVM;
+        }
+
         public List<UserThreadResponseDto> MapThreadsForUser(List<Thread> threads)
         {
             var returnList = new List<UserThreadResponseDto>();
