@@ -29,6 +29,10 @@
             <input asp-for="LastName" type="text" value="@Model.LastName" placeholder="Doe">
             <span asp-validation-for="LastName" class="form-error" style="color:#FFFF33"></span>
         </div>
+        <div>          
+            <input asp-for="Username" type="text" value="@Model.Username" hidden>
+            
+        </div>
         <div>
             <label asp-for="Email">E-Mail:</label><br>
             <input asp-for="Email" type="text" value="@Model.Email" placeholder="John@Doe.com">

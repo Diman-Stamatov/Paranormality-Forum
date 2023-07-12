@@ -50,7 +50,7 @@ namespace ForumSystemTeamFour.Tests
             var mockUserRepository = GetTestUsersRepository().Object;
             var mockSecurityServices = GetValidAuthenticationTestSecurity().Object;
             var mockUserMapper = GetTestUserMapper();
-            mockUserMapper.Setup(mapper => mapper.Map(It.IsAny<User>()))
+            mockUserMapper.Setup(mapper => mapper.MapResponseDto(It.IsAny<User>()))
             .Returns(GetTestBlockedUserResponseDto());
 
             var testedServices = new UserServices(mockUserRepository, mockSecurityServices, mockUserMapper.Object);
@@ -349,7 +349,7 @@ namespace ForumSystemTeamFour.Tests
             var mockUserRepository = GetTestUsersRepository().Object;
             var mockSecurityServices = GetValidAuthenticationTestSecurity().Object;
             var mockUserMapper = GetTestUserMapper();
-            mockUserMapper.Setup(mapper => mapper.Map(It.IsAny<User>()))
+            mockUserMapper.Setup(mapper => mapper.MapResponseDto(It.IsAny<User>()))
             .Returns(GetTestAdminResponseDto());
 
             var testedServices = new UserServices(mockUserRepository, mockSecurityServices, mockUserMapper.Object);

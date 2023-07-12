@@ -41,7 +41,6 @@ namespace ForumSystemTeamFour.Controllers.MVC
             catch (EntityNotFoundException exception)
             {
                 this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-
                 this.ViewData["ErrorMessage"] = exception.Message;
                 return this.View("Error404");
             }            
@@ -52,9 +51,20 @@ namespace ForumSystemTeamFour.Controllers.MVC
         [HttpGet]
         public IActionResult Update([FromRoute] string id)
         {
-            var originalUserData = UserServices.GetByUsername(id);
-            var userUpdateVM = new UserUpdateVM(originalUserData);
-            return this.View("Update", userUpdateVM);
+            
+            try
+            {
+                var userUpdateVM = UserServices.GetUserUpdateVM(id);
+                return this.View("Update", userUpdateVM);
+            }
+            catch (EntityNotFoundException exception)
+            {
+
+                this.ViewData["ErrorMessage"] = exception.Message;
+                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                return this.View("Error404");
+            }
+            
         }
 
         [Authorize]
@@ -75,9 +85,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             try
             {
                 int loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
-                var userToUpdate = UserServices.GetByUsername(id);
-                var userUpdateDTO = UserMapper.Map(userUpdateVM);
-                var updatedUser = UserServices.Update(loggedUserId, userToUpdate.Id, userUpdateDTO);
+                UserServices.Update(loggedUserId, userUpdateVM);
             }
             catch (DuplicateEntityException exception)
             {
@@ -172,7 +180,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
             try
             {
-                var newUserDto = UserMapper.Map(userCreateVM);
+                var newUserDto = UserMapper.MapCreateDTO(userCreateVM);
                 var createdUser = UserServices.Create(newUserDto);
             }
             catch (DuplicateEntityException exception)
@@ -185,10 +193,6 @@ namespace ForumSystemTeamFour.Controllers.MVC
             return RedirectToAction("Login", "Users");
 
         }
-
-       
-
-        
 
         [AllowAnonymous]
         [HttpGet]
@@ -229,7 +233,8 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 return this.View(loginVM);
             }
         }
-        [Authorize]
+
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Logout()
         {

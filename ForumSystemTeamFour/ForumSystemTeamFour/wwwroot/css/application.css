@@ -178,6 +178,7 @@ li {
 
 
 #messenger {
+
     position: absolute;
     top: 6.75%;
     left: 50.4%;
@@ -188,6 +189,15 @@ li {
     text-shadow: 0 20px 15px black;
     color: ghostwhite;
     letter-spacing: 2vw;
+}
+
+#farewellMessenger {
+    
+    font-family: monospace;
+    font-size: 3.5vw;
+    white-space: nowrap;
+    text-shadow: 0 20px 15px black;
+    color: ghostwhite;    
 }
 
 .appTable {
@@ -307,7 +317,7 @@ a:active {
 .appBelowHeader {
     position: absolute;
     text-align: center;
-    top: 30%;
+    top: 20%;
     left: 50%;
     transform: translate(-50%, 0%);
 }
@@ -330,8 +340,8 @@ input[type="password"], textarea {
 }
 
 .appProfilePicture {
-    height: 170px;       
-    width: 170px;    
+    height: 200px;
+    width: 200px;
     margin-left: auto;
     margin-right: auto;
 }

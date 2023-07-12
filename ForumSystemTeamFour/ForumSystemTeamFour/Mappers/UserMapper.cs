@@ -30,7 +30,7 @@ namespace ForumSystemTeamFour.Mappers
             };
         }
 
-        public UserCreateDto Map(UserCreateVM userVM)
+        public UserCreateDto MapCreateDTO(UserCreateVM userVM)
         {
             return new UserCreateDto
             {
@@ -41,7 +41,7 @@ namespace ForumSystemTeamFour.Mappers
                 Password = userVM.Password
             };
         }
-        public UserResponseDto Map(User user)
+        public UserResponseDto MapResponseDto(User user)
         {
             return new UserResponseDto
             {
@@ -55,23 +55,24 @@ namespace ForumSystemTeamFour.Mappers
             };
         }
 
-        public UserUpdateDto Map(UserUpdateVM updatedUser)
+        public UserUpdateDto MapUpdateDTO(UserUpdateVM updatedUser)
         {
             return new UserUpdateDto
             {
                 FirstName = updatedUser.FirstName,
                 LastName = updatedUser.LastName,
+
                 Email = updatedUser.Email,
                 Password = updatedUser.Password,
                 PhoneNumber = updatedUser.PhoneNumber
             };
         }
-        public List<UserResponseDto> Map(List<User> users)
+        public List<UserResponseDto> MapResponseDtoList(List<User> users)
         {
             var mappedUsers = new List<UserResponseDto>();
             foreach (var user in users)
             {
-                var mappedUser = this.Map(user);
+                var mappedUser = this.MapResponseDto(user);
                 mappedUsers.Add(mappedUser);
             }
             return mappedUsers;
@@ -83,6 +84,21 @@ namespace ForumSystemTeamFour.Mappers
             profileVM.Username = user.Username;
             profileVM.ThreadsCount = user.Threads.Count;
             profileVM.RepliesCount = user.Replies.Count;
+            return profileVM;
+        }
+
+        public UserUpdateVM MapUpdateVM(User user)
+        {
+            var profileVM = new UserUpdateVM
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.Username,
+                Email = user.Email,
+                Password = user.Password,
+                ConfirmPassword = user.Password,
+                PhoneNumber = user.PhoneNumber
+            };
             return profileVM;
         }
 

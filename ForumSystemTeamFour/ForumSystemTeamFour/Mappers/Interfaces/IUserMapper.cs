@@ -8,11 +8,12 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
     public interface IUserMapper
     {
         User Map(UserCreateDto userDto);
-        UserCreateDto Map(UserCreateVM userVM);
-        UserResponseDto Map(User user);
-        UserUpdateDto Map(UserUpdateVM updatedUser);
-        List<UserResponseDto> Map(List<User> users);
+        UserCreateDto MapCreateDTO(UserCreateVM userVM);
+        UserResponseDto MapResponseDto(User user);
+        UserUpdateDto MapUpdateDTO(UserUpdateVM userUpdateVm);
+        List<UserResponseDto> MapResponseDtoList(List<User> users);
         UserProfileVM MapProfileVM(User user);
+        UserUpdateVM MapUpdateVM(User user);
         List<UserThreadResponseDto> MapThreadsForUser(List<Thread> threads);
     }
 }

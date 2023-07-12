@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations;
 namespace ForumSystemTeamFour.Models.ViewModels
 {
     public class UserUpdateVM
-    {             
-
+    {            
+       
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please specify a First Name!")]
         [MinLength(4, ErrorMessage = "Your First name must be at least {1} characters long!")]
         [MaxLength(32)]
@@ -35,22 +35,6 @@ namespace ForumSystemTeamFour.Models.ViewModels
         [MinLength(9, ErrorMessage = "Your Phone number must be at least {1} characters long!")]
         [MaxLength(16)]
         public string PhoneNumber { get; set; }
-
-        public UserUpdateVM()
-        {           
-        }
-
-        public UserUpdateVM(User user)
-        {            
-            this.FirstName = user.FirstName;
-            this.LastName = user.LastName;
-            this.Username = user.Username;
-            this.Email = user.Email;
-            this.Password = user.Password;
-            this.ConfirmPassword = user.Password;
-            this.PhoneNumber = user.PhoneNumber;
-        }
-
 
     }
 }
