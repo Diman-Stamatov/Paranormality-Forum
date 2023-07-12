@@ -52,8 +52,8 @@ namespace ForumSystemTeamFour.Controllers.MVC
         [HttpGet]
         public IActionResult Update([FromRoute] string id)
         {
-            var originalUserData = UserServices.GetByUsername(id);
-            var userUpdateVM = new UserUpdateVM(originalUserData);
+            
+            var userUpdateVM = UserServices.GetUserUpdateVM(id);
             return this.View("Update", userUpdateVM);
         }
 
@@ -76,7 +76,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             {
                 int loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
                 var userToUpdate = UserServices.GetByUsername(id);
-                var userUpdateDTO = UserMapper.Map(userUpdateVM);
+                var userUpdateDTO = UserMapper.MapUpdateDTO(userUpdateVM);
                 var updatedUser = UserServices.Update(loggedUserId, userToUpdate.Id, userUpdateDTO);
             }
             catch (DuplicateEntityException exception)
@@ -172,7 +172,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
             try
             {
-                var newUserDto = UserMapper.Map(userCreateVM);
+                var newUserDto = UserMapper.MapCreateDTO(userCreateVM);
                 var createdUser = UserServices.Create(newUserDto);
             }
             catch (DuplicateEntityException exception)

@@ -30,7 +30,7 @@ namespace ForumSystemTeamFour.Mappers
             };
         }
 
-        public UserCreateDto Map(UserCreateVM userVM)
+        public UserCreateDto MapCreateDTO(UserCreateVM userVM)
         {
             return new UserCreateDto
             {
@@ -41,7 +41,7 @@ namespace ForumSystemTeamFour.Mappers
                 Password = userVM.Password
             };
         }
-        public UserResponseDto Map(User user)
+        public UserResponseDto MapresponseDTO(User user)
         {
             return new UserResponseDto
             {
@@ -55,7 +55,7 @@ namespace ForumSystemTeamFour.Mappers
             };
         }
 
-        public UserUpdateDto Map(UserUpdateVM updatedUser)
+        public UserUpdateDto MapUpdateDTO(UserUpdateVM updatedUser)
         {
             return new UserUpdateDto
             {
@@ -66,12 +66,12 @@ namespace ForumSystemTeamFour.Mappers
                 PhoneNumber = updatedUser.PhoneNumber
             };
         }
-        public List<UserResponseDto> Map(List<User> users)
+        public List<UserResponseDto> MapresponseDTOList(List<User> users)
         {
             var mappedUsers = new List<UserResponseDto>();
             foreach (var user in users)
             {
-                var mappedUser = this.Map(user);
+                var mappedUser = this.MapresponseDTO(user);
                 mappedUsers.Add(mappedUser);
             }
             return mappedUsers;
@@ -83,6 +83,19 @@ namespace ForumSystemTeamFour.Mappers
             profileVM.Username = user.Username;
             profileVM.ThreadsCount = user.Threads.Count;
             profileVM.RepliesCount = user.Replies.Count;
+            return profileVM;
+        }
+
+        public UserUpdateVM MapUpdateVM(User user)
+        {
+            var profileVM = new UserUpdateVM();
+            profileVM.FirstName = user.FirstName;
+            profileVM.LastName = user.LastName;
+            profileVM.Username = user.Username;
+            profileVM.Email = user.Email;
+            profileVM.Password = user.Password;
+            profileVM.ConfirmPassword = user.Password;
+            profileVM.PhoneNumber = user.PhoneNumber;
             return profileVM;
         }
 

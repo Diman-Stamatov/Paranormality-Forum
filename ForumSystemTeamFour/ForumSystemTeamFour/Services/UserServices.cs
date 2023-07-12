@@ -39,13 +39,20 @@ namespace ForumSystemTeamFour.Services
             return profileVM;
         }
 
+        public UserUpdateVM GetUserUpdateVM(string username)
+        {
+            var foundUser = Repository.GetByUsername(username);
+            var profileVM = UserMapper.MapUpdateVM(foundUser);
+            return profileVM;
+        }
+
         public UserResponseDto Block(int loggedUserId, int idToBlock)
         {
             var loggedUser = this.Repository.GetById(loggedUserId);
             ForumSecurity.CheckAdminAuthorization(loggedUser);
             var blockedUser = this.Repository.Block(idToBlock);
 
-            return UserMapper.Map(blockedUser);
+            return UserMapper.MapresponseDTO(blockedUser);
         }
 
         public UserResponseDto Create(UserCreateDto userDto)
@@ -54,7 +61,7 @@ namespace ForumSystemTeamFour.Services
             user.Password = this.ForumSecurity.EncodePassword(userDto.Password);
             var createdUser = this.Repository.Create(user);
 
-            return UserMapper.Map(createdUser);
+            return UserMapper.MapresponseDTO(createdUser);
         }
 
         public UserResponseDto Delete(int loggedUserId, int idToDelete)
@@ -64,7 +71,7 @@ namespace ForumSystemTeamFour.Services
             ForumSecurity.CheckUserAuthorization(loggedUser, userToDelete);
 
             var deletedUser = this.Repository.Delete(userToDelete);
-            return UserMapper.Map(deletedUser);
+            return UserMapper.MapresponseDTO(deletedUser);
         }
 
         public UserResponseDto DemoteFromAdmin(int loggedUserId, int idToDemote)
@@ -73,7 +80,7 @@ namespace ForumSystemTeamFour.Services
             ForumSecurity.CheckAdminAuthorization(loggedUser);
             var demotedUser = this.Repository.DemoteFromAdmin(idToDemote);
 
-            return UserMapper.Map(demotedUser);
+            return UserMapper.MapresponseDTO(demotedUser);
         }
 
         public List<UserResponseDto> FilterBy(int loggedUserId, UserQueryParameters filterParameters)
@@ -81,7 +88,7 @@ namespace ForumSystemTeamFour.Services
             var loggedUser = this.Repository.GetById(loggedUserId);
             var filteredUsers = this.Repository.FilterBy(loggedUser, filterParameters);
 
-            return UserMapper.Map(filteredUsers);
+            return UserMapper.MapresponseDTOList(filteredUsers);
         }        
 
         public UserResponseDto PromoteToAdmin(int loggedUserId, int idToPromote)
@@ -90,7 +97,7 @@ namespace ForumSystemTeamFour.Services
             ForumSecurity.CheckAdminAuthorization(loggedUser);
             var promotedUser = this.Repository.PromoteToAdmin(idToPromote);
 
-            return UserMapper.Map(promotedUser);
+            return UserMapper.MapresponseDTO(promotedUser);
         }
 
         public UserResponseDto Unblock(int loggedUserId, int idToUnblock)
@@ -99,7 +106,7 @@ namespace ForumSystemTeamFour.Services
             ForumSecurity.CheckAdminAuthorization(loggedUser);
             var unblockedUser = this.Repository.Unblock(idToUnblock);
 
-            return UserMapper.Map(unblockedUser);
+            return UserMapper.MapresponseDTO(unblockedUser);
         }
 
         public UserResponseDto Update(int loggedUserId, int idToUpdate, UserUpdateDto updateData)
@@ -109,7 +116,7 @@ namespace ForumSystemTeamFour.Services
             ForumSecurity.CheckUserAuthorization(loggedUser, userToUpdate);
             var updatedUser = this.Repository.Update(userToUpdate, updateData);
 
-            return UserMapper.Map(updatedUser);
+            return UserMapper.MapresponseDTO(updatedUser);
         }
 
         public UserResponseDto Update(int loggedUserId, string usernameToUpdate, UserUpdateDto updateData)
@@ -119,7 +126,7 @@ namespace ForumSystemTeamFour.Services
             ForumSecurity.CheckUserAuthorization(loggedUser, userToUpdate);
             var updatedUser = this.Repository.Update(userToUpdate, updateData);
 
-            return UserMapper.Map(updatedUser);
+            return UserMapper.MapresponseDTO(updatedUser);
         }
     }
 }

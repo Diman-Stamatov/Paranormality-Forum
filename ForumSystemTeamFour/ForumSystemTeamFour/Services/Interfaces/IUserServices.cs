@@ -12,6 +12,7 @@ namespace ForumSystemTeamFour.Services.Interfaces
         User GetById(int id);
         User GetByUsername(string username);
         UserProfileVM GetUserProfileVM(string username);
+        UserUpdateVM GetUserUpdateVM(string username);
         UserResponseDto Create(UserCreateDto userDto);
         UserResponseDto Update(int loggedUserId, int idToUpdate, UserUpdateDto updateData);
         UserResponseDto Update(int loggedUserId, string usernameToUpdate, UserUpdateDto updateData);

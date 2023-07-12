@@ -52,7 +52,7 @@ namespace ForumSystemTeamFour.Mappers
                 Replies = ReplyMapper.Map(thread.Replies),
                 Tags = TagMapper.Map(thread.Tags),
                 Votes = ThreadVoteMapper.Map(thread.Votes),
-                Author = userMapper.Map(thread.Author),
+                Author = userMapper.MapresponseDTO(thread.Author),
             };
         }
 
