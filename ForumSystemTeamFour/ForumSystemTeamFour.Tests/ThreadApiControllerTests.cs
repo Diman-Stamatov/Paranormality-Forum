@@ -12,10 +12,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
-using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Controllers.API;
 using ForumSystemTeamFour.Exceptions;
 using Moq;
+using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 
 namespace ForumSystemTeamFour.Tests
 {

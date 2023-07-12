@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Models;
-using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 
 
@@ -19,6 +19,6 @@ namespace ForumSystemTeamFour.Services.Interfaces
 
         public List<ShortThreadResponseDto> GetAll();
 
-        public ShortThreadResponseDto Details(int id);
+        public LargeThreadResponseDto Details(int id);
     }
 }

@@ -1,9 +1,9 @@
-﻿using ForumSystemTeamFour.Models.DTOs;
-using ForumSystemTeamFour.Models;
+﻿using ForumSystemTeamFour.Models;
 using System.Collections.Generic;
 using System;
 using System.Linq;
 using ForumSystemTeamFour.Models.Enums;
+using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 
 namespace ForumSystemTeamFour.Mappers.Interfaces
 {
