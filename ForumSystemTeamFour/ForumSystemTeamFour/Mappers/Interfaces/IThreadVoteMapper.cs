@@ -1,5 +1,5 @@
 ﻿using ForumSystemTeamFour.Models;
-using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 using System.Collections.Generic;
 
 namespace ForumSystemTeamFour.Mappers.Interfaces

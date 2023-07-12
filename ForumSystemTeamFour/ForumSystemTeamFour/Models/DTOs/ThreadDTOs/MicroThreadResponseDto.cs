@@ -1,4 +1,4 @@
-﻿namespace ForumSystemTeamFour.Models.DTOs
+﻿namespace ForumSystemTeamFour.Models.DTOs.ThreadDTOs
 {
     public class MicroThreadResponseDto
     {

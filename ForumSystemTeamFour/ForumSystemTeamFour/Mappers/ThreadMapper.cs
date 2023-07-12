@@ -1,6 +1,6 @@
 ﻿using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
-using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 using ForumSystemTeamFour.Models.Enums;
 using ForumSystemTeamFour.Models.Interfaces;
 using System;
@@ -40,6 +40,14 @@ namespace ForumSystemTeamFour.Mappers
             };
         }
 
+        public ThreadUpdateDto Map(ShortThreadResponseDto shortThreadResponseDto)
+        {
+            return new ThreadUpdateDto
+            {
+                Title = shortThreadResponseDto.Title,
+                Content = shortThreadResponseDto.Content,
+            };
+        }
         public LargeThreadResponseDto MapLarge(Thread thread)
         {
             return new LargeThreadResponseDto
@@ -69,14 +77,14 @@ namespace ForumSystemTeamFour.Mappers
             return new ShortThreadResponseDto
             {
                 Title = thread.Title,
-                Content = thread.Content,
-                Likes = thread.Votes.Count(v => v.VoteType == VoteType.Like),
-                Dislikes = thread.Votes.Count(v => v.VoteType == VoteType.Dislike),
+                Content = thread.Content,           
                 CreationDate = DateTime.Now,
                 Replies = thread.Replies.Count,
-                Tags = TagMapper.Map(thread.Tags),    
+                Tags = TagMapper.Map(thread.Tags),
+                IsDeleted = thread.IsDeleted,
             };
         }
+
         public List<ShortThreadResponseDto> Map(List<Thread> threads)
         {
             return threads.Select(this.Map).ToList();

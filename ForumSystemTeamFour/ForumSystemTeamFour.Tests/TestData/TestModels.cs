@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static ForumSystemTeamFour.Models.Enums.VoteType;
 using ForumSystemTeamFour.Models.DTOs.UserDTOs;
+using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 
 namespace ForumSystemTeamFour.Tests.TestData
 {
@@ -620,16 +621,27 @@ namespace ForumSystemTeamFour.Tests.TestData
             };
         }
 
-        public static ShortThreadResponseDto GetTestThreadResponseDto()
+        public static ShortThreadResponseDto GetTestShortThreadResponseDto()
         {
             return new ShortThreadResponseDto
             {
                 Title = ValidThreadTitle,
                 Content = ValidThreadContent,
-                Likes = 0,
-                Dislikes = 0,
                 CreationDate = DateTime.Now
                 //ToDo Add list<ReplyReadDto> when test model for Reply is ready 
+            };
+        }
+
+        public static LargeThreadResponseDto GetTestLargeThreadResponseDto()
+        {
+            return new LargeThreadResponseDto 
+            {
+                Title = ValidThreadTitle,
+                Content = ValidThreadContent,
+                isDeleted = false,
+                CreationDate = DateTime.Now,
+                ModificationDate = DateTime.Now,
+
             };
         }
 
@@ -638,7 +650,7 @@ namespace ForumSystemTeamFour.Tests.TestData
             var listOfThreadResponseDto = new List<ShortThreadResponseDto>();
             for (int i = 1; i <= count; i++)
             {
-                listOfThreadResponseDto.Add(GetTestThreadResponseDto());
+                listOfThreadResponseDto.Add(GetTestShortThreadResponseDto());
             }
 
             return listOfThreadResponseDto;
@@ -704,7 +716,7 @@ namespace ForumSystemTeamFour.Tests.TestData
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<ThreadCreateDto>(), It.IsAny<User>()))
                 .Returns(GetTestDefaultThread());
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<Models.Thread>()))
-                .Returns(GetTestThreadResponseDto());
+                .Returns(GetTestShortThreadResponseDto());
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<Models.Thread>(), It.IsAny<ThreadUpdateDto>()))
                 .Returns(GetTestDefaultThread());
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<List<Models.Thread>>()))
@@ -719,15 +731,15 @@ namespace ForumSystemTeamFour.Tests.TestData
             var mockServices = new Mock<IThreadService>();
 
             mockServices.Setup(services => services.Create(It.IsAny<ThreadCreateDto>(), It.IsAny<int>()))
-                .Returns(GetTestThreadResponseDto());
+                .Returns(GetTestShortThreadResponseDto());
             mockServices.Setup(services => services.Update(It.IsAny<int>(), It.IsAny<ThreadUpdateDto>(), It.IsAny<int>()))
-                .Returns(GetTestThreadResponseDto());
+                .Returns(GetTestShortThreadResponseDto());
             mockServices.Setup(services => services.Delete(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(GetTestThreadResponseDto());
+                .Returns(GetTestShortThreadResponseDto());
             mockServices.Setup(services => services.GetAll())
                 .Returns(GetTestListOfThreadResponseDto(0));
             mockServices.Setup(services => services.Details(It.IsAny<int>()))
-                .Returns(GetTestThreadResponseDto());
+                .Returns(GetTestLargeThreadResponseDto());
 
             return mockServices;
         }

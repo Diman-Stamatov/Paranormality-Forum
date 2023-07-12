@@ -2,7 +2,7 @@
 using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
-using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
@@ -86,10 +86,10 @@ namespace ForumSystemTeamFour.Services
             return result;
         }
 
-        public ShortThreadResponseDto Details(int id)
+        public LargeThreadResponseDto Details(int id)
         {
             var thread = this.threadRepositroy.Details(id);            
-            var threadResponseDto = this.threadMapper.Map(thread);
+            var threadResponseDto = this.threadMapper.MapLarge(thread);
             return threadResponseDto;
         }        
     }

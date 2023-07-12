@@ -1,6 +1,6 @@
 ﻿using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Mappers.Interfaces;
-using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services;
 using ForumSystemTeamFour.Services.Interfaces;
@@ -31,7 +31,7 @@ namespace ForumSystemTeamFour.Tests
                                                     mockReplyService.Object);
 
            var testCreateDto = TestModels.GetTestThreadCreateDto();
-            var defaultThread = TestModels.GetTestThreadResponseDto();
+            var defaultThread = TestModels.GetTestShortThreadResponseDto();
   
                     var createdThread = testedServices
                                         .Create(testCreateDto, DefaultId);
@@ -86,7 +86,7 @@ namespace ForumSystemTeamFour.Tests
 
             int IdtoDelete = TestModels.DefaultId;
                     int loggedUserId = TestModels.DefaultId;
-                   var defaultThread = TestModels.GetTestThreadResponseDto();
+                   var defaultThread = TestModels.GetTestShortThreadResponseDto();
 
                     mockUserServices.Setup(service => service
                                     .GetById(It
@@ -172,7 +172,7 @@ namespace ForumSystemTeamFour.Tests
                                                     mockReplyService.Object);
 
             int threadId = TestModels.DefaultId;
-                      var threadToComape = TestModels.GetTestThreadResponseDto();
+                      var threadToComape = TestModels.GetTestShortThreadResponseDto();
 
                               var thread = testedServices
                                         .Details(threadId);

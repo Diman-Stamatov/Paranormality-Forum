@@ -1,17 +1,14 @@
 ﻿using System.Collections.Generic;
 using System;
 
-namespace ForumSystemTeamFour.Models.DTOs
+namespace ForumSystemTeamFour.Models.DTOs.ThreadDTOs
 {
     public class ShortThreadResponseDto
     {
+        public int Id { get; set; }
         public string Title { get; set; }
 
         public string Content { get; set; }
-
-        public int Likes { get; set; }
-
-        public int Dislikes { get; set; }
 
         public DateTime CreationDate { get; set; }
 
@@ -19,6 +16,9 @@ namespace ForumSystemTeamFour.Models.DTOs
 
         public List<string> Tags { get; set; }
 
-        public string Author { get; set; }
+        public int AuthorId { get; set; }
+        public string AuthorUserName { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

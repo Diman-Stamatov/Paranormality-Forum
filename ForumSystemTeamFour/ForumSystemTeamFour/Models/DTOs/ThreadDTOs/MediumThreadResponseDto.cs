@@ -2,7 +2,7 @@
 using System;
 using ForumSystemTeamFour.Models.DTOs.UserDTOs;
 
-namespace ForumSystemTeamFour.Models.DTOs
+namespace ForumSystemTeamFour.Models.DTOs.ThreadDTOs
 {
     public class MediumThreadResponseDto
     {

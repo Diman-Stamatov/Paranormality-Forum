@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace ForumSystemTeamFour.Models.DTOs
+namespace ForumSystemTeamFour.Models.DTOs.ThreadDTOs
 {
     public class ThreadUpdateDto
     {
@@ -13,5 +14,10 @@ namespace ForumSystemTeamFour.Models.DTOs
         [MinLength(32, ErrorMessage = "The {0} must be at least {1} characters long!")]
         [MaxLength(8192, ErrorMessage = "The {0} must be at most {1} characters long!")]
         public string Content { get; set; }
+
+        [Required]
+        public int AuthorId { get; set; }
+
+        public string AuthorUserName { get; set; }
     }
 }
