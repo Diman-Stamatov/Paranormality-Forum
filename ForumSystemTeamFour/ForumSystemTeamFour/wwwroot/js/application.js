@@ -149,7 +149,7 @@ var MessengerTwo = function (el) {
 
         if (do_cycles === true) {
             //How fast the characters change, higher is slower, 120 seems ok
-            setTimeout(m.animateFadeBuffer, 120);
+            setTimeout(m.animateFadeBuffer, 110);
         }
     };
 

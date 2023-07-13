@@ -1,4 +1,6 @@
 ﻿using ForumSystemTeamFour.Exceptions;
+using ForumSystemTeamFour.Models.QueryParameters;
+using ForumSystemTeamFour.Models.ViewModels;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -22,27 +24,15 @@ namespace ForumSystemTeamFour.Controllers.MVC
         [HttpGet]
         public IActionResult Index()
         {
-            try
+            if (!User.Identity.IsAuthenticated)
             {
-                if (!User.Identity.IsAuthenticated)
-                {
-
-                    var threads = this.ThreadRepository.GetAll().OrderByDescending(thread => thread.Replies.Count).Take(10).ToList();
-                    return this.View("AnonymousHome", threads);
-                }
-                else
-                {
-                    
-                    return this.View("UserHome");
-                }
+                var threads = this.ThreadRepository.GetAll().OrderByDescending(thread => thread.Replies.Count).Take(10).ToList();
+                return this.View("AnonymousHome", threads);
             }
-            catch (EntityNotFoundException)
+            else
             {
-
-                return this.View("Error404");
+                return this.View("UserHome");
             }
-           
-            
         }
 
 
@@ -60,5 +50,14 @@ namespace ForumSystemTeamFour.Controllers.MVC
             return this.View("Error401");
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult SortTest()
+        {
+            var viewModel = new ThreadWithRepliesVM();
+            viewModel.Thread = this.ThreadRepository.GetAllByUserId(1).First();
+            viewModel.QueryParameters = new ReplyQueryParameters();
+            return this.View("FilterRepliesTemp", viewModel);
+        }
     }
 }

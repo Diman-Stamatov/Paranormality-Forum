@@ -22,7 +22,7 @@ namespace ForumSystemTeamFour.CustomValidationAttributes
                 var extension = Path.GetExtension(file.FileName);
                 if (!Extensions.Contains(extension.ToLower()))
                 {
-                    return new ValidationResult($"Please upload either a .jpg or a .png file!");
+                    return new ValidationResult($"Please upload either a .jpg, .jpeg or a .png file!");
                 }
             }
 
