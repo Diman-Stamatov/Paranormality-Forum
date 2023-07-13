@@ -48,11 +48,11 @@
                             {
                                 if (this.ViewData["Title"].ToString() != "All discussions")
                                 {
-                                                    <li><a asp-controller="Threads" asp-action="Index">All discussions</a></li>
+                                                    <li><a asp-controller="Thread" asp-action="Index">All discussions</a></li>
                                 }
                                 if (this.ViewData["Title"].ToString() != "Start topic")
                                 {
-                                                    <li><a asp-controller="Threads" asp-action="Create">Start topic</a></li>
+                                                    <li><a asp-controller="Thread" asp-action="Create">Start topic</a></li>
                                 }                                
                             }
                             if (this.ViewData["Title"].ToString() != "About")

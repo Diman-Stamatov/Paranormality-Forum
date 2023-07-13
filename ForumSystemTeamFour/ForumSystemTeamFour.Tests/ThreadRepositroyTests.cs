@@ -90,7 +90,6 @@ namespace ForumSystemTeamFour.Tests
 
             Assert.ThrowsException<EntityNotFoundException>(() => testRepository
                                 .GetAll());
-
         }
 
         [TestMethod]
@@ -170,6 +169,7 @@ namespace ForumSystemTeamFour.Tests
             Assert.AreEqual(updatedThread.Title, resultThread.Title);
             Assert.AreEqual(updatedThread.Content, resultThread.Content);
         }
+        
         public void Save()
         {
             TestContext.SaveChanges();
