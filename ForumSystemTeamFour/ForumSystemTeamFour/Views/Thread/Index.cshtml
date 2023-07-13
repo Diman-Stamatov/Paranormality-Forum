@@ -1,0 +1,59 @@
+﻿@{
+    this.ViewData["Title"] = "All discussions";
+
+    string loggedUserId = "0";
+    if (User.Identity.IsAuthenticated)
+    {
+        loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+    }
+}
+@model List<ShortThreadResponseDto>
+
+<h1>All discussions</h1>
+
+@if (loggedUserId!=null)
+{
+    <p>
+        <a asp-controller="Thread" asp-action="Create" class="btn btn-primary">Create a new thread</a>
+    </p>
+}
+<p>Find a thread</p>
+<form asp-controller="Thread" asp-action="Index" method="get">
+    <input type="text" name="Name"/>
+    <input type="number" name="MinAbv"/>
+    <input type="number" name="MaxAbv" />
+    <input type ="submit" value="Search" class="btn btn-primary" />
+</form>
+@if (this.Model.Count() == 0)
+{
+    <p>
+        <i>No threads found 😔</i>
+    </p>
+}
+else
+{
+    <div class="table">
+        <div class="header">
+            <div class="header-cell">Name1</div>
+            <div class="header-cell">% ABV</div>
+            <div class="header-cell">Style</div>
+            <div class="header-cell">Actions</div>
+        </div>
+
+        @foreach (var thread in this.Model)
+        {
+            <div class="row">
+                <div class="cell">@thread.Title</div>
+                <div class="cell">@thread.AuthorUserName</div>
+                <div class="cell">@thread.Content</div>
+                <div class="cell">
+                    <a asp-controller="Thread" asp-action="Details" asp-route-id="@thread.Id" class="btn appBtn-outline">Details</a>
+                    <a asp-controller="Thread" asp-action="Edit" asp-route-id="@thread.Id" class="btn btn-warning">Edit</a>
+                    <a asp-controller="Thread" asp-action="Delete" asp-route-id="@thread.Id" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+

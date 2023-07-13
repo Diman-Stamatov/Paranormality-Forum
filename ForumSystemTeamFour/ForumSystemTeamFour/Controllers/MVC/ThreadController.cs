@@ -10,6 +10,7 @@ using ForumSystemTeamFour.Services;
 using ForumSystemTeamFour.Models.QueryParameters;
 using System.Linq;
 using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
+using System.Data;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
@@ -58,8 +59,46 @@ namespace ForumSystemTeamFour.Controllers.MVC
         public IActionResult Create()
         {
             var threadCreateDto = new ThreadCreateDto();
-            threadCreateDto.AuthorId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);            
+            threadCreateDto.AuthorId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
             return this.View("Create", threadCreateDto);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult FilterBy()
+        {
+            var threadQueryParameters = new ThreadQueryParameters();
+            return this.View("Index", threadQueryParameters);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult FilterBy(ThreadQueryParameters threadQueryParameters)
+        {
+            var loggedUser = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
+            string loggedAdmin = User.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin").Value;
+
+            try
+            {
+                if (threadQueryParameters.Email != null && loggedAdmin != "True")
+                {
+                    throw new UnauthorizedAccessException("You are not authorized to search by email.");
+                }
+                var listOfResponseDtos = this.ThreadServices.FilterBy(loggedUser, threadQueryParameters);
+                return this.View("Index", listOfResponseDtos);
+            }
+            catch (EntityNotFoundException exception)
+            {
+                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                this.ViewData["ErrorMessage"] = exception.Message;
+                return this.View("Error404");
+            }      
+            catch (UnauthorizedAccessException exception)
+            {
+                this.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                this.ViewData["ErrorMessage"] = exception.Message;
+                return this.View("Index");
+            }
         }
 
         [Authorize]
@@ -72,7 +111,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             }
             int loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
             var createdThread = this.ThreadServices.Create(threadCreateDto, loggedUserId);
-            return RedirectToAction("Details", new { id = createdThread.Id }); 
+            return RedirectToAction("Details", new { id = createdThread.Id });
 
         }
 
@@ -134,7 +173,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             try
             {
-                
+
                 var threadToDelete = this.ThreadServices.Details(id);
                 string loggedAdmin = User.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin").Value;
                 if (loggedAdmin != "True")
@@ -192,5 +231,6 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 return this.View(threadUpdateDto);
             }
         }
+
     }
 }
