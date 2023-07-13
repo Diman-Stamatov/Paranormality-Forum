@@ -29,6 +29,7 @@ namespace ForumSystemTeamFour.Data
             int nextUserId = 1;
             int nextThreadId = 1;
             int nextReplyId = 1;
+            int nextTagId = 1;
 
             var users = new List<User>() 
             {
@@ -111,7 +112,7 @@ namespace ForumSystemTeamFour.Data
                 new Thread {
                 Id = nextThreadId++,
                 AuthorId = random.Next(1,6),
-                Title = "How have you accepted death?No matter what happens to us did you find peace?",
+                Title = "How have you accepted death? No matter what happens to us did you find peace?",
                 CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)),
                 Content = "I'm 30 years old, while I do have plenty of time left to enjoy my life, " +
                 "I'm much more aware of my mortality more than ever. I miss being a kid and a teenager, " +
@@ -236,7 +237,7 @@ namespace ForumSystemTeamFour.Data
                 new Thread {
                 Id = nextThreadId++,
                 AuthorId = random.Next(1,6),
-                Title = "Tell me something I the US government doesn't want me to know.",
+                Title = "Tell me something I the government doesn't want me to know.",
                 CreationDate = DateTime.Now.AddMinutes(random.Next(-87600, 87600)),
                 Content = "Things are falling apart and they are scrambling to distract people from the inevitable collapse"
                 },
@@ -2614,11 +2615,25 @@ namespace ForumSystemTeamFour.Data
 
             var tags = new List<Tag>()
             {
-                new Tag{ Id = 1, Name = "##ModPost"},
-                new Tag{ Id = 2, Name = "Ufo"},
-                new Tag{ Id = 3, Name = "Skinwalker"},
-                new Tag{ Id = 4, Name = "Bigfoot"},
-                new Tag{ Id = 5, Name = "Existential"}
+                new Tag{ Id = nextTagId++, Name = "##ModPost"},
+                new Tag{ Id = nextTagId++, Name = "Aliens"},
+                new Tag{ Id = nextTagId++, Name = "Bigfoot"},
+                new Tag{ Id = nextTagId++, Name = "Afterlife"},
+                new Tag{ Id = nextTagId++, Name = "Existentialism"},
+                new Tag{ Id = nextTagId++, Name = "Creepypasta"},
+                new Tag{ Id = nextTagId++, Name = "Spooky"},
+                new Tag{ Id = nextTagId++, Name = "Symbolism"},
+                new Tag{ Id = nextTagId++, Name = "Occult"},
+                new Tag{ Id = nextTagId++, Name = "AI"},
+                new Tag{ Id = nextTagId++, Name = "Divinity"},
+                new Tag{ Id = nextTagId++, Name = "Secret societies"},
+                new Tag{ Id = nextTagId++, Name = "Secret knowledge"},
+                new Tag{ Id = nextTagId++, Name = "Conspiracies"},
+                new Tag{ Id = nextTagId++, Name = "Dreams"},
+                new Tag{ Id = nextTagId++, Name = "Mystery"},
+                new Tag{ Id = nextTagId++, Name = "Remove viewing"},
+                new Tag{ Id = nextTagId++, Name = "Divination"},
+                new Tag{ Id = nextTagId++, Name = "Romance"},
 
             };
             modelBuilder.Entity<Tag>().HasData(tags);
