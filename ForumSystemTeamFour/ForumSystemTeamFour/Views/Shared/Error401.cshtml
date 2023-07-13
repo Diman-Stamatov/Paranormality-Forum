@@ -1,0 +1,32 @@
+﻿@{
+    Layout = null;
+}
+<html>
+<head>
+    
+    <link href="~/css/application.css" rel="stylesheet" />
+</head>
+<body>
+
+
+    <div class="appHeadingText" style="position:absolute; top:8%; left:50%; transform:translate(-50%, -50%);">
+        PARANORMALITY
+    </div>
+
+
+    <div class="appCentered" style="font-size:2.5vw;text-align:center">
+        Unauthorized access attempt detected!<br>Clearance level <b>401</b> required.<br>
+        <a asp-controller="Home" asp-action="Index">Let's go back.</a><br />
+
+
+        <img class="image" src="/images/401.jpg"
+             style="width:80%;">
+        
+    </div>
+    <footer>
+        <div style="text-align:center;padding:10px;margin-top:7px;">
+            © copyright @DateTime.Now.Year Paranormality.com
+        </div>
+    </footer>
+</body>
+</html>

@@ -52,8 +52,13 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             return this.View("Error404");
         }
-        
 
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Error401()
+        {
+            return this.View("Error401");
+        }
 
     }
 }

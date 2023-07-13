@@ -84,12 +84,12 @@ var MessengerTwo = function (el) {
 
     m.init = function () {
         //scramble characters
-        m.codeletters = "꒘ꀆꀢꁏꁜꁽꂊꂞꂔꃍꄃꅵꅺꇻꈠꈾꉿꊎꋞꌀꌝꌲꎐ⧍⨳ᚡᚥᚼᛪꐪꒌ፠⚴♅⚴ϠϠϗϿѮꑔও৯ৼਲ਼ଈଡଵଡ଼୰ಀ೫෦እᖗᘙᙋᙽ◈▣◬๑๏߷ߧⵕⴲⴼꈔⴻⵁⵛꔮꔀꔊꔍꔧꔭꔯꕉꕙꕿꖥꗝꗞꗣꗫ꘨Ⱉ⨕⨊⩙⧰ꈔᛪᏫϠ";
+        m.codeletters = "꒘ꀆꀢꁏꁜꁽꂊꂞꂔꃍꄃꅵꅺꇻꈠꈾꉿꊎꋞꌀꌝꌲꎐ⧍⨳ᚡᚥᚼᛪꐪꒌ፠⚴♅⚴ϠϠϗϿѮꑔও৯ৼਲ਼ଈଡଵଡ଼୰ಀ೫෦እᖗᘙᙋᙽ◈▣◬๑๏߷ߧⵕⴲⴼꈔⴻⵁⵛꔮꔀꔊꔍꔧꔭꔯꕉꕙꕿꖥꗝꗞꗣꗫ꘨Ⱉ⨕⨊⩙⧰ꈔᛪᏫϠ߷̸̨̧̨̢̨̧̢̢̡̡̨̡̧̢̧̨̡̡̛̤̝̥̭͎̞͔͕̙̪̯͓̣̳͇̜̻̯͎̠̺̠̰̦̣͓̻̮̜̣̳͍̪̥͉̥͉̙̖͙͓͍͔̰͔̠͖͇̟̲͚͖͚̩̫͖̦͈̜̩̼͖̪͚͇̠͉͈͙͔̹͎̙͎̦̣͖̞̦̮̭̬̳̯̬͚̬̯̭̼̼̲̭͚̥̻̘͉̰͓̬̹̭̤̘͕̘͕̣̤̣̳͉̮̦͓̘̯̺̯̘͍̯̜̹͕͗̃͒͒̓̇͒͛̓͆̈́̏̇͋̒͐̉̃̐̊̂̇̓̆̓̅̇̆̃̈͒̇̄̃͒̑̾̀̃͗̅̒́̈́̃̓́̐͆̿̅̿̈̃̒̆̾̿͆̾͑̽̈́̾̋̊̆̒̃̒̈́̋́̉̈́̆̋̓̈́̀̈́͌̂́͑̀̃̿͆̈́͗̉̆̏͗̒͘͘̚͘̚̕̚̕̚͘͜͜͜͜͜͝͝͝͝͝͝͝͝͠͝͝͝͝͝ͅͅͅͅ";
         m.message = 0;
         m.current_length = 0;
         m.fadeBuffer = false;
         m.messages = [
-            'ꁜꁽꂊꂞꂔꃍꄃꅵꅺꇻꈠꈾꉿꊎꋞꌀꌝꌲꎐ' //Final message
+            'ଡ଼୰ಀ೫෦እᖗᘙᙋᙽꁜꁽꂊꂞꂔꃍꄃꅵꅺꇻꈠꈾꉿꊎꋞꌀꌝꌲꎐꔀꔊꔍꔧꔭꔯꕉꕙꕿꖥ' //Final message
         ];
 
         //How fast the initial message appears on the screen, lower is faster
@@ -98,7 +98,7 @@ var MessengerTwo = function (el) {
 
     m.generateRandomString = function (length) {
         //startingMessage
-        var random_text = 'See you again soon!';
+        var random_text = '          See you again soon!          ';
         while (random_text.length < length) {
             random_text += m.codeletters.charAt(Math.floor(Math.random() * m.codeletters.length));
         }
@@ -116,7 +116,7 @@ var MessengerTwo = function (el) {
             var message = m.generateRandomString(m.current_length);
             $(el).html(message);
             //How long the initial message stays on screen before the animation starts, 400 is about 3 seconds
-            setTimeout(m.animateIn, 400);
+            setTimeout(m.animateIn, 100);
         } else {
             setTimeout(m.animateFadeBuffer, 0);
         }
@@ -127,7 +127,7 @@ var MessengerTwo = function (el) {
             m.fadeBuffer = [];
             for (var i = 0; i < m.messages[m.message].length; i++) {
                 //How fast the real character shows up, higher is slower, 50 seems ok
-                m.fadeBuffer.push({ c: (Math.floor(Math.random() * 5000)) + 1, l: m.messages[m.message].charAt(i) });
+                m.fadeBuffer.push({ c: (Math.floor(Math.random() * 5000)) + 1000, l: m.messages[m.message].charAt(i) });
             }
         }
 

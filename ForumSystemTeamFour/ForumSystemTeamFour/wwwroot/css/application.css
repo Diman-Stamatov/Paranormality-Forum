@@ -171,17 +171,11 @@ li {
     background-color: #3e8e41;
 }
 
-
-/* Original CSS */
-
-/**/
-
-
 #messenger {
 
     position: absolute;
-    top: 6.75%;
-    left: 50.4%;
+    top: 7.4%;
+    left: 50.1%;
     transform: translate(-50%, -50%);
     font-family: monospace;
     font-size: 3.5vw;
