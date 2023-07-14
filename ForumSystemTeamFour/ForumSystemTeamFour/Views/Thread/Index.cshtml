@@ -19,7 +19,7 @@ else
 {
 
     <div style="margin: 0 auto; width:100%">
-        <h3 style="text-align:center;margin-top:15%;font-size:2vw">Popular discussions:</h3>
+        <h3 style="text-align:center;margin-top:5%;font-size:2vw">Popular discussions:</h3>
         <table style="text-align: left;" class="table appTable table-hover table-dark">
             @*ToDo Make each thread title link to the Thread in the table*@
             <thead>
@@ -37,26 +37,26 @@ else
                     foreach (var thread in this.Model)
                     {
 
-                        <tr>
+                                <tr>
 
-                            <td>
-                                @thread.Title
-                                <br />
-                                @foreach (var tag in thread.Tags)
+                                    <td>
+                                        @thread.Title
+                                        <br />
+                                        @foreach (var tag in thread.Tags)
                                 {
-                                    <button class="btn btn-primary btn-sm">@tag</button>
+                                            <button class="btn btn-primary btn-sm">@tag</button>
                                 }
-                            </td>
-                            <td style=text-align:center;>@thread.Replies</td>
-                            <td style=text-align:center;>
-                                <div style="display: inline-block; width: 18px;">&#x1F44D;</div>
-                                <div style="display: inline-block; width: 27px;">@thread.Replies</div>
-                                <div style="display: inline-block; width: 18px;">&#x1F44E;</div>
-                                <div style="display: inline-block; width: 27px;">@thread.Tags.Count()</div>
-                            </td>
-                            <td style=text-align:center;>@thread.AuthorUserName</td>
-                            <td style=text-align:center;>@thread.CreationDate</td>
-                        </tr>
+                                    </td>
+                                    <td style=text-align:center;>@thread.Replies</td>
+                                    <td style=text-align:center;>
+                                <div style="display: inline-block; width: 18px; font-size:1.5vw; color:limegreen">⨇</div>
+                                        <div style="display: inline-block; width: 27px;">@thread.Replies</div>
+                                <div style="display: inline-block; width: 18px; font-size:1.5vw; color:red">⨈</div>
+                                        <div style="display: inline-block; width: 27px;">@thread.Tags.Count()</div>
+                                    </td>
+                                    <td style=text-align:center;>@thread.AuthorUserName</td>
+                                    <td style=text-align:center;>@thread.CreationDate.ToString("g")</td>
+                                </tr>
                     }
                 }
             </tbody>
