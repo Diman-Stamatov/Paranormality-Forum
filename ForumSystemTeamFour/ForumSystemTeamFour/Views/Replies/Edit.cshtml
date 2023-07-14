@@ -1,0 +1,59 @@
+﻿@using ForumSystemTeamFour.Models.ViewModels;
+@model ReplyViewModel;
+
+@{
+    this.ViewData["ThreadId"] = Model.ThreadId;
+
+    string loggedUserId = "0";
+    bool isAdmin = false;
+    bool isAuthor = false;
+
+    if (User.Identity.IsAuthenticated)
+    {
+        loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+        isAdmin = User.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin").Value == "True";
+        isAuthor = loggedUserId == Model.AuthorId.ToString();
+    }
+
+    ViewData["Title"] = "Edit";
+}
+
+<div class="reply-view">
+    <form class="flex-container flex-column" asp-controller="Replies" asp-action="Edit" method="post">
+        <textarea asp-for="Content" class="reply-content-readwrite" name="Content">@Model.Content</textarea>
+        <div class="reply-details card border-0 bg-dark text-white">
+            <div class="card-header border-0">
+                <div class="reply-author">
+                    <span>Author: </span>
+                    <a asp-controller="Users" asp-action="Profile" asp-route-id="@Model.Author.UserName">@Model.Author.UserName</a>
+                </div>
+                <div class="reply-dates">
+                    <div>Created on: @Model.CreationDate</div>
+                    <div>
+                        Last modified:
+                        @if (Model.ModificationDate == DateTime.MinValue)
+                        {
+                            <span>Never</span>
+                        }
+                        else
+                        {
+                            <span>@Model.ModificationDate</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="reply-controls">
+            @{
+                if (isAuthor)
+                {
+                    <input type="submit" value="Save" class="btn appBtn-outline" style="text-decoration:none">
+                    <a asp-action="Details" asp-route-id="@Model.Id" type="button" class="btn appBtn-outline" style="text-decoration:none">Cancel</a>
+                }
+            }
+        </div>
+        <div class ="form-error">
+            <span asp-validation-for="Content"></span>
+        </div>
+    </form>
+</div>
