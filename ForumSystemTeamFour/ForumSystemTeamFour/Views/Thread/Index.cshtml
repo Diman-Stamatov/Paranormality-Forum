@@ -24,11 +24,11 @@ else
             @*ToDo Make each thread title link to the Thread in the table*@
             <thead>
                 <tr>
-                    <th style="text-align: center; font-size: 1vw;" col">Topic</th>
-                    <th style="font-size: 1vw;" scope="col">Replies</th>
-                    <th style="font-size: 1vw;" scope="col">Reactions</th>
-                    <th style="font-size: 1vw;" scope="col">Author</th>
-                    <th style="font-size: 1vw;" scope="col">Creation Date:</th>
+                    <th style="text-align:center; font-size: 1vw;" col">Topic</th>
+                    <th style="text-align:center; font-size: 1vw;" scope="col">Replies</th>
+                    <th style="text-align:center; font-size: 1vw; width: 150px;" scope="col">Reactions</th>
+                    <th style="text-align:center; font-size: 1vw;" scope="col">Author</th>
+                    <th style="text-align:center; font-size: 1vw;" scope="col">Creation Date:</th>
 
                 </tr>
             </thead>
@@ -47,15 +47,15 @@ else
                                     <button class="btn btn-primary btn-sm">@tag</button>
                                 }
                             </td>
-                            <td>@thread.Replies</td>
-                            <td>
+                            <td style=text-align:center;>@thread.Replies</td>
+                            <td style=text-align:center;>
                                 <div style="display: inline-block; width: 18px;">&#x1F44D;</div>
                                 <div style="display: inline-block; width: 27px;">@thread.Replies</div>
                                 <div style="display: inline-block; width: 18px;">&#x1F44E;</div>
                                 <div style="display: inline-block; width: 27px;">@thread.Tags.Count()</div>
                             </td>
-                            <td>@thread.AuthorUserName</td>
-                            <td>@thread.CreationDate</td>
+                            <td style=text-align:center;>@thread.AuthorUserName</td>
+                            <td style=text-align:center;>@thread.CreationDate</td>
                         </tr>
                     }
                 }
