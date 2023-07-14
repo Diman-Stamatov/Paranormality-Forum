@@ -1,0 +1,23 @@
+﻿@model ReplyViewModel;
+<div class="reply-details card border-0 bg-dark text-white">
+    <div class="card-header border-0">
+        <div class="reply-author">
+            <span>Author: </span>
+            <a asp-controller="Users" asp-action="Profile" asp-route-id="@Model.Author.UserName">@Model.Author.UserName</a>
+        </div>
+        <div class="reply-dates">
+            <div>Created on: @Model.CreationDate</div>
+            <div>
+                Last modified:
+                @if (Model.ModificationDate == DateTime.MinValue)
+                {
+                    <span>Never</span>
+                }
+                else
+                {
+                    <span>@Model.ModificationDate</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>

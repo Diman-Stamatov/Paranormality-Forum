@@ -52,19 +52,37 @@ namespace ForumSystemTeamFour.Controllers.MVC
         }
 
         // GET: RepliesController/Create
-        public IActionResult Create()
+        [Authorize]
+        [HttpGet]
+        public IActionResult Create([FromQuery] int threadId)
         {
-            return View();
+            this.ViewData["ThreadId"] = threadId;
+
+            var replyCreateViewModel = new ReplyCreateViewModel()
+            {
+                ThreadId = threadId
+            };
+
+            return View(replyCreateViewModel);
         }
 
         // POST: RepliesController/Create
         [Authorize]
         [HttpPost]
-        public IActionResult Create(IFormCollection collection)
+        public IActionResult Create(ReplyCreateViewModel replyCreateViewModel)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (!ModelState.IsValid)
+                {
+                    return View(replyCreateViewModel);
+                }
+
+                var loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
+
+                var newReply = replyService.Create(replyCreateViewModel, loggedUserId);
+
+                return RedirectToAction("Details", "Replies", new { id = newReply.Id });
             }
             catch
             {
@@ -87,7 +105,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 {
                     return View(replyViewModel);
                 }
-                return RedirectToAction("Details", "Replies", id);
+                return RedirectToAction("Details", "Replies", new {id = id});
             }
             catch (EntityNotFoundException)
             {
@@ -109,9 +127,9 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
                 if(!ModelState.IsValid)
                 {
-                    var originalReply = replyService.GetViewModelById(id);
-                    originalReply.Content = replyViewModel.Content;
-                    return View(originalReply);
+                    var modifiedReply = replyService.GetViewModelById(id);
+                    modifiedReply.Content = replyViewModel.Content;
+                    return View(modifiedReply);
                 }
                 
                 var loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
@@ -120,30 +138,52 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
                 return RedirectToAction("Details", "Replies", new { id = updatedViewModel.Id });
             }
-            catch
+            catch (EntityNotFoundException exception)
             {
-                return View();
+                ViewData["ErrorMessage"] = exception.Message;
+                HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                return View(replyViewModel);
             }
         }
 
         // GET: RepliesController/Delete/5
+        [Authorize]
+        [HttpGet]
         public IActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: RepliesController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var replyViewModel = replyService.GetViewModelById(id);
+                return View(replyViewModel);
             }
-            catch
+            catch (EntityNotFoundException)
             {
-                return View();
+                return View("Error404");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+        }
+
+        // POST: RepliesController/Delete/5
+        [Authorize]
+        [HttpPost]
+        public IActionResult Delete(ReplyViewModel replyViewModel)
+        {
+            try
+            {
+                int loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
+                var replyToDelete = replyService.Delete(replyViewModel.Id, loggedUserId);
+
+                return RedirectToAction("Details", "Threads", new { id = replyToDelete.ThreadId });
+            }
+            catch (EntityNotFoundException exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status404NotFound;
+                this.ViewData["ErrorMessage"] = exception.Message;
+
+                return this.View("Error404");
             }
         }
     }
