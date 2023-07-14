@@ -1,0 +1,37 @@
+﻿@using ForumSystemTeamFour.Models.ViewModels;
+@model ReplyViewModel;
+
+@{
+    this.ViewData["ThreadId"] = Model.ThreadId;
+
+    string loggedUserId = "0";
+    bool isAdmin = false;
+    bool isAuthor = false;
+
+    if (User.Identity.IsAuthenticated)
+    {
+        loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+        isAdmin = User.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin").Value == "True";
+        isAuthor = loggedUserId == Model.AuthorId.ToString();
+    }
+
+    ViewData["Title"] = "Details";
+}
+
+<div class="reply-view flex-container flex-column">
+    <textarea readonly="readonly" class="reply-content-readonly">@Model.Content</textarea>
+    <partial name="_ReplyDetails" />
+    <div class="reply-controls">
+        @{
+            if (isAuthor)
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn appBtn-outline" style="text-decoration:none">Edit</a>
+            }
+            if (isAuthor || isAdmin)
+            {
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn appBtn-outline" style="text-decoration:none">Delete</a>
+            }
+        }
+        <a asp-controller="Thread" asp-action="Details" asp-route-id="@Model.ThreadId" class="btn appBtn-outline" style="text-decoration:none">Back to Thread</a>
+    </div>
+</div>

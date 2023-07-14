@@ -8,7 +8,9 @@ using ForumSystemTeamFour.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using ForumSystemTeamFour.Exceptions;
-using static ForumSystemTeamFour.Models.Enums.VoteType; 
+using static ForumSystemTeamFour.Models.Enums.VoteType;
+using ForumSystemTeamFour.Models.ViewModels;
+using System;
 
 namespace ForumSystemTeamFour.Services
 {
@@ -60,6 +62,12 @@ namespace ForumSystemTeamFour.Services
             ReplyReadDto replyDto = replyMapper.Map(reply);
             return replyDto;
         }
+        public ReplyViewModel GetViewModelById(int id)
+        {
+            var reply = repository.GetById(id);
+            ReplyViewModel replyDto = replyMapper.MapViewModel(reply);
+            return replyDto;
+        }
         public List<ReplyReadDto> GetByThreadId(int id)
         {
             ReplyQueryParameters filterByThreadId = new ReplyQueryParameters()
@@ -83,6 +91,21 @@ namespace ForumSystemTeamFour.Services
 
             ReplyReadDto replyDto = replyMapper.Map(updatedReply);
             return replyDto;
+        }
+        public ReplyViewModel Update(int id, ReplyViewModel replyViewModel, int loggedUserId)
+        {
+            // Check if the user is owner
+            var loggedUser = userServices.GetById(loggedUserId);
+            var replyToUpdate = repository.GetById(id);
+            securityServices.CheckAuthorAuthorization(loggedUser, replyToUpdate);
+
+            // TODO: Check if the parent thread exists, maybe????
+
+            Reply reply = replyMapper.MapViewModel(replyToUpdate, replyViewModel);
+            var updatedReply = repository.Update(id, reply);
+
+            ReplyViewModel updatedViewModel = replyMapper.MapViewModel(updatedReply);
+            return updatedViewModel;
         }
         public ReplyReadDto Delete(int id, int loggedUserId)
         {
