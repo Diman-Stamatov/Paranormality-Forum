@@ -12,9 +12,9 @@
     int totalPosts = Model.RepliesCount;
 
     string profilePicDirectory = "wwwroot/ProfilePictures";
-    bool hasProfilePic = Directory.EnumerateFiles(profilePicDirectory, $"{loggedUsername}*").Any();
+    bool hasProfilePic = Directory.EnumerateFiles(profilePicDirectory, $"{Model.Username}*").Any();
     var directory = new DirectoryInfo(@"wwwroot/ProfilePictures");
-    var fileInfo = directory.GetFiles("*" + loggedUsername + "*.*");
+    var fileInfo = directory.GetFiles("*" + Model.Username + "*.*");
     string profilePicName = hasProfilePic ? $"{fileInfo[0].Name}" : "default.jpg";
 
 }
