@@ -9,7 +9,6 @@ namespace ForumSystemTeamFour.Models.DTOs
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
         public int ThreadId { get; set; }
-        //public int AuthorId { get; set; }
         public AuthorDto Author { get; set; }
         public string Content { get; set; }
         public int Likes { get; set; }

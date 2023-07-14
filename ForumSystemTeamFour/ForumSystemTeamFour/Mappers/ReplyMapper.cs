@@ -1,11 +1,11 @@
 ﻿using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
-using ForumSystemTeamFour.Models.Enums;
-using ForumSystemTeamFour.Services;
+using ForumSystemTeamFour.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static ForumSystemTeamFour.Models.Enums.VoteType;
 
 namespace ForumSystemTeamFour.Mappers
 {
@@ -26,30 +26,54 @@ namespace ForumSystemTeamFour.Mappers
         // Read
         public ReplyReadDto Map(Reply reply)
         {
-            return new ReplyReadDto
+            return new ReplyReadDto()
             {
                 Id = reply.Id,
                 ThreadId = (int)reply.ThreadId,
+                Author = new AuthorDto() { UserName = reply.Author.Username, Email = reply.Author.Email },
                 CreationDate = reply.CreationDate,
                 ModificationDate = reply.ModificationDate,
-                Author = new AuthorDto() { UserName = reply.Author.Username, Email = reply.Author.Email },
                 Content = reply.Content,
-                Likes = reply.Votes.Count(v => v.VoteType == VoteType.Like),
-                Dislikes = reply.Votes.Count(v => v.VoteType == VoteType.Dislike)
+                Likes = reply.Votes.Count(v => v.VoteType == Like),
+                Dislikes = reply.Votes.Count(v => v.VoteType == Dislike)
             };
         }
+
         public List<ReplyReadDto> Map(List<Reply> replies)
         {
             return replies.Select(reply => Map(reply)).ToList();
+        }
+        public ReplyViewModel MapViewModel(Reply reply)
+        {
+            return new ReplyViewModel()
+            {
+                Id = reply.Id,
+                ThreadId = (int)reply.ThreadId,
+                AuthorId = reply.AuthorId,
+                Author = new AuthorDto() { UserName = reply.Author.Username, Email = reply.Author.Email },
+                CreationDate = reply.CreationDate,
+                ModificationDate = reply.ModificationDate,
+                Content = reply.Content,
+                Likes = reply.Votes.Where(v => v.VoteType == Like).ToList(),
+                Dislikes = reply.Votes.Where(v => v.VoteType == Dislike).ToList()                
+            };
         }
 
         // Update
         public Reply Map(Reply reply, ReplyUpdateDto replyUpdateDto)
         {
             reply.Content = replyUpdateDto.Content;
-            reply.CreationDate = DateTime.Now;
+            reply.ModificationDate = DateTime.Now;
             
             return reply;
         }
+        public Reply MapViewModel(Reply reply, ReplyViewModel replyUpdateViewModel)
+        {
+            reply.Content = replyUpdateViewModel.Content;
+            reply.ModificationDate = DateTime.Now;
+
+            return reply;
+        }
+
     }
 }

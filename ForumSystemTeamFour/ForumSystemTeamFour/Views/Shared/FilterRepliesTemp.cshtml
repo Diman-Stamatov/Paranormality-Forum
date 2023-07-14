@@ -12,41 +12,62 @@
     <div>        
         <input asp-for="Thread" type="hidden" value="@Model.Thread">       
     </div>
-    <div>
-        <input asp-for="QueryParameters.ThreadId" type="text" value="@Model.QueryParameters.ThreadId" hidden>
-
-        <label asp-for="QueryParameters.UserName">By author:</label><br>
-        <input asp-for="QueryParameters.UserName" type="text" value="@Model.QueryParameters.UserName" placeholder="Mulder">
-
-        <label asp-for="QueryParameters.Email">By e-mail:</label><br> @*Remove this one?*@
-        <input asp-for="QueryParameters.Email" type="text" value="@Model.QueryParameters.UserName" placeholder="Mulder@Scully.com">
+    <table style="text-align:left;padding-left:100px" >
+        @*ToDo Make each thread title link to the Thread in the table*@
         
-        <label asp-for="QueryParameters.CreationDate">By creation date:</label><br> @*Have only before and after?*@
-        <input asp-for="QueryParameters.CreationDate" type="text" value="@Model.QueryParameters.CreationDate" placeholder="06.06.2006">       
+        <tbody style="font-size:0.8vw">
+           
+                    <tr>
+                <input asp-for="QueryParameters.ThreadId" type="text" value="@Model.QueryParameters.ThreadId" hidden>
+                        <td>
+                    <label asp-for="QueryParameters.UserName">By author:</label><br>
+                    <input asp-for="QueryParameters.UserName" type="text" value="@Model.QueryParameters.UserName"               placeholder="Mulder">
+                        </td>
 
-        <label asp-for="QueryParameters.CreatedAfter">Created after:</label><br>
-        <input asp-for="QueryParameters.CreatedAfter" type="text" value="@Model.QueryParameters.CreatedAfter" placeholder="06.06.2006">
+                        <td>
+                    <label asp-for="QueryParameters.Email">By e-mail:</label><br> @*Remove this one?*@
+                    <input asp-for="QueryParameters.Email" type="text" value="@Model.QueryParameters.UserName" placeholder="Mulder@Scully.com">
+                        </td>
 
-        <label asp-for="QueryParameters.CreatedBefore">Created before:</label><br>
-        <input asp-for="QueryParameters.CreatedBefore" type="text" value="@Model.QueryParameters.CreatedBefore" placeholder="06.06.2006">
-        
-        <label asp-for="QueryParameters.ModifiedAfter">Modified after:</label><br>@*Remove this one?*@
-        <input asp-for="QueryParameters.ModifiedAfter" type="text" value="@Model.QueryParameters.ModifiedAfter" placeholder="06.06.2006">
+                        <td>
+                    <label asp-for="QueryParameters.CreationDate">By creation date:</label><br> @*Have only before and after?*@
+                    <input asp-for="QueryParameters.CreationDate" type="text" value="@Model.QueryParameters.CreationDate" placeholder="06.06.2006">
+                </td>
 
-        <label asp-for="QueryParameters.ModifiedBefore">Modified before:</label><br>@*Remove this one?*@
-        <input asp-for="QueryParameters.ModifiedBefore" type="text" value="@Model.QueryParameters.ModifiedBefore" placeholder="06.06.2006">  
+                        <td>
+                    <label asp-for="QueryParameters.CreatedAfter">Created after:</label><br>
+                    <input asp-for="QueryParameters.CreatedAfter" type="text" value="@Model.QueryParameters.CreatedAfter" placeholder="06.06.2006">
+                        </td>
 
-        <label asp-for="QueryParameters.SortBy">Order by:</label><br>
-        <select asp-items="@sortOptions" asp-for="QueryParameters.SortBy" ></select>
+                        <td>
+                    <label asp-for="QueryParameters.CreatedBefore">Created before:</label><br>
+                    <input asp-for="QueryParameters.CreatedBefore" type="text" value="@Model.QueryParameters.CreatedBefore" placeholder="06.06.2006">
+                        </td>
 
-        <label asp-for="QueryParameters.SortOrder">Order by:</label><br>
-        <select asp-items="@orderOptions" asp-for="QueryParameters.SortOrder" ></select>
-    </div>
-    
-    <div>
-        <input type="submit" value="Filter"
+                        <td>
+                    <label asp-for="QueryParameters.SortBy">Order by:</label><br>
+                    <select asp-items="@sortOptions" asp-for="QueryParameters.SortBy"></select>
+                        </td>
+
+                <td>
+                    <label asp-for="QueryParameters.SortOrder">Sort by:</label><br>
+                    <select asp-items="@orderOptions" asp-for="QueryParameters.SortOrder"></select>
+                </td>
+                <td>
+                    <input type="submit" value="Filter"
                      class="btn appBtn-outline" style="text-decoration:none">
+                </td>
+
+                    </tr>
+                
+            
+        </tbody>
+    </table>
+    
+    
+    
         
-    </div>
+        
+    
 
 </form>

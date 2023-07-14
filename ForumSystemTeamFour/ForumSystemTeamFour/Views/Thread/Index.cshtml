@@ -32,31 +32,29 @@ else
 
                 </tr>
             </thead>
-            <tbody style="font-size:1vw">
+            <tbody style="font-size:1vw;  vertical-align: middle;">
                 @{
                     foreach (var thread in this.Model)
                     {
-
-                                <tr>
-
-                                    <td>
-                                        @thread.Title
-                                        <br />
-                                        @foreach (var tag in thread.Tags)
+                            <tr>
+                                <td>
+                                    @thread.Title
+                                    <br />
+                                    @foreach (var tag in thread.Tags)
                                 {
-                                            <button class="btn btn-primary btn-sm">@tag</button>
+                                        <button class="btn btn-primary btn-sm">@tag</button>
                                 }
-                                    </td>
-                                    <td style=text-align:center;>@thread.Replies</td>
-                                    <td style=text-align:center;>
-                                <div style="display: inline-block; width: 18px; font-size:1.5vw; color:limegreen">⨇</div>
-                                        <div style="display: inline-block; width: 27px;">@thread.Replies</div>
-                                <div style="display: inline-block; width: 18px; font-size:1.5vw; color:red">⨈</div>
-                                        <div style="display: inline-block; width: 27px;">@thread.Tags.Count()</div>
-                                    </td>
-                                    <td style=text-align:center;>@thread.AuthorUserName</td>
-                                    <td style=text-align:center;>@thread.CreationDate.ToString("g")</td>
-                                </tr>
+                                </td>
+                                <td style=text-align:center;>@thread.Replies</td>
+                                <td style="text-align:center;">
+                                    <div style="display: inline-block; width: 18px; font-size:1.5vw; color:limegreen">⨇</div>
+                                    <div style="display: inline-block; height:auto; width: 27px;">@thread.Replies</div>
+                                    <div style="display: inline-block; width: 18px; font-size:1.5vw; color:red">⨈</div>
+                                    <div style="display: inline-block; height:auto; width: 27px;">@thread.Tags.Count()</div>
+                                </td>
+                                <td style=text-align:center;>@thread.AuthorUserName</td>
+                                <td style=text-align:center;>@thread.CreationDate.ToString("g")</td>
+                            </tr>
                     }
                 }
             </tbody>

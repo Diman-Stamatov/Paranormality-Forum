@@ -1,0 +1,33 @@
+﻿@using ForumSystemTeamFour.Models.ViewModels;
+@model ReplyViewModel;
+
+@{
+    this.ViewData["ThreadId"] = Model.ThreadId;
+
+    string loggedUserId = "0";
+    bool isAdmin = false;
+    bool isAuthor = false;
+
+    if (User.Identity.IsAuthenticated)
+    {
+        loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+        isAdmin = User.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin").Value == "True";
+        isAuthor = loggedUserId == Model.AuthorId.ToString();
+    }
+
+    ViewData["Title"] = "Delete";
+}
+
+<div class="reply-view">
+    <form class="flex-container flex-column" asp-controller="Replies" asp-action="Delete" method="post">
+        <textarea readonly="readonly" class="reply-content-readonly reply-content-delete" asp-for="Content" name="Content">@Model.Content</textarea>
+        <partial name="_ReplyDetails" />
+        <div class="reply-controls">
+            <input type="submit" value="Confirm" class="btn btn-outline-danger" style="text-decoration:none">
+                    <a asp-action="Details" asp-route-id="@Model.Id" type="button" class="btn appBtn-outline" style="text-decoration:none">Cancel</a>
+        </div>
+        <div class="form-error">
+            <span asp-validation-for="Content"></span>
+        </div>
+    </form>
+</div>

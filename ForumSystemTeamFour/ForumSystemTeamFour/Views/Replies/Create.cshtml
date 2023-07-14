@@ -1,0 +1,22 @@
+﻿@using ForumSystemTeamFour.Models.ViewModels;
+@model ReplyCreateViewModel;
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="reply-view">
+    <form class="flex-container flex-column" asp-controller="Replies" asp-action="Create" method="post">
+        <input type="hidden" asp-for="ThreadId" name="ThreadId" value="@Model.ThreadId" />
+        <textarea asp-for="Content" class="reply-content-readwrite" name="Content">@Model.Content</textarea>
+        <div class="reply-controls">
+
+            <input type="submit" value="Save" class="btn appBtn-outline" style="text-decoration:none">
+            <a asp-controller="Thread" asp-action="Details" asp-route-id="@Model.ThreadId" type="button" class="btn appBtn-outline" style="text-decoration:none">Cancel</a>
+
+        </div>
+        <div class="form-error">
+            <span asp-validation-for="Content"></span>
+        </div>
+    </form>
+</div>

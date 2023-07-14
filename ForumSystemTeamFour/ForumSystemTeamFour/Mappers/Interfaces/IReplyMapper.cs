@@ -2,6 +2,7 @@
 using ForumSystemTeamFour.Models;
 using System;
 using System.Collections.Generic;
+using ForumSystemTeamFour.Models.ViewModels;
 
 namespace ForumSystemTeamFour.Mappers.Interfaces
 {
@@ -12,9 +13,11 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
 
         // Read
         ReplyReadDto Map(Reply reply);
+        ReplyViewModel MapViewModel(Reply reply);
         List<ReplyReadDto> Map(List<Reply> replies);
 
         // Update
         Reply Map(Reply reply, ReplyUpdateDto replyUpdateDto);
+        Reply MapViewModel(Reply reply, ReplyViewModel replyUpdateViewModel);
     }
 }
