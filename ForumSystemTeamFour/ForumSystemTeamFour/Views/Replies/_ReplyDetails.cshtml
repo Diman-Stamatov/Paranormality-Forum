@@ -1,23 +1,74 @@
-﻿@model ReplyViewModel;
-<div class="reply-details card border-0 bg-dark text-white">
-    <div class="card-header border-0">
-        <div class="reply-author">
-            <span>Author: </span>
-            <a asp-controller="Users" asp-action="Profile" asp-route-id="@Model.Author.UserName">@Model.Author.UserName</a>
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model ReplyViewModel;
+@{
+    string loggedUserName = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
+}
+
+<div class="reply-details flex-row">
+    <div class="card- border-0 bg-dark text-white">
+        <div class="card-header border-0">
+            <div class="reply-author">
+                <span>Author: </span>
+                <a asp-controller="Users" asp-action="Profile" asp-route-id="@Model.Author.UserName">@Model.Author.UserName</a>
+            </div>
+            <div class="reply-dates">
+                <div>Created on: @Model.CreationDate</div>
+                <div>
+                    Last modified:
+                    @if (Model.ModificationDate == DateTime.MinValue)
+                    {
+                        <span>Never</span>
+                    }
+                    else
+                    {
+                        <span>@Model.ModificationDate</span>
+                    }
+                </div>
+            </div>
         </div>
-        <div class="reply-dates">
-            <div>Created on: @Model.CreationDate</div>
-            <div>
-                Last modified:
-                @if (Model.ModificationDate == DateTime.MinValue)
+    </div>
+    <div class="card border-0 bg-dark text-white flex-row">
+        <div class="votes">
+            <a class="upvote-symbol" asp-action="UpVote" asp-route-id="@Model.Id">⨇</a>
+            @{
+                if(Model.Likes.Any(v => v.VoterUsername == loggedUserName))
                 {
-                    <span>Never</span>
+                    <div>You </div>
+                    if(Model.Likes.Count == 2)
+                    {
+                        <span>, 1 other</span>
+                    }
+                    else if (Model.Likes.Count > 2)
+                    {
+                        <span>, @(Model.Likes.Count - 1) others</span>
+                    }
                 }
                 else
                 {
-                    <span>@Model.ModificationDate</span>
+                    <div>@Model.Likes.Count</div>
                 }
-            </div>
+            }
+        </div>
+        <div class="votes">
+            <a class="downvote-symbol" asp-action="DownVote" asp-route-id="@Model.Id">⨈</a>
+            @{
+                if(Model.Dislikes.Any(v => v.VoterUsername == loggedUserName))
+                {
+                    <span>You </span>
+                    if(Model.Dislikes.Count == 2)
+                    {
+                        <span>, 1 other</span>
+                    }
+                    else if (Model.Dislikes.Count > 2)
+                    {
+                        <span>, @(Model.Dislikes.Count - 1) others</span>
+                    }
+                }
+                else
+                {
+                    <div>@Model.Dislikes.Count</div>
+                }
+            }
         </div>
     </div>
 </div>

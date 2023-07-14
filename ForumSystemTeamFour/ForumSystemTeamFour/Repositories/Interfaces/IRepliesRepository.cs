@@ -19,5 +19,6 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
         Reply UpVote(int id, string loggedUserName);
         Reply DownVote(int id, string loggedUserName);
         Reply ChangeVote(int id, string loggedUserName);
+        Reply RemoveVote(int id, string loggedUserName);
     }
 }

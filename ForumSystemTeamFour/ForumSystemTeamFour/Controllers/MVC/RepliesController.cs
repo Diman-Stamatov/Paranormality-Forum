@@ -78,9 +78,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
                     return View(replyCreateViewModel);
                 }
 
-                var loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
-
-                var newReply = replyService.Create(replyCreateViewModel, loggedUserId);
+                var newReply = replyService.Create(replyCreateViewModel, GetLoggedUserId());
 
                 return RedirectToAction("Details", "Replies", new { id = newReply.Id });
             }
@@ -97,7 +95,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             try
             {
-                int loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
+                int loggedUserId = GetLoggedUserId();
 
                 var replyViewModel = replyService.GetViewModelById(id);
 
@@ -131,10 +129,8 @@ namespace ForumSystemTeamFour.Controllers.MVC
                     modifiedReply.Content = replyViewModel.Content;
                     return View(modifiedReply);
                 }
-                
-                var loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
 
-                var updatedViewModel = replyService.Update(id, replyViewModel, loggedUserId);
+                var updatedViewModel = replyService.Update(id, replyViewModel, GetLoggedUserId());
 
                 return RedirectToAction("Details", "Replies", new { id = updatedViewModel.Id });
             }
@@ -173,8 +169,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             try
             {
-                int loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
-                var replyToDelete = replyService.Delete(replyViewModel.Id, loggedUserId);
+                var replyToDelete = replyService.Delete(replyViewModel.Id, GetLoggedUserId());
 
                 return RedirectToAction("Details", "Threads", new { id = replyToDelete.ThreadId });
             }
@@ -185,6 +180,71 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
                 return this.View("Error404");
             }
+        }
+        public IActionResult Upvote(int id)
+        {
+            try
+            {
+                var replyToUpvote = replyService.UpVote(id, GetLoggedUserId());
+
+                return RedirectToAction("Details", "Replies", new { id = replyToUpvote.Id });
+            }
+            catch (EntityNotFoundException exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status404NotFound;
+                this.ViewData["ErrorMessage"] = exception.Message;
+
+                return this.View("Error404");
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                this.ViewData["ErrorMessage"] = exception.Message;
+
+                return this.View("Error401");
+            }
+            catch (Exception exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                this.ViewData["ErrorMessage"] = exception.Message;
+
+                return this.View("Error500");
+            }
+        }
+        public IActionResult DownVote(int id)
+        {
+            try
+            {
+                var replyToDownvote = replyService.DownVote(id, GetLoggedUserId());
+
+                return RedirectToAction("Details", "Replies", new { id = replyToDownvote.Id });
+
+            }
+            catch (EntityNotFoundException exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status404NotFound;
+                this.ViewData["ErrorMessage"] = exception.Message;
+
+                return this.View("Error404");
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                this.ViewData["ErrorMessage"] = exception.Message;
+
+                return this.View("Error401");
+            }
+            catch (Exception exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                this.ViewData["ErrorMessage"] = exception.Message;
+
+                return this.View("Error500");
+            }
+        }
+        private int GetLoggedUserId()
+        {
+            return int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
         }
     }
 }

@@ -218,5 +218,16 @@ namespace ForumSystemTeamFour.Repositories
 
             return replyToChangeVote;
         }
+        public Reply RemoveVote(int id, string loggedUserName)
+        {
+            var replyToRemoveVote = GetById(id);
+            var vote = replyToRemoveVote.Votes.FirstOrDefault(v => v.VoterUsername == loggedUserName);
+
+            replyToRemoveVote.Votes.Remove(vote);
+
+            context.SaveChanges();
+
+            return replyToRemoveVote;
+        }
     }
 }

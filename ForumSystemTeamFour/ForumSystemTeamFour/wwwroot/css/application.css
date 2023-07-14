@@ -314,18 +314,52 @@ a:active {
 .reply-details {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
     text-align: left;
     font-size: 0.7em;
+    padding: 1em;
 }
 
 .flex-container {
     display: flex;
 }
 
-.flex-container > div {
+.flex-column > div {
     padding: 0.5em 0;
 }
+
+.flex-row > div {
+    padding: 0 0.5em;
+}
+
+.votes {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+a.upvote-symbol {
+    font-size: 1.2rem;
+    color: limegreen;
+    text-decoration: none;
+    padding: 0 0.5em;
+}
+
+    a.upvote-symbol:hover {
+        font-weight: bold;
+    }
+
+a.downvote-symbol {
+    font-size: 1.2rem;
+    color: red;
+    text-decoration: none;
+    padding: 0 0.5em;
+}
+
+    a.downvote-symbol:hover {
+        font-weight: bold;
+    }
 
 .appCentered {
     min-height: auto;

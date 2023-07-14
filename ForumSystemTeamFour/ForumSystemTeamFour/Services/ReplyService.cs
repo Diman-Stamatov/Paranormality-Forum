@@ -129,7 +129,8 @@ namespace ForumSystemTeamFour.Services
             {
                 if (vote.VoteType == Like)
                 {
-                    throw new DuplicateEntityException($"User: {vote.VoterUsername} already upvoted reply with id: {id}.");
+                    //throw new DuplicateEntityException($"User: {vote.VoterUsername} already upvoted reply with id: {id}.");
+                    repository.RemoveVote(id, loggedUser.Username);
                 }
                 else
                 {
@@ -153,7 +154,8 @@ namespace ForumSystemTeamFour.Services
             {
                 if (vote.VoteType == Dislike)
                 {
-                    throw new DuplicateEntityException($"User: {vote.VoterUsername} already downvoted reply with id: {id}.");
+                    //throw new DuplicateEntityException($"User: {vote.VoterUsername} already upvoted reply with id: {id}.");
+                    repository.RemoveVote(id, loggedUser.Username);
                 }
                 else
                 {
