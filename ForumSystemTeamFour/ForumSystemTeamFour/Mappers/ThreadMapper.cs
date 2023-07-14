@@ -78,7 +78,7 @@ namespace ForumSystemTeamFour.Mappers
             {
                 Title = thread.Title,
                 Content = thread.Content,           
-                CreationDate = DateTime.Now,
+                CreationDate = thread.CreationDate,
                 Replies = thread.Replies.Count,
                 Tags = TagMapper.Map(thread.Tags),
                 IsDeleted = thread.IsDeleted,
