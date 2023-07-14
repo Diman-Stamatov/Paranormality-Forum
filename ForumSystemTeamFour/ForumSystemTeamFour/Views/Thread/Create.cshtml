@@ -1,0 +1,31 @@
+﻿@{
+    this.ViewData["Title"] = "Start topic";
+    this.ViewData["Action"] = "Create";
+
+    string loggedUserId = "0";
+    if (User.Identity.IsAuthenticated)
+    {
+        loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
+    }
+}
+@model ThreadCreateDto
+
+<div style="margin: 0 auto; width:100%">
+    <h3 style="text-align:center;margin-top:5%;font-size:2vw">Create new topic</h3>
+    <table style="text-align: left;" class="table appTable table-hover table-dark">
+        @*ToDo Make each thread title link to the Thread in the table*@
+        <thead>
+            <tr>
+                <th style="text-align:left; font-size: 1vw;" col">Title</th>
+                
+
+            </tr>
+        </thead>
+        <tbody style="font-size:1vw">
+       
+                            
+        </tbody>
+    </table>
+</div>
+
+
