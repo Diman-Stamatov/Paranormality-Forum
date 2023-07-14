@@ -82,6 +82,7 @@ namespace ForumSystemTeamFour.Mappers
                 Replies = thread.Replies.Count,
                 Tags = TagMapper.Map(thread.Tags),
                 IsDeleted = thread.IsDeleted,
+                AuthorUserName = thread.Author.Username
             };
         }
 

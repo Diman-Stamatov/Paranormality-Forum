@@ -9,21 +9,6 @@
 }
 @model List<ShortThreadResponseDto>
 
-<h1>All discussions</h1>
-
-@if (loggedUserId!=null)
-{
-    <p>
-        <a asp-controller="Thread" asp-action="Create" class="btn btn-primary">Create a new thread</a>
-    </p>
-}
-<p>Find a thread</p>
-<form asp-controller="Thread" asp-action="Index" method="get">
-    <input type="text" name="Name"/>
-    <input type="number" name="MinAbv"/>
-    <input type="number" name="MaxAbv" />
-    <input type ="submit" value="Search" class="btn btn-primary" />
-</form>
 @if (this.Model.Count() == 0)
 {
     <p>
@@ -32,28 +17,50 @@
 }
 else
 {
-    <div class="table">
-        <div class="header">
-            <div class="header-cell">Name1</div>
-            <div class="header-cell">% ABV</div>
-            <div class="header-cell">Style</div>
-            <div class="header-cell">Actions</div>
-        </div>
 
-        @foreach (var thread in this.Model)
-        {
-            <div class="row">
-                <div class="cell">@thread.Title</div>
-                <div class="cell">@thread.AuthorUserName</div>
-                <div class="cell">@thread.Content</div>
-                <div class="cell">
-                    <a asp-controller="Thread" asp-action="Details" asp-route-id="@thread.Id" class="btn appBtn-outline">Details</a>
-                    <a asp-controller="Thread" asp-action="Edit" asp-route-id="@thread.Id" class="btn btn-warning">Edit</a>
-                    <a asp-controller="Thread" asp-action="Delete" asp-route-id="@thread.Id" class="btn btn-danger">Delete</a>
-                </div>
-            </div>
-        }
+    <div style="margin: 0 auto; width:100%">
+        <h3 style="text-align:center;margin-top:15%;font-size:2vw">Popular discussions:</h3>
+        <table style="text-align: left;" class="table appTable table-hover table-dark">
+            @*ToDo Make each thread title link to the Thread in the table*@
+            <thead>
+                <tr>
+                    <th style="text-align: center; font-size: 1vw;" col">Topic</th>
+                    <th style="font-size: 1vw;" scope="col">Replies</th>
+                    <th style="font-size: 1vw;" scope="col">Reactions</th>
+                    <th style="font-size: 1vw;" scope="col">Author</th>
+                    <th style="font-size: 1vw;" scope="col">Creation Date:</th>
+
+                </tr>
+            </thead>
+            <tbody style="font-size:1vw">
+                @{
+                    foreach (var thread in this.Model)
+                    {
+
+                        <tr>
+
+                            <td>
+                                @thread.Title
+                                <br />
+                                @foreach (var tag in thread.Tags)
+                                {
+                                    <button class="btn btn-primary btn-sm">@tag</button>
+                                }
+                            </td>
+                            <td>@thread.Replies</td>
+                            <td>
+                                <div style="display: inline-block; width: 18px;">&#x1F44D;</div>
+                                <div style="display: inline-block; width: 27px;">@thread.Replies</div>
+                                <div style="display: inline-block; width: 18px;">&#x1F44E;</div>
+                                <div style="display: inline-block; width: 27px;">@thread.Tags.Count()</div>
+                            </td>
+                            <td>@thread.AuthorUserName</td>
+                            <td>@thread.CreationDate</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
     </div>
 }
-
 
