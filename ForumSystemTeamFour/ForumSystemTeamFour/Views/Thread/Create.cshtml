@@ -15,15 +15,27 @@
     <table style="text-align: left;" class="table appTable table-hover table-dark">
         @*ToDo Make each thread title link to the Thread in the table*@
         <thead>
-            <tr>
-                <th style="text-align:left; font-size: 1vw;" col">Title</th>
-                
+            <div>
 
-            </tr>
+                <div class="form-group" style="text-align:left; font-size: 2vw; col">
+                    <label asp-for="Title">Title</></label>
+                    <textarea class="form-control" asp-for="Title" type="text" rows="1"></textarea>
+                    <span asp-validation-for="Title" class="form-error"></span>
+                </div>
+                <br />
+                <div class="form-group" form-group" style="text-align:left; font-size: 2vw; col">
+                    <label asp-for="Content">Content</label>
+                    <textarea class="form-control" asp-for="Content" type="text" rows="3"></textarea>
+                    <span asp-validation-for="Content" class="form-error"></span>
+                </div>
+                <div>
+                    <input type="submit" value="@this.ViewData["SubmitButton"]" class="btn btn-primary" />
+                    <a onclick="history.back()" class="btn btn-light">Back</a>
+                </div>
+
+            </div>
         </thead>
         <tbody style="font-size:1vw">
-       
-                            
         </tbody>
     </table>
 </div>
