@@ -267,14 +267,16 @@ namespace ForumSystemTeamFour.Controllers.MVC
         public IActionResult Details([FromRoute]int id, ThreadDetailsVM detailsVM)
         {
             var queryParameters = ReplyMapper.MapViewQuery(detailsVM.QueryParameters);
+            
             try
             {
-                var sortedReplies = ReplyServices.FilterBy(queryParameters);
+				detailsVM.Thread = ThreadServices.Details(id);
+				var sortedReplies = ReplyServices.FilterBy(queryParameters);
                 detailsVM.Thread.Replies = sortedReplies;
             }
             catch (EntityNotFoundException exception)
             {
-                this.ViewData["ErrorMessage"] = exception.Message;
+                this.ViewData["ErrorMessage"] = exception.Message + " Displaying the original replies.";
                 this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
                 return this.View(detailsVM);
             }           
