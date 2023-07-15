@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ForumSystemTeamFour.Models.DTOs.ThreadDTOs
@@ -17,5 +18,7 @@ namespace ForumSystemTeamFour.Models.DTOs.ThreadDTOs
 
         [Required]
         public int AuthorId { get; set; }
+
+        public List<string> Tags { get; set; }
     }
 }
