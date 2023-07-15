@@ -86,6 +86,13 @@ namespace ForumSystemTeamFour.Services
             return result;
         }
 
+        public List<LargeThreadResponseDto> GetAllLarge()
+        {
+            var allThreads = this.threadRepositroy.GetAll();
+            var result = this.threadMapper.MapLargeList(allThreads);
+            return result;
+        }
+
         public LargeThreadResponseDto Details(int id)
         {
             var thread = this.threadRepositroy.Details(id);            

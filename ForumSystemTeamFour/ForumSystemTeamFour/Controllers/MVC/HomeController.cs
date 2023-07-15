@@ -13,11 +13,11 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
     public class HomeController : Controller
     {
-        private readonly IThreadRepositroy ThreadRepository;
+        private readonly IThreadService ThreadService;
 
-        public HomeController(IThreadRepositroy threadRepository)
+        public HomeController(IThreadService threadService)
         {
-            this.ThreadRepository = threadRepository;
+            this.ThreadService = threadService;
         }
 
         [AllowAnonymous]
@@ -26,7 +26,8 @@ namespace ForumSystemTeamFour.Controllers.MVC
         {
             if (!User.Identity.IsAuthenticated)
             {
-                var threads = this.ThreadRepository.GetAll().OrderByDescending(thread => thread.Replies.Count).Take(10).ToList();
+                var threads = this.ThreadService.GetAllLarge()
+                    .OrderByDescending(thread => thread.Replies.Count).Take(10).ToList();
                 return this.View("AnonymousHome", threads);
             }
             else
@@ -50,14 +51,6 @@ namespace ForumSystemTeamFour.Controllers.MVC
             return this.View("Error401");
         }
 
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult SortTest()
-        {
-            var viewModel = new ThreadWithRepliesVM();
-            viewModel.Thread = this.ThreadRepository.GetAllByUserId(1).First();
-            viewModel.QueryParameters = new ReplyQueryParameters();
-            return this.View("FilterRepliesTemp", viewModel);
-        }
+        
     }
 }

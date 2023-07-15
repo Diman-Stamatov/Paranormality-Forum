@@ -1,7 +1,7 @@
 ﻿using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs.UserDTOs;
-using ForumSystemTeamFour.Models.ViewModels;
+using ForumSystemTeamFour.Models.ViewModels.User;
 using System.Collections.Generic;
 using System.Linq;
 

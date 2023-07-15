@@ -3,7 +3,7 @@ using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs.UserDTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
-using ForumSystemTeamFour.Models.ViewModels;
+using ForumSystemTeamFour.Models.ViewModels.User;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
 using System.Collections.Generic;

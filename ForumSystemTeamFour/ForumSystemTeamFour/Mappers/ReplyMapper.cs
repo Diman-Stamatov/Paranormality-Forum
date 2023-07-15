@@ -1,7 +1,9 @@
 ﻿using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Models.ViewModels;
+using ForumSystemTeamFour.Models.ViewModels.Reply;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,6 +75,19 @@ namespace ForumSystemTeamFour.Mappers
             reply.ModificationDate = DateTime.Now;
 
             return reply;
+        }
+
+        public ReplyQueryParameters MapViewQuery(ReplyQueryParametersVM queryVM)
+        {
+            return new ReplyQueryParameters()
+            {
+                ThreadId = queryVM.ThreadId,
+                UserName = queryVM.UserName,
+                CreatedAfter = queryVM.CreatedAfter,
+                CreatedBefore = queryVM.CreatedBefore,
+                SortBy = queryVM.SortBy,
+                SortOrder = queryVM.SortOrder
+            };
         }
 
     }

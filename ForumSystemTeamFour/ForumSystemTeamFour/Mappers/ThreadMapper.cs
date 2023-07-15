@@ -52,6 +52,7 @@ namespace ForumSystemTeamFour.Mappers
         {
             return new LargeThreadResponseDto
             {
+                Id = thread.Id,
                 Title = thread.Title,
                 Content = thread.Content,
                 isDeleted = thread.IsDeleted,
@@ -85,10 +86,16 @@ namespace ForumSystemTeamFour.Mappers
                 AuthorUserName = thread.Author.Username
             };
         }
+               
 
         public List<ShortThreadResponseDto> Map(List<Thread> threads)
         {
             return threads.Select(this.Map).ToList();
+        }
+
+        public List<LargeThreadResponseDto> MapLargeList(List<Thread> threads)
+        {
+            return threads.Select(this.MapLarge).ToList();
         }
 
         public PaginatedList<ShortThreadResponseDto> Map(PaginatedList<Thread> threads)

@@ -19,6 +19,8 @@ namespace ForumSystemTeamFour.Services.Interfaces
 
         public List<ShortThreadResponseDto> GetAll();
 
+        List<LargeThreadResponseDto> GetAllLarge();
+
         public LargeThreadResponseDto Details(int id);
     }
 }

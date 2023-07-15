@@ -1,4 +1,4 @@
-﻿namespace ForumSystemTeamFour.Models.ViewModels
+﻿namespace ForumSystemTeamFour.Models.ViewModels.User
 {
     public class UserProfileVM
     {

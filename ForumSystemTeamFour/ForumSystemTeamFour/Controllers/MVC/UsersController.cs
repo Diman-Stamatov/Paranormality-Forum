@@ -1,6 +1,5 @@
 ﻿using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Services.Interfaces;
-using ForumSystemTeamFour.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +11,11 @@ using System.Web;
 using Microsoft.Extensions.Hosting.Internal;
 using System.IO;
 using System.IO.Pipes;
+using ForumSystemTeamFour.Models.ViewModels.User;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
-    
+
     public class UsersController : Controller
     {
         private readonly IUserServices UserServices;
@@ -65,6 +65,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 return this.View("Error404");
             }
             
+
         }
 
         [Authorize]

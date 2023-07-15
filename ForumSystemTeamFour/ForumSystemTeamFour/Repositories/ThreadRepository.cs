@@ -138,7 +138,8 @@ namespace ForumSystemTeamFour.Repositories
             var threads = this.context.Threads
                             .Where(thread => !thread.IsDeleted)
                             .Include(thread => thread.Replies)
-                            .Include(thread => thread.Author)                            
+							.ThenInclude(reply => reply.Author)
+							.Include(thread => thread.Author)                            
                             .ToList();
             if (threads.Count == 0 || !threads.Any())
             {
@@ -153,6 +154,7 @@ namespace ForumSystemTeamFour.Repositories
                     var thread = this.context.Threads
                             .Where(thread => !thread.IsDeleted && thread.Id ==id)
                             .Include(thread => thread.Replies)
+                            .ThenInclude(reply => reply.Author)   
                             .Include(thread => thread.Author)
                             .FirstOrDefault();
 

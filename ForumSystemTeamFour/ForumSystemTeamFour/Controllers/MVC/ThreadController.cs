@@ -1,6 +1,5 @@
 ﻿using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Services.Interfaces;
-using ForumSystemTeamFour.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +10,9 @@ using ForumSystemTeamFour.Models.QueryParameters;
 using System.Linq;
 using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 using System.Data;
+using ForumSystemTeamFour.Models.ViewModels.User;
+using ForumSystemTeamFour.Mappers;
+using ForumSystemTeamFour.Models.ViewModels.Thread;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
@@ -19,14 +21,20 @@ namespace ForumSystemTeamFour.Controllers.MVC
         private readonly IThreadService ThreadServices;
         private readonly ISecurityServices SecurityServices;
         private readonly IThreadMapper ThreadMapper;
+        private readonly IReplyService ReplyServices;
+        private readonly IReplyMapper ReplyMapper;
 
         public ThreadController(IThreadService threadServices,
                                 ISecurityServices securityServices,
-                                IThreadMapper threadMapper)
+                                IThreadMapper threadMapper,
+                                IReplyService replyServices,
+                                IReplyMapper replyMapper)
         {
             this.ThreadServices = threadServices;
             this.SecurityServices = securityServices;
             this.ThreadMapper = threadMapper;
+            this.ReplyServices = replyServices;
+            this.ReplyMapper = replyMapper;
         }
 
 
@@ -232,5 +240,46 @@ namespace ForumSystemTeamFour.Controllers.MVC
             }
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Details([FromRoute] int id)
+        {
+            var detailsVM = new ThreadDetailsVM();
+            try
+            {
+                detailsVM.Thread = ThreadServices.Details(id);
+            }
+            catch (EntityNotFoundException exception)
+            {
+
+                this.ViewData["ErrorMessage"] = exception.Message;
+                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                return this.View("Error404");
+            }
+            
+
+            return this.View("Details", detailsVM);
+
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult Details([FromRoute]int id, ThreadDetailsVM detailsVM)
+        {
+            var queryParameters = ReplyMapper.MapViewQuery(detailsVM.QueryParameters);
+            try
+            {
+                var sortedReplies = ReplyServices.FilterBy(queryParameters);
+                detailsVM.Thread.Replies = sortedReplies;
+            }
+            catch (EntityNotFoundException exception)
+            {
+                this.ViewData["ErrorMessage"] = exception.Message;
+                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                return this.View(detailsVM);
+            }           
+            return this.View("Details", detailsVM);
+
+        }
     }
 }

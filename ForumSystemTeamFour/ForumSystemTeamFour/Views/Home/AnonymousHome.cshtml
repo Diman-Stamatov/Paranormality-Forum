@@ -1,6 +1,6 @@
 ﻿
 @using ForumSystemTeamFour.Models.DTOs
-@model List<Thread>
+@model List<LargeThreadResponseDto>
 
 @{
     Layout = null;
@@ -53,8 +53,9 @@
                         {
                             var latestReply = thread.Replies.OrderByDescending(reply => reply.CreationDate).FirstOrDefault();
                             <tr>
-                            
-                                <td>@thread.Title</td>
+                                <td>
+                                    <a asp-controller="Thread" asp-action="Details" asp-route-id="@thread.Id" style="text-decoration:none">@thread.Title</a>
+                                </td>
                                 <td>@thread.Replies.Count()</td>
                                 <td>@thread.Author.Username</td>
                                 @if (latestReply != null)
@@ -65,7 +66,6 @@
                                 {
                                     <td>No replies yet :&#0060;</td>
                                 }
-
                             </tr>
                         }
                     }

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
-namespace ForumSystemTeamFour.Models.ViewModels
+namespace ForumSystemTeamFour.Models.ViewModels.User
 {
     public class UserCreateVM 
     {        

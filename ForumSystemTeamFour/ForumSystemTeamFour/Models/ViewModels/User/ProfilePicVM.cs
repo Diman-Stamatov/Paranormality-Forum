@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using ForumSystemTeamFour.CustomValidationAttributes;
 
-namespace ForumSystemTeamFour.Models.ViewModels
+namespace ForumSystemTeamFour.Models.ViewModels.User
 {
     public class ProfilePicVM
     {

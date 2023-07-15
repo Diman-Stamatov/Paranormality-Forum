@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace ForumSystemTeamFour.Models.ViewModels
+namespace ForumSystemTeamFour.Models.ViewModels.User
 {
     public class UserUpdateVM
     {            

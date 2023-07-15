@@ -1,4 +1,4 @@
-﻿@model ThreadWithRepliesVM;
+﻿@model ThreadDetailsVM;
 @{
     this.ViewData["Title"] = "Sort Test";
     var sortParameters = new List<string> { "Username", "Email", "CreationDate" };
@@ -23,16 +23,6 @@
                     <label asp-for="QueryParameters.UserName">By author:</label><br>
                     <input asp-for="QueryParameters.UserName" type="text" value="@Model.QueryParameters.UserName"               placeholder="Mulder">
                         </td>
-
-                        <td>
-                    <label asp-for="QueryParameters.Email">By e-mail:</label><br> @*Remove this one?*@
-                    <input asp-for="QueryParameters.Email" type="text" value="@Model.QueryParameters.UserName" placeholder="Mulder@Scully.com">
-                        </td>
-
-                        <td>
-                    <label asp-for="QueryParameters.CreationDate">By creation date:</label><br> @*Have only before and after?*@
-                    <input asp-for="QueryParameters.CreationDate" type="text" value="@Model.QueryParameters.CreationDate" placeholder="06.06.2006">
-                </td>
 
                         <td>
                     <label asp-for="QueryParameters.CreatedAfter">Created after:</label><br>

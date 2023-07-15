@@ -10,7 +10,7 @@ namespace ForumSystemTeamFour.Models.DTOs.ThreadDTOs
 
         public string Content { get; set; }
 
-        public DateTime CreationDate { get; set; }
+        public DateTime CreationDate { get; set; }        
 
         public int Replies { get; set; }
 

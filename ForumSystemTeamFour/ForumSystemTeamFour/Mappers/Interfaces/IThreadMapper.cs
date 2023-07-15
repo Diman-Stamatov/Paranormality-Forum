@@ -19,6 +19,8 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
 
         public PaginatedList<ShortThreadResponseDto> Map(PaginatedList<Thread> threads);
 
+        List<LargeThreadResponseDto> MapLargeList(List<Thread> threads);
+
         public List<ShortThreadResponseDto> Map(List<Thread> thread);
 
        

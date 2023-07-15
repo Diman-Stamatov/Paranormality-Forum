@@ -2,7 +2,7 @@
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs.UserDTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
-using ForumSystemTeamFour.Models.ViewModels;
+using ForumSystemTeamFour.Models.ViewModels.User;
 
 namespace ForumSystemTeamFour.Services.Interfaces
 {
