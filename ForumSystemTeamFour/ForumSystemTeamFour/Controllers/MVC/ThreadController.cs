@@ -13,6 +13,7 @@ using System.Data;
 using ForumSystemTeamFour.Models.ViewModels.User;
 using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Models.ViewModels.Thread;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ForumSystemTeamFour.Controllers.MVC
 {
@@ -66,9 +67,23 @@ namespace ForumSystemTeamFour.Controllers.MVC
         [HttpGet]
         public IActionResult Create()
         {
-            var threadCreateDto = new ThreadCreateDto();
+            var threadCreateDto = new ThreadCreateVM();
+            this.InitializeDropDownListsOfTags(threadCreateDto);
             threadCreateDto.AuthorId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
             return this.View("Create", threadCreateDto);
+        }
+        [Authorize]
+        [HttpPost]
+        public IActionResult Create(ThreadCreateVM threadCreateDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(threadCreateDto);
+            }
+            int loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
+            var createdThread = this.ThreadServices.Create(threadCreateDto, loggedUserId);
+            return RedirectToAction("Details", new { id = createdThread.Id });
+
         }
 
         [Authorize]
@@ -109,19 +124,6 @@ namespace ForumSystemTeamFour.Controllers.MVC
             }
         }
 
-        [Authorize]
-        [HttpPost]
-        public IActionResult Create(ThreadCreateDto threadCreateDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return this.View(threadCreateDto);
-            }
-            int loggedUserId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
-            var createdThread = this.ThreadServices.Create(threadCreateDto, loggedUserId);
-            return RedirectToAction("Details", new { id = createdThread.Id });
-
-        }
 
         [Authorize]
         [HttpGet]
@@ -280,6 +282,10 @@ namespace ForumSystemTeamFour.Controllers.MVC
             }           
             return this.View("Details", detailsVM);
 
+        }
+        private void InitializeDropDownListsOfTags(ThreadCreateVM threadViewModel)
+        {
+            threadViewModel.Tags = new SelectList(ThreadServices.GetAll(), "Id", "Name");
         }
     }
 }

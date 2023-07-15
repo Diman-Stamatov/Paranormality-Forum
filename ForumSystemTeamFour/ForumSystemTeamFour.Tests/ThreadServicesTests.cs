@@ -21,6 +21,7 @@ namespace ForumSystemTeamFour.Tests
             var mockThreadRepository = new Mock<IThreadRepositroy>();
             var mockSecurityServices = new Mock<ISecurityServices>();
                    var mockTagMapper = new Mock<ITagMapper>();
+                   var mockTagService = new Mock<ITagServices>();
                 var mockThreadMapper = TestModels.GetTestThreadMapper();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
@@ -28,7 +29,8 @@ namespace ForumSystemTeamFour.Tests
                                                     mockThreadMapper.Object,
                                                     mockTagMapper.Object,
                                                     mockUserServices.Object,
-                                                    mockReplyService.Object);
+                                                    mockReplyService.Object,
+                                                    mockTagService.Object);
 
            var testCreateDto = TestModels.GetTestThreadCreateDto();
             var defaultThread = TestModels.GetTestShortThreadResponseDto();
@@ -47,7 +49,8 @@ namespace ForumSystemTeamFour.Tests
                 var mockReplyService = new Mock<IReplyService>();
             var mockThreadRepository = new Mock<IThreadRepositroy>();
             var mockSecurityServices = new Mock<ISecurityServices>();
-                   var mockTagMapper = new Mock<ITagMapper>();
+                   var mockTagMapper = new Mock<ITagMapper>(); 
+                  var mockTagService = new Mock<ITagServices>();
                 var mockThreadMapper = TestModels.GetTestThreadMapper();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
@@ -55,7 +58,8 @@ namespace ForumSystemTeamFour.Tests
                                                     mockThreadMapper.Object,
                                                     mockTagMapper.Object,
                                                     mockUserServices.Object,
-                                                    mockReplyService.Object);
+                                                    mockReplyService.Object,
+                                                    mockTagService.Object);
             int idToUpdate = DefaultId;
                     int loggedUserId = DefaultId;
                  var threadUpdateDto = TestModels.GetTestThreadUpdateDto();
@@ -74,6 +78,7 @@ namespace ForumSystemTeamFour.Tests
                 var mockReplyService = new Mock<IReplyService>();
             var mockSecurityServices = new Mock<ISecurityServices>();
                    var mockTagMapper = new Mock<ITagMapper>();
+                  var mockTagService = new Mock<ITagServices>();
             var mockThreadRepository = TestModels.GetTestThreadRepositroy();
                 var mockThreadMapper = TestModels.GetTestThreadMapper();
 
@@ -82,7 +87,8 @@ namespace ForumSystemTeamFour.Tests
                                                     mockThreadMapper.Object,
                                                     mockTagMapper.Object,
                                                     mockUserServices.Object,
-                                                    mockReplyService.Object);
+                                                    mockReplyService.Object, 
+                                                    mockTagService.Object);
 
             int IdtoDelete = TestModels.DefaultId;
                     int loggedUserId = TestModels.DefaultId;
@@ -108,7 +114,8 @@ namespace ForumSystemTeamFour.Tests
                 var mockReplyService = new Mock<IReplyService>();
             var mockSecurityServices = new Mock<ISecurityServices>();
                    var mockTagMapper = new Mock<ITagMapper>();
-                var mockThreadMapper = TestModels.GetTestThreadMapper();
+                  var mockTagService = new Mock<ITagServices>();
+            var mockThreadMapper = TestModels.GetTestThreadMapper();
             var mockThreadRepository = TestModels.GetTestThreadRepositroy();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
@@ -116,7 +123,8 @@ namespace ForumSystemTeamFour.Tests
                                                     mockThreadMapper.Object,
                                                     mockTagMapper.Object,
                                                     mockUserServices.Object,
-                                                    mockReplyService.Object);
+                                                    mockReplyService.Object,
+                                                    mockTagService.Object);
 
             int IdtoDelete2 = TestModels.DefaultId;
                     int loggedUserId = TestModels.DefaultId;
@@ -139,6 +147,7 @@ namespace ForumSystemTeamFour.Tests
             var mockThreadRepository = new Mock<IThreadRepositroy>();
             var mockSecurityServices = new Mock<ISecurityServices>();
                    var mockTagMapper = new Mock<ITagMapper>();
+                  var mockTagService = new Mock<ITagServices>();
                 var mockThreadMapper = TestModels.GetTestThreadMapper();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
@@ -146,7 +155,8 @@ namespace ForumSystemTeamFour.Tests
                                                     mockThreadMapper.Object,
                                                     mockTagMapper.Object,
                                                     mockUserServices.Object,
-                                                    mockReplyService.Object);
+                                                    mockReplyService.Object, 
+                                                    mockTagService.Object);
 
             var allThreads = testedServices.GetAll();            
 
@@ -162,6 +172,7 @@ namespace ForumSystemTeamFour.Tests
             var mockSecurityServices = new Mock<ISecurityServices>();
                    var mockTagMapper = new Mock<ITagMapper>();
                 var mockUserServices = new Mock<IUserServices>();
+                  var mockTagService = new Mock<ITagServices>();
                 var mockThreadMapper = TestModels.GetTestThreadMapper();
 
             var testedServices = new ThreadService(mockThreadRepository.Object,
@@ -169,7 +180,8 @@ namespace ForumSystemTeamFour.Tests
                                                     mockThreadMapper.Object,
                                                     mockTagMapper.Object,
                                                     mockUserServices.Object,
-                                                    mockReplyService.Object);
+                                                    mockReplyService.Object, 
+                                                    mockTagService.Object);
 
             int threadId = TestModels.DefaultId;
                       var threadToComape = TestModels.GetTestDefaultThread();

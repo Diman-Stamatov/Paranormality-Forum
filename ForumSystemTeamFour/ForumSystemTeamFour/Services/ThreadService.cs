@@ -3,6 +3,7 @@ using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
+using ForumSystemTeamFour.Models.Interfaces;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
@@ -20,20 +21,23 @@ namespace ForumSystemTeamFour.Services
         private readonly ITagMapper tagMapper;
         private readonly IUserServices userServices;
         private readonly IReplyService replyService;
+        private readonly ITagServices tagServices;
 
         public ThreadService(IThreadRepositroy threadRepositroy,
                             ISecurityServices securityServices,
                             IThreadMapper threadMapper,
                             ITagMapper tagMapper,
                             IUserServices userServices,
-                            IReplyService replyService)
+                            IReplyService replyService,
+                            ITagServices tagServices)
         {
             this.threadRepositroy = threadRepositroy;
             this.forumSecurity = securityServices;
             this.threadMapper = threadMapper;
             this.userServices = userServices;
             this.replyService = replyService;
-            this.tagMapper= tagMapper;
+            this.tagMapper = tagMapper;
+            this.tagServices = tagServices;
         }
 
         public ShortThreadResponseDto Create(ThreadCreateDto threadCreateDto, int loggedUserId)
@@ -42,6 +46,14 @@ namespace ForumSystemTeamFour.Services
             var newThread = this.threadMapper.Map(threadCreateDto, loggedUser);
             var createdThread = this.threadRepositroy.Create(newThread);
             var threadResponseDto = this.threadMapper.Map(createdThread);
+            if (threadCreateDto.Tags !=null)
+            {
+                foreach (var tag in threadCreateDto.Tags)
+                {
+                    var tagResponse = this.tagServices.Create(tag);
+                    threadResponseDto.Tags.Add(tagResponse.Name);
+                }
+            }
             return threadResponseDto;
         }
 
@@ -98,6 +110,16 @@ namespace ForumSystemTeamFour.Services
             var thread = this.threadRepositroy.Details(id);            
             var threadResponseDto = this.threadMapper.MapLarge(thread);
             return threadResponseDto;
-        }        
+        }  
+        
+        public List<string> GetAllTags(List<Tag> tags) 
+        {
+            var listOfTags = new List<string>();
+            foreach (var tag in tags)
+            {
+                listOfTags.Add(tag.Name);
+            }
+            return listOfTags;
+        }
     }
 }

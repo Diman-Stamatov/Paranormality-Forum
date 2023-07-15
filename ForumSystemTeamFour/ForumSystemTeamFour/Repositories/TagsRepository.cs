@@ -17,6 +17,10 @@ namespace ForumSystemTeamFour.Repositories
 
         public Tag Create(string name)
         {
+            if (TagExists(name))
+            {
+                return this.GetByName(name);
+            }
             var newTag = new Tag{Name = name};
 
             context.Tags.Add(newTag);
@@ -48,6 +52,12 @@ namespace ForumSystemTeamFour.Repositories
         public Tag GetByName(string name)
         {
             return context.Tags.FirstOrDefault(tag => tag.Name == name && tag.IsDeleted == false);            
+        }
+
+        public bool TagExists(string tag)
+        {
+            Tag x = GetByName(tag);
+            return x != null;
         }
     }
 }
