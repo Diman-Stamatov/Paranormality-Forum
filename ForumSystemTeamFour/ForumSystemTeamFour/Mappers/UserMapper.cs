@@ -50,6 +50,7 @@ namespace ForumSystemTeamFour.Mappers
                 Email = user.Email,
                 Username = user.Username,
                 Threads = this.MapThreadsForUser(user.Threads),
+                TotalPosts = user.TotalPosts,
                 IsAdmin = user.IsAdmin,
                 IsBlocked = user.IsBlocked,
             };

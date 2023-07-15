@@ -23,6 +23,7 @@ namespace ForumSystemTeamFour.Repositories
 
         public Reply Create(Reply reply)
         {
+            reply.Author.TotalPosts++;
             context.Replies.Add(reply);
             context.SaveChanges();
 

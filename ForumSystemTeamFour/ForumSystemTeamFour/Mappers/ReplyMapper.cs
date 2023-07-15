@@ -1,6 +1,7 @@
 ﻿using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.Interfaces;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Models.ViewModels;
 using ForumSystemTeamFour.Models.ViewModels.Reply;
@@ -32,7 +33,12 @@ namespace ForumSystemTeamFour.Mappers
             {
                 Id = reply.Id,
                 ThreadId = (int)reply.ThreadId,
-                Author = new AuthorDto() { UserName = reply.Author.Username, Email = reply.Author.Email },
+                Author = new AuthorDto() 
+                { 
+                    UserName = reply.Author.Username,
+					TotalPosts = reply.Author.TotalPosts,
+					Email = reply.Author.Email 
+                },
                 CreationDate = reply.CreationDate,
                 ModificationDate = reply.ModificationDate,
                 Content = reply.Content,

@@ -16,5 +16,6 @@ namespace ForumSystemTeamFour.Models.Interfaces
         bool IsDeleted { get; set; }
         List<Thread> Threads { get; set; }
         List<Reply> Replies { get; set; }
+        int TotalPosts { get;set; }
     }
 }

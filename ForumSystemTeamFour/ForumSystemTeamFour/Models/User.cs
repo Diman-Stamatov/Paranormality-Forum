@@ -31,6 +31,7 @@ namespace ForumSystemTeamFour.Models
         public bool IsDeleted { get; set; }
         public List<Thread> Threads { get; set; }
         public List<Reply> Replies { get; set; }
+        public int TotalPosts { get; set; }
 
         public User()
         {

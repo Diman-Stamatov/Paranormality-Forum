@@ -81,7 +81,7 @@ namespace ForumSystemTeamFour.Services
             var token = new JwtSecurityToken(configManager["Jwt:Issuer"],
                 configManager["Jwt:Audience"],
                 claims,
-                expires: DateTime.Now.AddMinutes(10),
+                expires: DateTime.Now.AddMinutes(20),
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

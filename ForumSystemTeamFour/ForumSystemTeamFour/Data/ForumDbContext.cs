@@ -40,6 +40,7 @@ namespace ForumSystemTeamFour.Data
                 Username = "UsernameOne",
                 Email = "FirstnameOne@Lastname.com",
                 Password = "cGFzc3dvcmRPbmU=", //passwordOne in plain text
+                TotalPosts = random.Next(10,60),
                 IsAdmin = true 
                 },
                 new User {
@@ -49,7 +50,8 @@ namespace ForumSystemTeamFour.Data
                 Username = "UsernameTwo",
                 Email = "FirstnameTwo@Lastname.com",
                 Password = "cGFzc3dvcmRUd28=", //passwordTwo in plain text
-                IsBlocked = true 
+                TotalPosts = random.Next(10,60),
+				IsBlocked = true 
                 },
                 new User {
                 Id = nextUserId++,
@@ -57,7 +59,8 @@ namespace ForumSystemTeamFour.Data
                 LastName = "LastNameThree",
                 Username = "UsernameThree",
                 Email = "FirstnameThree@Lastname.com",
-                Password = "cGFzc3dvcmRUaHJlZQ==" //passwordThree in plain text etc.
+                Password = "cGFzc3dvcmRUaHJlZQ==", //passwordThree in plain text etc.
+                TotalPosts = random.Next(10,60),
                 },
                 new User {
                 Id = nextUserId++,
@@ -65,7 +68,8 @@ namespace ForumSystemTeamFour.Data
                 LastName = "LastNameFour",
                 Username = "UsernameFour",
                 Email = "FirstnameFour@Lastname.com",
-                Password = "cGFzc3dvcmRGb3Vy"
+                Password = "cGFzc3dvcmRGb3Vy",
+                TotalPosts = random.Next(10,60),
                 },
                 new User {
                 Id = nextUserId++,
@@ -73,8 +77,9 @@ namespace ForumSystemTeamFour.Data
                 LastName = "LastNameFive",
                 Username = "UsernameFive",
                 Email = "FirstnameFive@Lastname.com",
-                Password = "cGFzc3dvcmRGaXZl"
-                }
+                Password = "cGFzc3dvcmRGaXZl",
+				TotalPosts = random.Next(10,60),
+				}
             };            
             modelBuilder.Entity<User>().HasData(users);
 

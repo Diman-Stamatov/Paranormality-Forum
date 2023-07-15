@@ -1,32 +1,193 @@
 ﻿@model ThreadDetailsVM
-@{
-	this.ViewData["Title"] = Model.Thread.Title;
-}
 
-<table width=100% cellspacing="1" style="border: 1px solid black;">
+@{
+	bool loggedIn = User.Identity.IsAuthenticated;
+	
+	
+
+	this.ViewData["Title"] = Model.Thread.Title;
+	string threadAuthor = Model.Thread.Author.Username;
+	string threadTitle = Model.Thread.Title;
+	string threadCreationDate = Model.Thread.CreationDate.ToString("g");
+	string threadContent = Model.Thread.Content;
+	bool threadWasEdited = Model.Thread.ModificationDate != DateTime.MinValue;
+	int threadLikes = Model.Thread.Votes.Where(vote => vote.VoteType == "Like").Count();
+	int threadDislikes = Model.Thread.Votes.Where(vote => vote.VoteType == "Dislike").Count();
+	int threadAuthorPosts = Model.Thread.Author.TotalPosts;
+
+	string profilePicDirectory = "wwwroot/ProfilePictures";
+	bool hasThreadPic = Directory.EnumerateFiles(profilePicDirectory, $"{threadAuthor}*").Any();
+	var directory = new DirectoryInfo(@"wwwroot/ProfilePictures");
+	var threadFileInfo = directory.GetFiles("*" + threadAuthor + "*.*");
+	string threadPicName = hasThreadPic ? $"{threadFileInfo[0].Name}" : "default.jpg";
+}
+<style>
+	html, body {
+		max-width: 100%;
+		overflow-x: hidden;
+	}
+	
+	.postTable {
+		width: 100%;
+		height: auto;
+		background-color: #232323;
+		border: 3px solid black;
+		border-radius: 10px;
+	}
+
+		.postTable td {
+			border: 2px solid black;
+		}
+</style>
+
+
+
+@*//Thread*@
+<table class="postTable">
 	<tbody>
 		<tr>
-			<td>
-				Username
+			<td style="width:8vw;">
+				<div style="font-size:14px">Author:</div>
+				@{
+					if (loggedIn)
+					{
+						<div><a asp-controller="Users" asp-action="Profile" asp-route-id="@threadAuthor" style="font-size:16px; text-decoration:none">@threadAuthor</a></div>
+					}
+					else
+					{
+						<div style="font-size:16px">@threadAuthor</div>
+					}
+				}
+				
 			</td>
 			<td>
-				Thread Subject + Posted on to the right
+				<div style="font-size:20px;padding-top:10px;">@threadTitle</div>
+				<div style="text-align:right; font-size:12px; padding-right:20px">
+					Posted: @threadCreationDate
+				</div>
 			</td>
 		</tr>
 
 		<tr>
-			<td>UserData + picture</td>
-			<td>Thread content</td>
+			<td style="vertical-align:top; padding-top:20px">
+				<div>
+					<img style="width:100px;height:100px;vertical-align:top"
+						 src="/ProfilePictures/@threadPicName"/>
+				</div>
+				<div>
+					Posts: @threadAuthorPosts
+				</div>
+			</td>
+			<td  style="text-align:justify; padding:30px">@threadContent</td>
 		</tr>
 
 		<tr>
-			<td>redirect to top</td>
-			<td>edited on</td>
+			<td>
+				
+			</td>
+			<td>
+				<div style=" float:left; padding-left:20px;">
+					<div style="display: inline-block; color:limegreen">⨇</div>
+					<div style="display: inline-block;">@threadLikes</div>
+					<div style="display: inline-block; color:red">⨈</div>
+					<div style="display: inline-block;">@threadDislikes</div>
+				</div>
+				@{
+					if (threadWasEdited)
+					{
+						<div style="text-align:left; float:right">Edited on: @Model.Thread.ModificationDate.ToString("g")</div>
+					}
+				}
+			</td>
 		</tr>
 
-		<tr>
-			acts as seperator
+		<tr border="none">
+			<td colspan="2" style="background-color:black;height:5px"></td>
+			
 		</tr>
 
 	</tbody>
-</table>
+</table> 
+@{
+	//Replies
+	foreach (var reply in Model.Thread.Replies)
+	{
+		string replyAuthor = reply.Author.UserName;
+		string replyCreationDate = reply.CreationDate.ToString("g");
+		string replyContent = reply.Content;
+		bool replyWasEdited = reply.ModificationDate != DateTime.MinValue;
+		int replyLikes = reply.Likes;
+		int replyDislikes = reply.Dislikes;
+		int replyAuthorPosts = reply.Author.TotalPosts;
+
+		bool hasReplyPic = Directory.EnumerateFiles(profilePicDirectory, $"{replyAuthor}*").Any();
+		var replydFileInfo = directory.GetFiles("*" + replyAuthor + "*.*");
+		string replyPicName = hasReplyPic ? $"{replydFileInfo[0].Name}" : "default.jpg";
+
+		<table class="postTable" style="width:100%">
+			<tbody>
+				<tr>
+					<td style="width:8vw;">
+						<div style="font-size:14px">Author:</div>
+						@{
+							if (loggedIn)
+							{
+								<div><a asp-controller="Users" asp-action="Profile" asp-route-id="@replyAuthor" style="font-size:16px; text-decoration:none">@replyAuthor</a></div>
+							}
+							else
+							{
+								<div style="font-size:16px">@replyAuthor</div>
+							}
+						}
+
+					</td>
+					<td>
+						<div style="font-size:12px;float:left;">Re: @threadTitle</div>
+						<div style="float:right; font-size:12px;padding-right:20px">
+							Posted: @replyCreationDate
+						</div>
+					</td>
+				</tr>
+
+				<tr>
+					<td style="vertical-align:top; padding-top:20px">
+						<div>
+							<img style="width:100px;height:100px;vertical-align:top"
+								 src="/ProfilePictures/@replyPicName" />
+						</div>
+						<div>
+							Posts: @replyAuthorPosts
+						</div>
+					</td>
+					<td style="text-align:justify; padding:30px">@replyContent</td>
+				</tr>
+
+				<tr>
+					<td>
+						<a href="#top" style="float:left; padding-left:20px;text-decoration:none; font-size:14px">Top</a>
+					</td>
+					<td>
+						<div style="float:left; padding-left:20px;">
+							<div style="display: inline-block; color:limegreen">⨇</div>
+							<div style="display: inline-block;">@replyLikes</div>
+							<div style="display: inline-block; color:red">⨈</div>
+							<div style="display: inline-block;">@replyDislikes</div>
+						</div>
+						@{
+							if (replyWasEdited)
+							{
+								<div style="text-align:left; float:right">Edited on: @reply.ModificationDate.ToString("g")</div>
+							}
+						}
+					</td>
+				</tr>
+
+				<tr border="none">
+					<td colspan="2" style="background-color:black;height:5px"></td>
+
+				</tr>
+
+			</tbody>
+		</table>
+	}
+}

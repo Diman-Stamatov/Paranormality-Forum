@@ -24,6 +24,7 @@ namespace ForumSystemTeamFour.Repositories
 
         public Thread Create(Thread thread)
         {
+            thread.Author.TotalPosts++;
             context.Threads.Add(thread);
             Save();
             return thread;
@@ -154,9 +155,9 @@ namespace ForumSystemTeamFour.Repositories
                     var thread = this.context.Threads
                             .Where(thread => !thread.IsDeleted && thread.Id ==id)
                             .Include(thread => thread.Replies)
-                            .ThenInclude(reply => reply.Author)   
-                            .Include(thread => thread.Author)
-                            .FirstOrDefault();
+                            .ThenInclude(reply => reply.Author)
+                            .Include(thread => thread.Author)							
+							.FirstOrDefault();
 
             return thread ?? throw new EntityNotFoundException($"Thread with id={id} doesn't exist.");
         }

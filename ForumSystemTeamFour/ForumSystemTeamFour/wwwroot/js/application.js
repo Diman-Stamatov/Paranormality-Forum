@@ -116,7 +116,7 @@ var MessengerTwo = function (el) {
             var message = m.generateRandomString(m.current_length);
             $(el).html(message);
             //How long the initial message stays on screen before the animation starts, 400 is about 3 seconds
-            setTimeout(m.animateIn, 100);
+            setTimeout(m.animateIn, 80);
         } else {
             setTimeout(m.animateFadeBuffer, 0);
         }

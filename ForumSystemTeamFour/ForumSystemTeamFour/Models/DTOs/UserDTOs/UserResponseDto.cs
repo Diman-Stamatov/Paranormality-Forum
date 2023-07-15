@@ -16,6 +16,8 @@ namespace ForumSystemTeamFour.Models.DTOs.UserDTOs
 
         public List<UserThreadResponseDto> Threads { get; set; }
 
+        public int TotalPosts { get; set; }
+
         public bool IsAdmin { get; set; }
 
         public bool IsBlocked { get; set; }
