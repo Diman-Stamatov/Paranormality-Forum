@@ -12,20 +12,34 @@
 
 <div style="margin: 0 auto; width:100%">
     <h3 style="text-align:center;margin-top:5%;font-size:2vw">Create new topic</h3>
-    <table style="text-align: left;" class="table appTable table-hover table-dark">
-        @*ToDo Make each thread title link to the Thread in the table*@
-        <thead>
-            <tr>
-                <th style="text-align:left; font-size: 1vw;" col">Title</th>
-                
+    <form asp-controller="Thread" asp-action="Create" method="post">
+        <table style="text-align: left;" class="table appTable table-hover table-dark">
+            @*ToDo Make each thread title link to the Thread in the table*@
+            <body>
+                <div class="flex-row">
+                    <div class="card- border-0 bg-dark text-white">
 
-            </tr>
-        </thead>
-        <tbody style="font-size:1vw">
-       
-                            
-        </tbody>
-    </table>
+
+                        <div class="form-group" style="text-align:left; font-size: 2vw; col">
+                            <label asp-for="Title">Title</label>
+                            <textarea class="form-control" asp-for="Title" type="text" rows="1" style="background-color: #E6FFE5;"></textarea>
+                            <span asp-validation-for="Title" class="form-error"></span>
+                        </div>
+                        <br />
+                        <div class="form-group" form-group" style="text-align:left; font-size: 2vw; col">
+                            <label asp-for="Content">Content</label>
+                            <textarea class="form-control" asp-for="Content" type="text" rows="3" style="background-color: #E6FFE5;"></textarea>
+                            <span asp-validation-for="Content" class="form-error"></span>
+                        </div>
+                        <div>
+                            <input type="submit" value="@this.ViewData["Action"]" class="btn btn-primary" />
+                            <a onclick="history.back()" class="btn btn-light">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            <tbody style="font-size:1vw">
+            </tbody>
+        </table>
+    </form>
 </div>
-
-
