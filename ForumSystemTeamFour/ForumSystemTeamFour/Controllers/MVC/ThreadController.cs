@@ -88,10 +88,13 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
         [Authorize]
         [HttpGet]
-        public IActionResult FilterBy()
+        public IActionResult FilterBy( string tag)
         {
-            var threadQueryParameters = new ThreadQueryParameters();
-            return this.View("Index", threadQueryParameters);
+			var loggedUser = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
+			var threadQueryParameters = new ThreadQueryParameters();
+            threadQueryParameters.Tags.Add(tag);
+			var listOfResponseDtos = this.ThreadServices.FilterBy(loggedUser, threadQueryParameters);
+			return this.View("Index", listOfResponseDtos);
         }
 
         [Authorize]

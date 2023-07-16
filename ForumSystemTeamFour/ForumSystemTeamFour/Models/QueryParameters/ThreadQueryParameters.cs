@@ -10,7 +10,7 @@ namespace ForumSystemTeamFour.Models.QueryParameters
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Title { get; set; }
-        public List<string> Tags { get; set; }
+        public List<string> Tags { get; set; } = new List<string>();
         public string CreationDate { get; set; }
         public string CreatedAfter { get; set; }
         public string CreatedBefore { get; set; }

@@ -50,6 +50,18 @@
 		overflow-x: hidden;
 	}
 	
+	.threadTable {
+		width: 100%;
+		height: auto;
+		background-color: #3D3635;
+		border: 3px solid black;
+		border-radius: 10px;
+	}
+
+	.threadTable td {
+		border: 2px solid black;
+	}
+
 	.postTable {
 		width: 100%;
 		height: auto;
@@ -113,7 +125,7 @@
 </form> 
 
 @*//Thread*@
-<table class="postTable">
+<table class="threadTable">
 	<tbody>
 		<tr>
 			<td style="width:8vw;">
@@ -131,7 +143,7 @@
 				
 			</td>
 			<td>
-				<div style="font-size:20px;padding-top:10px;">@threadTitle</div>
+				<div style="font-size:22px;padding-top:10px;">@threadTitle</div>
 				<div style="text-align:right; font-size:12px; padding-right:20px">
 					Posted: @threadCreationDate
 				</div>
@@ -292,50 +304,63 @@
 					</td>
 					<td>
 						<div style="float:left; padding-left:20px;">
-							<div class="card border-0 bg-dark text-white flex-row">
-								<div class="votes">
-									<a class="upvote-symbol" asp-controller="Replies" asp-action="UpVote" asp-route-id="@reply.Id" asp-route-threadId="@threadId">⨇</a>
-									@{
-										if (reply.Likes.Any(v => v.VoterUsername == loggedUser))
-										{
-											<div>You </div>
-											if (reply.Likes.Count == 2)
-											{
-												<span>, 1 other</span>
-											}
-											else if (reply.Likes.Count > 2)
-											{
-												<span>, @(reply.Likes.Count - 1) others</span>
-											}
-										}
-										else
-										{
-											<div>@reply.Likes.Count</div>
-										}
-									}
+						@if (!loggedIn)
+							{
+								<div style=" float:left; padding-left:20px;">
+									<div style="display: inline-block; color:limegreen">⨇</div>
+									<div style="display: inline-block;">@reply.Likes.Count</div>
+									<div style="display: inline-block; color:red">⨈</div>
+									<div style="display: inline-block;">@reply.Dislikes.Count</div>
 								</div>
-								<div class="votes">
-									<a class="downvote-symbol" asp-controller="Replies" asp-action="DownVote" asp-route-id="@reply.Id" asp-route-threadId="@threadId">⨈</a>
-									@{
-										if (reply.Dislikes.Any(v => v.VoterUsername == loggedUser))
-										{
-											<span>You </span>
-											if (reply.Dislikes.Count == 2)
+							}
+							else
+							{
+								<div class="card border-0 bg-dark text-white flex-row">
+									<div class="votes">
+										<a class="upvote-symbol" asp-controller="Replies" asp-action="UpVote" asp-route-id="@reply.Id" asp-route-threadId="@threadId">⨇</a>
+										@{
+											if (reply.Likes.Any(v => v.VoterUsername == loggedUser))
 											{
-												<span>, 1 other</span>
+												<div>You </div>
+												if (reply.Likes.Count == 2)
+												{
+													<span>, 1 other</span>
+												}
+												else if (reply.Likes.Count > 2)
+												{
+													<span>, @(reply.Likes.Count - 1) others</span>
+												}
 											}
-											else if (reply.Dislikes.Count > 2)
+											else
 											{
-												<span>, @(reply.Dislikes.Count - 1) others</span>
+												<div>@reply.Likes.Count</div>
 											}
 										}
-										else
-										{
-											<div>@reply.Dislikes.Count</div>
+									</div>
+									<div class="votes">
+										<a class="downvote-symbol" asp-controller="Replies" asp-action="DownVote" asp-route-id="@reply.Id" asp-route-threadId="@threadId">⨈</a>
+										@{
+											if (reply.Dislikes.Any(v => v.VoterUsername == loggedUser))
+											{
+												<span>You </span>
+												if (reply.Dislikes.Count == 2)
+												{
+													<span>, 1 other</span>
+												}
+												else if (reply.Dislikes.Count > 2)
+												{
+													<span>, @(reply.Dislikes.Count - 1) others</span>
+												}
+											}
+											else
+											{
+												<div>@reply.Dislikes.Count</div>
+											}
 										}
-									}
+									</div>
 								</div>
-							</div>
+							}
+							
 						</div >
 						@{
 							if (replyWasEdited)

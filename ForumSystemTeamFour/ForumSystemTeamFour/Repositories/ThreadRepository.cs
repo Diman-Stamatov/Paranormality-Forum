@@ -52,8 +52,7 @@ namespace ForumSystemTeamFour.Repositories
             var filteredThreads = context.Threads
                 .Where(thread => thread.IsDeleted == false)
                 .Include(thread => thread.Author)
-                .Include(thread => thread.CreationDate)
-                .Include(thread => thread.ModificationDate)
+                
                 .Include(thread => thread.Tags)
                 .Include(thread => thread.Votes)
                 .Include(thread => thread.Replies)
@@ -141,7 +140,7 @@ namespace ForumSystemTeamFour.Repositories
         {
             var threads = this.context.Threads
                             .Where(thread => !thread.IsDeleted)
-                            .Include(thread => thread.Replies)
+                            .Include(thread => thread.Replies.Where(reply => !reply.IsDeleted))
 							.ThenInclude(reply => reply.Author)
 							.Include(thread => thread.Author)  
                             .Include(thread => thread.Votes)
@@ -219,9 +218,9 @@ namespace ForumSystemTeamFour.Repositories
         {
                     var thread = this.context.Threads
                             .Where(thread => !thread.IsDeleted && thread.Id ==id)
-                            .Include(thread => thread.Replies)
+                            .Include(thread => thread.Replies.Where(reply => !reply.IsDeleted))
                             .ThenInclude (reply => reply.Votes)
-							.Include(thread => thread.Replies)
+							.Include(thread => thread.Replies.Where(reply => !reply.IsDeleted))
 							.ThenInclude(reply => reply.Author)
                             .Include(thread => thread.Author)	
                             .Include(thread => thread.Votes)

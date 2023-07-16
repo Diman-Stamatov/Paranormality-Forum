@@ -3,6 +3,7 @@ using System.Linq;
 using ForumSystemTeamFour.Data;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace ForumSystemTeamFour.Repositories
 {
@@ -41,17 +42,24 @@ namespace ForumSystemTeamFour.Repositories
 
         public List<Tag> GetAll()
         {
-            return context.Tags.Where(tag=>tag.IsDeleted == false).ToList();
+            return context.Tags.
+                Where(tag=>tag.IsDeleted == false)
+                .Include(tag=>tag.Threads)
+                .ToList();
         }
 
         public Tag GetById(int id)
         {
-            return context.Tags.FirstOrDefault(tag => tag.Id == id && tag.IsDeleted == false);            
+            return context.Tags
+                .Include(tag => tag.Threads)
+                .FirstOrDefault(tag => tag.Id == id && tag.IsDeleted == false);            
         }
 
         public Tag GetByName(string name)
         {
-            return context.Tags.FirstOrDefault(tag => tag.Name == name && tag.IsDeleted == false);            
+            return context.Tags
+                .Include(tag => tag.Threads)
+                .FirstOrDefault(tag => tag.Name == name && tag.IsDeleted == false);            
         }
 
         public bool TagExists(string tag)
