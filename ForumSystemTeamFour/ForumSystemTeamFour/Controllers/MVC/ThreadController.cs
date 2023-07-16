@@ -184,11 +184,11 @@ namespace ForumSystemTeamFour.Controllers.MVC
 			{
 				var threadToUpvote = ThreadServices.UpVote(id, GetLoggedUserId());
 
-				if (threadId != 0)
-				{
-					return RedirectToAction("Details", "Thread", new { id = threadId });
-				}
-				return RedirectToAction("Details", "Replies", new { id = threadToUpvote.Id });
+				//if (threadId != 0)
+				//{
+				//	return RedirectToAction("Details", "Thread", new { id = threadId });
+				//}
+				return RedirectToAction("Details", "Thread", new { id = threadToUpvote.Id });
 			}
 			catch (EntityNotFoundException exception)
 			{
@@ -218,11 +218,11 @@ namespace ForumSystemTeamFour.Controllers.MVC
 			{
 				var threadToDownvote = ThreadServices.DownVote(id, GetLoggedUserId());
 
-				if (threadId != 0)
-				{
-					return RedirectToAction("Details", "Thread", new { id = threadId });
-				}
-				return RedirectToAction("Details", "Replies", new { id = threadToDownvote.Id });
+				//if (threadId != 0)
+				//{
+				//	return RedirectToAction("Details", "Thread", new { id = threadId });
+				//}
+				return RedirectToAction("Details", "Thread", new { id = threadToDownvote.Id });
 
 			}
 			catch (EntityNotFoundException exception)

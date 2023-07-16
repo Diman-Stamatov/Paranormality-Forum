@@ -159,7 +159,7 @@
 				<div style="float:left; padding-left:20px;">
 					<div class="card border-0 bg-dark text-white flex-row">
 						<div class="votes">
-							<a class="upvote-symbol" asp-controller="Replies" asp-action="UpVote" asp-route-id="@Model.Thread.Id" asp-route-threadId="@threadId">⨇</a>
+							<a class="upvote-symbol" asp-controller="Thread" asp-action="UpVote" asp-route-id="@Model.Thread.Id" asp-route-threadId="@threadId">⨇</a>
 							@{
 								if (Model.Thread.Votes.Any(v => v.VoterUsername == loggedUser))
 								{
@@ -180,7 +180,7 @@
 							}
 						</div>
 						<div class="votes">
-							<a class="downvote-symbol" asp-controller="Replies" asp-action="DownVote" asp-route-id="@Model.Thread.Id" asp-route-threadId="@threadId">⨈</a>
+							<a class="downvote-symbol" asp-controller="Thread" asp-action="DownVote" asp-route-id="@Model.Thread.Id" asp-route-threadId="@threadId">⨈</a>
 							@{
 								if (Model.Thread.Votes.Any(v => v.VoterUsername == loggedUser))
 								{

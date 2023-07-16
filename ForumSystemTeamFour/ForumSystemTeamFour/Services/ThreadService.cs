@@ -181,9 +181,9 @@ namespace ForumSystemTeamFour.Services
 			};
 			return votesDto;
 		}
-		private bool AlreadyVoted(Thread reply, string loggedUserName, out Vote vote)
+		private bool AlreadyVoted(Thread thread, string loggedUserName, out Vote vote)
 		{
-			vote = reply.Votes.FirstOrDefault(v => v.VoterUsername == loggedUserName);
+			vote = thread.Votes.FirstOrDefault(v => v.VoterUsername == loggedUserName);
 
 			if (vote != null)
 			{

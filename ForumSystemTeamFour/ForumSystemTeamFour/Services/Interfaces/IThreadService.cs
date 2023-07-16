@@ -12,6 +12,7 @@ namespace ForumSystemTeamFour.Services.Interfaces
     public interface IThreadService
     {
         PaginatedList<ShortThreadResponseDto> FilterBy(int loggedUserId, ThreadQueryParameters filterParameters);
+
         public ShortThreadResponseDto Create(ThreadCreateDto threadCreateDto, int loggedUserId);
 
         public ShortThreadResponseDto Update(int id, ThreadUpdateDto threadUpdateDto, int loggedUserId);
@@ -27,7 +28,6 @@ namespace ForumSystemTeamFour.Services.Interfaces
         public List<string> GetAllTags();
 		int GetCount();
 	
-
         public VotesDto GetReplyVotes(int id);
 
         public ShortThreadResponseDto DownVote(int id, int loggedUserId);
