@@ -177,7 +177,77 @@ namespace ForumSystemTeamFour.Controllers.MVC
             }
         }
 
-        [Authorize]
+		[Authorize]
+		public IActionResult Upvote(int id, int threadId)
+		{
+			try
+			{
+				var threadToUpvote = ThreadServices.UpVote(id, GetLoggedUserId());
+
+				if (threadId != 0)
+				{
+					return RedirectToAction("Details", "Thread", new { id = threadId });
+				}
+				return RedirectToAction("Details", "Replies", new { id = threadToUpvote.Id });
+			}
+			catch (EntityNotFoundException exception)
+			{
+				this.Response.StatusCode = StatusCodes.Status404NotFound;
+				this.ViewData["ErrorMessage"] = exception.Message;
+
+				return this.View("Error404");
+			}
+			catch (UnauthorizedAccessException exception)
+			{
+				this.Response.StatusCode = StatusCodes.Status401Unauthorized;
+				this.ViewData["ErrorMessage"] = exception.Message;
+
+				return this.View("Error401");
+			}
+			catch (Exception exception)
+			{
+				this.Response.StatusCode = StatusCodes.Status500InternalServerError;
+				this.ViewData["ErrorMessage"] = exception.Message;
+
+				return this.View("Error500");
+			}
+		}
+		public IActionResult DownVote(int id, int threadId)
+		{
+			try
+			{
+				var threadToDownvote = ThreadServices.DownVote(id, GetLoggedUserId());
+
+				if (threadId != 0)
+				{
+					return RedirectToAction("Details", "Thread", new { id = threadId });
+				}
+				return RedirectToAction("Details", "Replies", new { id = threadToDownvote.Id });
+
+			}
+			catch (EntityNotFoundException exception)
+			{
+				this.Response.StatusCode = StatusCodes.Status404NotFound;
+				this.ViewData["ErrorMessage"] = exception.Message;
+
+				return this.View("Error404");
+			}
+			catch (UnauthorizedAccessException exception)
+			{
+				this.Response.StatusCode = StatusCodes.Status401Unauthorized;
+				this.ViewData["ErrorMessage"] = exception.Message;
+
+				return this.View("Error401");
+			}
+			catch (Exception exception)
+			{
+				this.Response.StatusCode = StatusCodes.Status500InternalServerError;
+				this.ViewData["ErrorMessage"] = exception.Message;
+
+				return this.View("Error500");
+			}
+		}
+		[Authorize]
         [HttpGet]
         public IActionResult Delete([FromRoute] int id)
         {
@@ -281,8 +351,11 @@ namespace ForumSystemTeamFour.Controllers.MVC
             }           
             return this.View("Details", detailsVM);
         }
-
-        private void InitializeDropDownListsOfTags(ThreadCreateVM threadViewModel)
+		private int GetLoggedUserId()
+		{
+			return int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
+		}
+		private void InitializeDropDownListsOfTags(ThreadCreateVM threadViewModel)
         {
             var allTags = ThreadServices.GetAllTags();
 
