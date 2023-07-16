@@ -1,4 +1,5 @@
-﻿@model ThreadDetailsVM
+﻿@using ForumSystemTeamFour.Models.Enums;
+@model ThreadDetailsVM
 
 @{
 	bool loggedIn = User.Identity.IsAuthenticated;
@@ -173,7 +174,7 @@
 						<div class="votes">
 							<a class="upvote-symbol" asp-controller="Thread" asp-action="UpVote" asp-route-id="@Model.Thread.Id" asp-route-threadId="@threadId">⨇</a>
 							@{
-								if (Model.Thread.Votes.Any(v => v.VoterUsername == loggedUser))
+								if (Model.Thread.Votes.Where(vote=>vote.VoteType == "Like").Any(v => v.VoterUsername == loggedUser))
 								{
 									<div>You </div>
 									if (threadLikes == 2)
@@ -194,7 +195,7 @@
 						<div class="votes">
 							<a class="downvote-symbol" asp-controller="Thread" asp-action="DownVote" asp-route-id="@Model.Thread.Id" asp-route-threadId="@threadId">⨈</a>
 							@{
-								if (Model.Thread.Votes.Any(v => v.VoterUsername == loggedUser))
+								if (Model.Thread.Votes.Where(vote => vote.VoteType == "Dislike").Any(v => v.VoterUsername == loggedUser))
 								{
 									<span>You </span>
 									if (threadDislikes == 2)

@@ -187,10 +187,6 @@ namespace ForumSystemTeamFour.Controllers.MVC
 			{
 				var threadToUpvote = ThreadServices.UpVote(id, GetLoggedUserId());
 
-				//if (threadId != 0)
-				//{
-				//	return RedirectToAction("Details", "Thread", new { id = threadId });
-				//}
 				return RedirectToAction("Details", "Thread", new { id = threadToUpvote.Id });
 			}
 			catch (EntityNotFoundException exception)
