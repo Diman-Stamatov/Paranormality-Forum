@@ -32,6 +32,18 @@
 	var threadFileInfo = directory.GetFiles("*" + threadAuthor + "*.*");
 	string threadPicName = hasThreadPic ? $"{threadFileInfo[0].Name}" : "default.jpg";
 }
+<script>
+	document.addEventListener("DOMContentLoaded", function (event) {
+		var scrollpos = sessionStorage.getItem('scrollpos');
+		if (scrollpos) window.scrollTo(0, scrollpos);
+		sessionStorage.removeItem('scrollpos');
+	});
+
+	window.onbeforeunload = function (e) {
+		sessionStorage.setItem('scrollpos', window.scrollY);
+	};
+</script>
+
 <style>
 	html, body {
 		max-width: 100%;
@@ -227,7 +239,7 @@
 						<div style="float:left; padding-left:20px;">
 							<div class="card border-0 bg-dark text-white flex-row">
 								<div class="votes">
-									<a class="upvote-symbol" asp-controller="Replies" asp-action="UpVote" asp-route-id="@reply.Id">⨇</a>
+									<a class="upvote-symbol" asp-controller="Replies" asp-action="UpVote" asp-route-id="@reply.Id" asp-route-threadId="@threadId">⨇</a>
 									@{
 										if (reply.Likes.Any(v => v.VoterUsername == loggedUser))
 										{
@@ -248,7 +260,7 @@
 									}
 								</div>
 								<div class="votes">
-									<a class="downvote-symbol" asp-controller="Replies" asp-action="DownVote" asp-route-id="@reply.Id">⨈</a>
+									<a class="downvote-symbol" asp-controller="Replies" asp-action="DownVote" asp-route-id="@reply.Id" asp-route-threadId="@threadId">⨈</a>
 									@{
 										if (reply.Dislikes.Any(v => v.VoterUsername == loggedUser))
 										{
@@ -280,7 +292,7 @@
 							@{
 								if (loggedIn)
 								{
-									<a asp-controller="Replies" asp-action="Create" asp-route-id="@threadId"
+									<a asp-controller="Replies" asp-action="Create" asp-route-id="@threadId" 
 									   type="button" class="btn appBtnReply-outline appBtn-outline" style="text-decoration:none; padding-top:0px; padding-bottom:1px; margin-right:5px;">Post reply</a>
 								}
 								if (loggedUser == replyAuthor)

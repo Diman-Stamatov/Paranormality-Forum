@@ -32,8 +32,8 @@ namespace ForumSystemTeamFour.Controllers.MVC
             }
             else
             {
-                return this.View("UserHome");
-            }
+				return RedirectToAction("Index", "Thread");
+			}
         }
 
 
