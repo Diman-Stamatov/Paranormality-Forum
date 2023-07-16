@@ -8,7 +8,7 @@
         loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
     }
 }
-@model ThreadCreateVM
+@model ThreadCreateDto
 
 <div style="margin: 0 auto; width:100%">
     <h3 style="text-align:center;margin-top:5%;font-size:2vw">Create new topic</h3>
@@ -36,9 +36,7 @@
                             <a onclick="history.back()" class="btn btn-light">Back</a>
                         </div>
                         <div>
-                            <label asp-for="Tags" class="form-label"></label>
-                            <br />
-                            <select asp-items="@Model.Tags" asp-for="SelectedTag" class="form-input"></select>
+                            
 
                             <br />
                             <span asp-validation-for="Tags" class="form-error"></span>
