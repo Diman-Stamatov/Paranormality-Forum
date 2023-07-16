@@ -190,13 +190,17 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 return this.View("Error404");
             }
         }
-        public IActionResult Upvote(int id)
+        public IActionResult Upvote(int id,  int threadId)
         {
             try
             {
                 var replyToUpvote = replyService.UpVote(id, GetLoggedUserId());
 
-                return RedirectToAction("Details", "Replies", new { id = replyToUpvote.Id });
+				if (threadId != 0)
+				{
+					return RedirectToAction("Details", "Thread", new { id = threadId });
+				}
+				return RedirectToAction("Details", "Replies", new { id = replyToUpvote.Id });
             }
             catch (EntityNotFoundException exception)
             {
@@ -220,12 +224,16 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 return this.View("Error500");
             }
         }
-        public IActionResult DownVote(int id)
+        public IActionResult DownVote(int id, int threadId)
         {
             try
             {
                 var replyToDownvote = replyService.DownVote(id, GetLoggedUserId());
 
+                if (threadId!=0)
+                {
+					return RedirectToAction("Details", "Thread", new { id = threadId });
+				}
                 return RedirectToAction("Details", "Replies", new { id = replyToDownvote.Id });
 
             }

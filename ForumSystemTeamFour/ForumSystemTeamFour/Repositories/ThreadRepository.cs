@@ -55,6 +55,7 @@ namespace ForumSystemTeamFour.Repositories
                 .Include(thread => thread.Tags)
                 .Include(thread => thread.Votes)
                 .Include(thread => thread.Replies)
+                .ThenInclude(reply=>reply.Votes)
                 .ToList();
 
             if (IsNotEmpty(filterParameters.UserName))
@@ -155,7 +156,9 @@ namespace ForumSystemTeamFour.Repositories
                     var thread = this.context.Threads
                             .Where(thread => !thread.IsDeleted && thread.Id ==id)
                             .Include(thread => thread.Replies)
-                            .ThenInclude(reply => reply.Author)
+                            .ThenInclude (reply => reply.Votes)
+							.Include(thread => thread.Replies)
+							.ThenInclude(reply => reply.Author)
                             .Include(thread => thread.Author)							
 							.FirstOrDefault();
 
