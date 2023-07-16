@@ -2,13 +2,16 @@
 
 @{
 	bool loggedIn = User.Identity.IsAuthenticated;
-	
+	string loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
+
 	var sortParameters = new List<string> { "Username", "CreationDate", "Likes", "Dislikes" };
 	var sortOptions = new SelectList(sortParameters);
 	var orderParameters = new List<string> { "Ascending", "Descending" }; 
 	var orderOptions = new SelectList(orderParameters);
 
 	this.ViewData["Title"] = Model.Thread.Title;
+
+	int threadId = Model.Thread.Id;
 	string threadAuthor = Model.Thread.Author.Username;
 	string threadTitle = Model.Thread.Title;
 	string threadCreationDate = Model.Thread.CreationDate.ToString("g");
@@ -162,6 +165,7 @@
 	//Replies
 	foreach (var reply in Model.Thread.Replies)
 	{
+		int replyId = reply.Id;
 		string replyAuthor = reply.Author.UserName;
 		string replyCreationDate = reply.CreationDate.ToString("g");
 		string replyContent = reply.Content;
@@ -222,18 +226,33 @@
 							<div style="display: inline-block;">@replyLikes</div>
 							<div style="display: inline-block; color:red">⨈</div>
 							<div style="display: inline-block;">@replyDislikes</div>
-						</div>
+						</div >
 						@{
 							if (replyWasEdited)
 							{
-								<div style="text-align:left; float:right">Edited on: @reply.ModificationDate.ToString("g")</div>
+								<div style="text-align:left; font-size:12px; float:right; vertical-align:central">Edited on: @reply.ModificationDate.ToString("g")</div>
 							}
 						}
+						<div style="float:right">
+							@{
+								if (loggedIn)
+								{
+									<a asp-controller="Replies" asp-action="Create" asp-route-id="@threadId"
+									   type="button" class="btn appBtnReply-outline appBtn-outline" style="text-decoration:none; padding-top:0px; padding-bottom:1px; margin-right:5px;">Post reply</a>
+								}
+								if (loggedUser == replyAuthor)
+								{
+									<a asp-controller="Replies" asp-action="Edit" asp-route-id="@replyId"
+									   type="button" class="btn appBtnReply-outline appBtn-outline" style="text-decoration:none; padding-top:0px; padding-bottom:1px; margin-right:5px;">Edit</a>
+								}
+							}
+
+						</div>
 					</td>
 				</tr>
 
 				<tr border="none">
-					<td colspan="2" style="background-color:black;height:5px"></td>
+					<td colspan="2" style="background-color:none;height:5px"></td>
 
 				</tr>
 

@@ -54,13 +54,13 @@ namespace ForumSystemTeamFour.Controllers.MVC
         // GET: RepliesController/Create
         [Authorize]
         [HttpGet]
-        public IActionResult Create([FromQuery] int threadId)
+        public IActionResult Create([FromRoute] int id)
         {
-            this.ViewData["ThreadId"] = threadId;
+            this.ViewData["ThreadId"] = id;
 
             var replyCreateViewModel = new ReplyCreateViewModel()
             {
-                ThreadId = threadId
+                ThreadId = id
             };
 
             return View(replyCreateViewModel);
@@ -69,12 +69,13 @@ namespace ForumSystemTeamFour.Controllers.MVC
         // POST: RepliesController/Create
         [Authorize]
         [HttpPost]
-        public IActionResult Create(ReplyCreateViewModel replyCreateViewModel)
+        public IActionResult Create([FromRoute] int id, ReplyCreateViewModel replyCreateViewModel)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
+                    replyCreateViewModel.ThreadId = id;
                     return View(replyCreateViewModel);
                 }
 
@@ -82,16 +83,19 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
                 return RedirectToAction("Details", "Replies", new { id = newReply.Id });
             }
-            catch
-            {
-                return View();
-            }
-        }
+			catch (UnauthorizedAccessException exception)
+			{
+				this.Response.StatusCode = StatusCodes.Status401Unauthorized;
+				this.ViewData["ErrorMessage"] = exception.Message;
+
+				return this.View("Error401");
+			}
+		}
 
         // GET: RepliesController/Edit/5
         [Authorize]
         [HttpGet]
-        public IActionResult Edit(int id)
+        public IActionResult Edit([FromRoute] int id)
         {
             try
             {
@@ -105,20 +109,25 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 }
                 return RedirectToAction("Details", "Replies", new {id = id});
             }
-            catch (EntityNotFoundException)
+            catch (EntityNotFoundException exception)
             {
-                return View("Error404");
+				this.Response.StatusCode = StatusCodes.Status404NotFound;
+				this.ViewData["ErrorMessage"] = exception.Message;
+				return View("Error404");
             }
-            catch (UnauthorizedAccessException)
-            {
-                return RedirectToAction("Login", "Users");
-            }
-        }
+			catch (UnauthorizedAccessException exception)
+			{
+				this.Response.StatusCode = StatusCodes.Status401Unauthorized;
+				this.ViewData["ErrorMessage"] = exception.Message;
+
+				return this.View("Error401");
+			}
+		}
 
         // POST: RepliesController/Edit/5
         [Authorize]
         [HttpPost]
-        public IActionResult Edit(int id, ReplyViewModel replyViewModel)
+        public IActionResult Edit([FromRoute] int id, ReplyViewModel replyViewModel)
         {
             try
             {
@@ -145,7 +154,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
         // GET: RepliesController/Delete/5
         [Authorize]
         [HttpGet]
-        public IActionResult Delete(int id)
+        public IActionResult Delete([FromRoute] int id)
         {
             try
             {

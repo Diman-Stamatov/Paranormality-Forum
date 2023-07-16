@@ -255,6 +255,12 @@ a:active {
     --bs-gradient: none;    
 }
 
+.appBtnReply-outline {
+    
+    --bs-btn-border-color: none;
+    
+}
+
 .topnav {
     overflow: hidden;
     padding: 0 1em;    
