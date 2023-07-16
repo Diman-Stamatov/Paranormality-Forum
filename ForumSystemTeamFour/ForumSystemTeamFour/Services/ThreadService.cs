@@ -192,7 +192,7 @@ namespace ForumSystemTeamFour.Services
 
 			return false;
 		}
-	}
+	
 
 		public int GetCount()
 		{

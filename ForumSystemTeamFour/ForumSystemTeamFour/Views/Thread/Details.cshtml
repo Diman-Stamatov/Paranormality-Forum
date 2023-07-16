@@ -156,11 +156,51 @@
 				
 			</td>
 			<td>
-				<div style=" float:left; padding-left:20px;">
-					<div style="display: inline-block; color:limegreen">⨇</div>
-					<div style="display: inline-block;">@threadLikes</div>
-					<div style="display: inline-block; color:red">⨈</div>
-					<div style="display: inline-block;">@threadDislikes</div>
+				<div style="float:left; padding-left:20px;">
+					<div class="card border-0 bg-dark text-white flex-row">
+						<div class="votes">
+							<a class="upvote-symbol" asp-controller="Replies" asp-action="UpVote" asp-route-id="@Model.Thread.Id" asp-route-threadId="@threadId">⨇</a>
+							@{
+								if (Model.Thread.Votes.Any(v => v.VoterUsername == loggedUser))
+								{
+									<div>You </div>
+									if (threadLikes == 2)
+									{
+										<span>, 1 other</span>
+									}
+									else if (threadLikes > 2)
+									{
+										<span>, @(threadLikes - 1) others</span>
+									}
+								}
+								else
+								{
+									<div>@threadLikes</div>
+								}
+							}
+						</div>
+						<div class="votes">
+							<a class="downvote-symbol" asp-controller="Replies" asp-action="DownVote" asp-route-id="@Model.Thread.Id" asp-route-threadId="@threadId">⨈</a>
+							@{
+								if (Model.Thread.Votes.Any(v => v.VoterUsername == loggedUser))
+								{
+									<span>You </span>
+									if (threadDislikes == 2)
+									{
+										<span>, 1 other</span>
+									}
+									else if (threadDislikes > 2)
+									{
+										<span>, @(threadDislikes - 1) others</span>
+									}
+								}
+								else
+								{
+									<div>@threadDislikes</div>
+								}
+							}
+						</div>
+					</div>
 				</div>
 				@{
 					if (threadWasEdited)

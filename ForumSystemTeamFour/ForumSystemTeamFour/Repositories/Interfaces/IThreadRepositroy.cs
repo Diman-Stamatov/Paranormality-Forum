@@ -29,7 +29,7 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
         public Thread ChangeVote(int id, string loggedUserName);
 
         public Thread RemoveVote(int id, string loggedUserName);
-	}
+	
 
         int GetCount();
 

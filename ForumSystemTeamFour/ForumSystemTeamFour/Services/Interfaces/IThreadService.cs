@@ -26,7 +26,7 @@ namespace ForumSystemTeamFour.Services.Interfaces
 
         public List<string> GetAllTags();
 		int GetCount();
-	}
+	
 
         public VotesDto GetReplyVotes(int id);
 
