@@ -50,6 +50,10 @@ namespace ForumSystemTeamFour.Repositories
                                                .Include(v => v.Votes)
                                                .ToList();
 
+            if (filter.ThreadId !=0)
+            {
+                result = result.Where(reply => reply.ThreadId == filter.ThreadId);
+            }
             // Filter by attributes
             result = FilterByUserAttribute(result, filter.UserName, filter.Email);
 
@@ -143,14 +147,18 @@ namespace ForumSystemTeamFour.Repositories
                     return replies.OrderBy(reply => reply.Author.Email);
                 case "creationdate":
                     return replies.OrderBy(reply => reply.CreationDate);
-                // The following handles null or empty strings
-                default:
+				case "likes":
+					return replies.OrderBy(reply => reply.Votes.Where(vote=>vote.VoteType == VoteType.Like).Count());
+				case "dislikes":
+					return replies.OrderBy(reply => reply.Votes.Where(vote => vote.VoteType == VoteType.Dislike).Count());
+				// The following handles null or empty strings
+				default:
                     return replies;
             }
         }
         private IEnumerable<Reply> SortOrder(IEnumerable<Reply> replies, string sortOrder)
         {
-            return (sortOrder.ToLower() == "desc") ? replies.Reverse() : replies;
+            return (sortOrder.ToLower() == "desc" || sortOrder.ToLower() == "descending") ? replies.Reverse() : replies;
         }
         public Reply Update(int id, Reply reply)
         {
