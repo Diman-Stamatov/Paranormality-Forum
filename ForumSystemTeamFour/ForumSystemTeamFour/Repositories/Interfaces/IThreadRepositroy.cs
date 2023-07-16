@@ -22,6 +22,15 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
 
         public List<Thread> GetAllByUserId(int id);
 
+        public Thread UpVote(int id, string loggedUserName);
+
+        public Thread DownVote(int id, string loggedUserName);
+
+        public Thread ChangeVote(int id, string loggedUserName);
+
+        public Thread RemoveVote(int id, string loggedUserName);
+	}
+
         int GetCount();
 
 	}
