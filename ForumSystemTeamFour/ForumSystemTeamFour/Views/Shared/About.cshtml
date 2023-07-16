@@ -1,0 +1,71 @@
+﻿@model AnonymousHomeVM
+@{
+    this.ViewData["Title"] = "About";  
+    int totalUsers = Model.TotalUsers;
+    int totalThreads = Model.NumberOfThreads;
+    int totalPosts = Model.NumberOfPosts;
+    string usersOnline = string.Join(',', Model.UsersOnline);
+    string popularTags = string.Join(',', Model.TopTags);
+}
+
+<div style="text-align:left; padding-top:5vh">
+    <div>
+        Welcome to Paranormality. This is not a board for the faint of heart. If you need something to get started with, see the below lists for some basic resources. We hope you enjoy your venture into the spooks, the creeps and the unknown. Тhe resources here are not exhaustive and are merely meant for beginners to get their footing.
+    </div>
+    <br />
+    <div>
+        Some of these lists are still a work in progress, as of this writing:
+    </div>
+    <br />
+    <div>
+        <div><a href="https://pastebin.com/w3z3CCGR" style="text-decoration:none">Film Recommendations</a> </div>
+
+        <div> <a href="https://pastebin.com/LWT6dAQD" style="text-decoration:none">Game Recommendations</a> </div>
+
+        <div><a href="https://pastebin.com/V3RMBdpW" style="text-decoration:none">Radio Shows/Podcasts</a> </div>
+
+        <div> <a href="https://pastebin.com/RhXVTEsz" style="text-decoration:none">Websites of Interest</a> </div>
+
+        <div><a href="https://pastebin.com/8gBA8jZ9" style="text-decoration:none">Wikipedia Articles</a>  </div>
+
+        <div><a href="https://pastebin.com/A8pXnjUj" style="text-decoration:none">YouTube Videos & Channels</a> </div>
+    </div>
+    <br />
+    <div>
+        Please note the following:
+        <br />
+        • This board desires high quality discussion. High quality posts will be praised. Low quality posts e.g. "Is this paranormal?" or "I am [insert paranormal entity here] ask me anything," etc. will be removed.<br />        
+        • Conspiracy theories are welcome, but anything overly political in nature should be posted to elsewhere.<br />
+        • For everything else, refer to global and board-specific rules.
+    </div>
+    <br />
+    
+    <div style="text-align:left;float:left; padding-left:20vw;">
+        <div>
+            <div><b>Forum stats:</b></div><br />
+            <div>Registered users: @totalUsers</div>
+            <div>Total threads: @totalThreads</div>
+            <div>Total posts: @totalPosts</div>
+            <br />
+
+        </div>
+    </div>
+    <div style="text-align:left;padding-right:20vw; float:right">
+        <div><b>Popular Tags:</b></div>
+        @{
+            foreach (var tag in Model.TopTags)
+            {
+                <div style="display: inline-block;background-color:#52595D; border-radius: 05px;margin-top:5px; align-content:start"><a asp-controller="Thread" asp-action="FilterBy" asp-route-tag="@tag" style="text-decoration:none; text-align:left">@tag</a></div>
+
+                <br />
+
+            }
+        }
+    </div>
+    
+</div>
+
+
+
+
+

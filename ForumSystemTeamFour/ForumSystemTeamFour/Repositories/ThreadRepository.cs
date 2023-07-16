@@ -50,8 +50,7 @@ namespace ForumSystemTeamFour.Repositories
             var filteredThreads = context.Threads
                 .Where(thread => thread.IsDeleted == false)
                 .Include(thread => thread.Author)
-                .Include(thread => thread.CreationDate)
-                .Include(thread => thread.ModificationDate)
+                
                 .Include(thread => thread.Tags)
                 .Include(thread => thread.Votes)
                 .Include(thread => thread.Replies)

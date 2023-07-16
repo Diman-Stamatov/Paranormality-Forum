@@ -30,7 +30,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
         [Authorize]
         [HttpGet]
-        public IActionResult Profile([FromRoute] string id)
+        public IActionResult Profile(string id)
         {
             try
             {
@@ -51,10 +51,21 @@ namespace ForumSystemTeamFour.Controllers.MVC
         [HttpGet]
         public IActionResult Update([FromRoute] string id)
         {
-            
+
+            string loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;            
+
             try
             {
                 var userUpdateVM = UserServices.GetUserUpdateVM(id);
+
+                loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
+                if (loggedUser != id)
+                {
+                    this.ViewData["ErrorMessage"] = "You can only edit your own profile!";
+                    this.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return this.View("Error401");
+                }
+
                 return this.View("Update", userUpdateVM);
             }
             catch (EntityNotFoundException exception)
@@ -71,7 +82,8 @@ namespace ForumSystemTeamFour.Controllers.MVC
         [Authorize]
         [HttpPost]
         public IActionResult Update([FromRoute] string id, UserUpdateVM userUpdateVM)
-        {
+        {            
+
             if (!ModelState.IsValid)
             {
                 

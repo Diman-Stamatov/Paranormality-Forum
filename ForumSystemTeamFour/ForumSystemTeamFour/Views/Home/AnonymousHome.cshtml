@@ -7,8 +7,9 @@
     int totalUsers = Model.TotalUsers;
     int totalThreads = Model.NumberOfThreads;
     int totalPosts = Model.NumberOfPosts;
-    var usersOnline = string.Join(',', Model.UsersOnline);
-    var popularTags = string.Join(',', Model.TopTags);
+    string usersOnline = string.Join(',', Model.UsersOnline);
+    string popularTags = string.Join(',', Model.TopTags);
+
 }
 
 <!DOCTYPE html>
@@ -40,11 +41,20 @@
         </div>
     </div>
 
-    <div class="grid-menu" style="text-align:left; position:absolute; top:40%; padding-left:20px">
-        <div >Forum stats:</div><br />
+    <div class="grid-menu" style="text-align:left; position:absolute; top:25.3%; padding-left:60px">
+        <div><b>Forum stats:</b></div><br />
         <div>Registered users: @totalUsers</div>
         <div >Total threads: @totalThreads</div>
         <div >Total posts: @totalPosts</div>
+        <br />
+        <div><b>Popular Tags:</b></div>
+        @{
+            foreach (var tag in Model.TopTags)
+            {
+                <div style="display: inline-block;background-color:#52595D; border-radius: 05px;margin-top:5px; width:auto">@tag</div>
+                <br />
+            }
+        }
 
 
 
@@ -54,7 +64,7 @@
         <div style="position: absolute;left: 50%;transform: translate(-50%, 0%);width:70%">
             <h3 style ="text-align:center;margin-top:15%;font-size:2vw">Popular discussions:</h3>
             <table class="table table-hover table-dark">
-                @*ToDo Make each thread title link to the Thread in the table*@
+               
                 <thead>
                     <tr>
                         <th scope="col">Topic</th>

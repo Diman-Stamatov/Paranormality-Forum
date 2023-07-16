@@ -83,6 +83,34 @@ namespace ForumSystemTeamFour.Controllers.MVC
             return this.View("Error401");
         }
 
-        
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult About()
+        {
+            var statsVM = new AnonymousHomeVM();
+            var allTags = this.TagServices.GetAll();
+            var topTags = allTags.OrderByDescending(tag => tag.Threads.Count).Take(5).ToList();
+            statsVM.TopTags = this.TagMapper.Map(topTags);
+
+            var topThreads = this.ThreadServices.GetAllVM()
+                .OrderByDescending(thread => thread.Replies.Count).Take(10).ToList();
+            statsVM.TopThreads = topThreads;
+
+            int defaultId = 1;
+            var queryParameters = new UserQueryParameters();
+            var allUsers = UserServices.FilterBy(defaultId, queryParameters);
+            int totalUsers = UserServices.GetCount();
+            var random = new Random();
+            var randomUsers = allUsers.OrderBy(user => random.Next()).Take(random.Next(5, totalUsers)).ToList();
+            var usernames = UserMapper.MapUsernameList(randomUsers);
+            statsVM.UsersOnline = usernames.Distinct().ToList();
+
+            statsVM.TotalUsers = totalUsers;
+            statsVM.NumberOfThreads = ThreadServices.GetCount();
+            statsVM.NumberOfPosts = ReplyServices.GetCount();
+
+            return this.View("About", statsVM);
+        }
+
     }
 }
