@@ -260,5 +260,10 @@ namespace ForumSystemTeamFour.Repositories
                 throw new DuplicateEntityException($"The email \"{email}\" is already in use!");
             }
         }
-    }
+
+		public int GetCount()
+		{
+			return context.Users.Count();
+		}
+	}
 }

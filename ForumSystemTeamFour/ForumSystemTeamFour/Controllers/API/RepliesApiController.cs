@@ -28,7 +28,7 @@ namespace ForumSystemTeamFour.Controllers.API
         }
 
         // GetById
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
@@ -43,7 +43,7 @@ namespace ForumSystemTeamFour.Controllers.API
             }
         }
         // Query replies by threadId, ???DateTime???, username
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("")]
         public IActionResult FilterBy([FromQuery] ReplyQueryParameters filterParameters)
         {

@@ -30,4 +30,8 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
 
         public Thread RemoveVote(int id, string loggedUserName);
 	}
+
+        int GetCount();
+
+	}
 }

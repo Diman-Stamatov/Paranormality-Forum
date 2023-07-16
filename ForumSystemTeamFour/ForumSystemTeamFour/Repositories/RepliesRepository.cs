@@ -238,5 +238,10 @@ namespace ForumSystemTeamFour.Repositories
 
             return replyToRemoveVote;
         }
+
+        public int GetCount()
+        {
+            return context.Replies.Count();
+		}
     }
 }

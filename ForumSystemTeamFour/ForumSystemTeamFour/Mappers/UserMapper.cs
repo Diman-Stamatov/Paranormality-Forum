@@ -121,5 +121,15 @@ namespace ForumSystemTeamFour.Mappers
             return returnList;
         }
 
+        public List<string> MapUsernameList(List<UserResponseDto> users)
+        {
+            var returnList = new List<string>();
+            foreach (var user in users)
+            {                
+                returnList.Add(user.Username);
+            }
+            return returnList;
+        }
+
     }
 }

@@ -128,6 +128,11 @@ namespace ForumSystemTeamFour.Services
             _ = this.Repository.Update(userToUpdate, userUpdateDto);
             
         }
-        
-    }
+
+		public int GetCount()
+		{
+			return this.Repository.GetCount();
+		}
+
+	}
 }

@@ -101,7 +101,7 @@ namespace ForumSystemTeamFour.Services
             return result;
         }
 
-        public List<ThreadVM> GetAllLarge()
+        public List<ThreadVM> GetAllVM()
         {
             var allThreads = this.threadRepositroy.GetAll();
             var result = this.threadMapper.MapVMList(allThreads);
@@ -191,6 +191,12 @@ namespace ForumSystemTeamFour.Services
 			}
 
 			return false;
+		}
+	}
+
+		public int GetCount()
+		{
+			return this.threadRepositroy.GetCount();
 		}
 	}
 }
