@@ -85,7 +85,9 @@ namespace ForumSystemTeamFour.Mappers
                 Tags = TagMapper.Map(thread.Tags),
                 IsDeleted = thread.IsDeleted,
                 AuthorUserName = thread.Author.Username,
-                AuthorId = thread.Author.Id
+                AuthorId = thread.Author.Id,
+                LikeCount = thread.Votes.Count(vote => vote.VoteType == VoteType.Like),
+                DislikeCount = thread.Votes.Count(vote => vote.VoteType == VoteType.Dislike)
             };
         }
                

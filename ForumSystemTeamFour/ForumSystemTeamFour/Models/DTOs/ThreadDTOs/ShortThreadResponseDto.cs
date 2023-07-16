@@ -16,7 +16,12 @@ namespace ForumSystemTeamFour.Models.DTOs.ThreadDTOs
 
         public List<string> Tags { get; set; }
 
+        public int LikeCount { get; set; }
+
+        public int DislikeCount { get; set; }
+
         public int AuthorId { get; set; }
+
         public string AuthorUserName { get; set; }
 
         public bool IsDeleted { get; set; }
