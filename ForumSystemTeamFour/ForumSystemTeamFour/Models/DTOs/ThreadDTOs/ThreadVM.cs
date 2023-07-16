@@ -20,6 +20,10 @@ namespace ForumSystemTeamFour.Models.DTOs.ThreadDTOs
 
         public List<ReplyViewModel> Replies { get; set; }
 
+        public int LikeCount { get; set; }
+
+        public int DislikeCount { get; set; }
+
         public List<string> Tags { get; set; }
 
         public List<ThreadVoteDto> Votes { get; set; }

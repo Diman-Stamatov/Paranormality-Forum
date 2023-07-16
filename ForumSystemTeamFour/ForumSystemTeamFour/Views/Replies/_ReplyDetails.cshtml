@@ -5,7 +5,7 @@
 }
 
 <div class="reply-details flex-row">
-    <div class="card- border-0 bg-dark text-white">
+    <div class="card border-0 bg-dark text-white">
         <div class="card-header border-0">
             <div class="reply-author">
                 <span>Author: </span>
@@ -31,43 +31,54 @@
         <div class="votes">
             <a class="upvote-symbol" asp-action="UpVote" asp-route-id="@Model.Id">⨇</a>
             @{
-                if(Model.Likes.Any(v => v.VoterUsername == loggedUserName))
+                string upvoteLinkText = "";
+                if (Model.Likes.Any(v => v.VoterUsername == loggedUserName))
                 {
-                    <div>You </div>
-                    if(Model.Likes.Count == 2)
+                    switch (Model.Likes.Count)
                     {
-                        <span>, 1 other</span>
-                    }
-                    else if (Model.Likes.Count > 2)
-                    {
-                        <span>, @(Model.Likes.Count - 1) others</span>
+                        case 1:
+                            upvoteLinkText = "You";
+                            break;
+                        case 2:
+                            upvoteLinkText = "You, 1 other";
+                            break;
+                        default:
+                            upvoteLinkText = "You, " + (Model.Likes.Count - 1).ToString() + " others";
+                            break;
                     }
                 }
                 else
                 {
-                    <div>@Model.Likes.Count</div>
+                    upvoteLinkText = Model.Likes.Count.ToString();
                 }
+                <div>@upvoteLinkText</div>
             }
         </div>
         <div class="votes">
             <a class="downvote-symbol" asp-action="DownVote" asp-route-id="@Model.Id">⨈</a>
             @{
-                if(Model.Dislikes.Any(v => v.VoterUsername == loggedUserName))
+                string downvoteLinkText = "";
+
+                if (Model.Dislikes.Any(v => v.VoterUsername == loggedUserName))
                 {
-                    <span>You </span>
-                    if(Model.Dislikes.Count == 2)
+                    switch (Model.Dislikes.Count)
                     {
-                        <span>, 1 other</span>
-                    }
-                    else if (Model.Dislikes.Count > 2)
-                    {
-                        <span>, @(Model.Dislikes.Count - 1) others</span>
+                        case 1:
+                            downvoteLinkText = "You";
+                            break;
+                        case 2:
+                            downvoteLinkText = "You, 1 other";
+                            break;
+                        default:
+                            downvoteLinkText = "You, " + (Model.Dislikes.Count - 1).ToString() + " others";
+                            break;
                     }
                 }
                 else
                 {
-                    <div>@Model.Dislikes.Count</div>
+                    downvoteLinkText = Model.Dislikes.Count.ToString();
                 }
+                <div>@downvoteLinkText</div>
             }
         </div>
     </div>

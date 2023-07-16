@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Models;
+using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 using ForumSystemTeamFour.Models.QueryParameters;
 
@@ -22,7 +23,17 @@ namespace ForumSystemTeamFour.Services.Interfaces
         List<ThreadVM> GetAllVM();
 
         public ThreadVM Details(int id);
+
         public List<string> GetAllTags();
 		int GetCount();
+	
+
+        public VotesDto GetReplyVotes(int id);
+
+        public ShortThreadResponseDto DownVote(int id, int loggedUserId);
+
+        public ShortThreadResponseDto UpVote(int id, int loggedUserId);
+
+        
 	}
 }

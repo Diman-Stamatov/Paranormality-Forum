@@ -2,12 +2,15 @@
 using ForumSystemTeamFour.Mappers;
 using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
+using ForumSystemTeamFour.Models.DTOs;
 using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 using ForumSystemTeamFour.Models.Interfaces;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
 using ForumSystemTeamFour.Services.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
+using static ForumSystemTeamFour.Models.Enums.VoteType;
 
 namespace ForumSystemTeamFour.Services
 {
@@ -118,6 +121,78 @@ namespace ForumSystemTeamFour.Services
             var listOfTags = this.tagMapper.Map(allTags);
             return listOfTags;
         }
+		public ShortThreadResponseDto UpVote(int id, int loggedUserId)
+		{
+			// Check if the user has already voted
+			var replyToUpVote = threadRepositroy.Details(id);
+			var loggedUser = userServices.GetById(loggedUserId);
+			if (AlreadyVoted(replyToUpVote, loggedUser.Username, out Vote vote))
+			{
+				if (vote.VoteType == Like)
+				{
+					//throw new DuplicateEntityException($"User: {vote.VoterUsername} already upvoted reply with id: {id}.");
+					threadRepositroy.RemoveVote(id, loggedUser.Username);
+				}
+				else
+				{
+					threadRepositroy.ChangeVote(id, loggedUser.Username);
+				}
+			}
+			else
+			{
+				replyToUpVote = threadRepositroy.UpVote(id, loggedUser.Username);
+			}
+
+			var shortThreadResponseDto = this.threadMapper.Map(replyToUpVote);
+			return shortThreadResponseDto;
+		}
+		public ShortThreadResponseDto DownVote(int id, int loggedUserId)
+		{
+			// Check if the user has already voted
+			var replyToDownVote = threadRepositroy.Details(id);
+			var loggedUser = userServices.GetById(loggedUserId);
+			if (AlreadyVoted(replyToDownVote, loggedUser.Username, out Vote vote))
+			{
+				if (vote.VoteType == Dislike)
+				{
+					//throw new DuplicateEntityException($"User: {vote.VoterUsername} already upvoted reply with id: {id}.");
+					threadRepositroy.RemoveVote(id, loggedUser.Username);
+				}
+				else
+				{
+					threadRepositroy.ChangeVote(id, loggedUser.Username);
+				}
+			}
+			else
+			{
+				replyToDownVote = threadRepositroy.DownVote(id, loggedUser.Username);
+			}
+
+			var shortThreadResponseDto = threadMapper.Map(replyToDownVote);
+			return shortThreadResponseDto;
+		}
+		public VotesDto GetReplyVotes(int id)
+		{
+			var thread = threadRepositroy.Details(id);
+			var votesDto = new VotesDto()
+			{
+				Likes = thread.Votes.Where(v => v.VoteType == Like).Select(u => u.VoterUsername).ToList(),
+				Dislikes = thread.Votes.Where(v => v.VoteType == Dislike).Select(u => u.VoterUsername).ToList()
+			};
+			return votesDto;
+		}
+		private bool AlreadyVoted(Thread reply, string loggedUserName, out Vote vote)
+		{
+			vote = reply.Votes.FirstOrDefault(v => v.VoterUsername == loggedUserName);
+
+			if (vote != null)
+			{
+				return true;
+			}
+
+			return false;
+		}
+	
 
 		public int GetCount()
 		{

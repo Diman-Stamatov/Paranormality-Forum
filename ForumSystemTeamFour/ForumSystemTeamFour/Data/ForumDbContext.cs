@@ -3,6 +3,9 @@ using ForumSystemTeamFour.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using ForumSystemTeamFour.Models.Enums;
+using System.Linq;
+using ForumSystemTeamFour.Models.Comparers;
 
 namespace ForumSystemTeamFour.Data
 
@@ -2724,8 +2727,48 @@ namespace ForumSystemTeamFour.Data
             modelBuilder.Entity<ThreadTag>().HasData(threadTags);
 
 
+            // Votes
+            var votesRandom = new Random();
 
+            // Thread Votes
+            var threadVotes = new HashSet<ThreadVote>();
+            int totalPossibleThreadVoteCount = users.Count * threads.Count;
+            int threadVoteCount = votesRandom.Next((int)Math.Round(totalPossibleThreadVoteCount * 0.8), totalPossibleThreadVoteCount);
+            for (int i = 1; i <= threadVoteCount; i++)
+            {
+                int id = i;
+                int threadId = votesRandom.Next(1, threads.Count);
+                string userName = users[votesRandom.Next(0, users.Count)].Username;
+                VoteType voteType = (VoteType)votesRandom.Next(0,2);
+                var vote = new ThreadVote() { Id = id, ThreadId = threadId, VoterUsername = userName, VoteType = voteType };
+                if (threadVotes.Any(t => t.VoterUsername == vote.VoterUsername && t.ThreadId == vote.ThreadId))
+                {
+                    continue;
+                }
+                threadVotes.Add(vote);
+            }
 
+            modelBuilder.Entity<ThreadVote>().HasData(threadVotes);
+
+            // Reply Votes
+            var replyVotes = new HashSet<ReplyVote>();
+            int totalPossibleReplyVoteCount = users.Count * replies.Count;
+            int replyVoteCount = votesRandom.Next((int)Math.Round(totalPossibleReplyVoteCount * 0.5), totalPossibleReplyVoteCount);
+            for (int i = 1; i <= replyVoteCount; i++)
+            {
+                int id = i;
+                int replyId = votesRandom.Next(1, replies.Count);
+                string userName = users[votesRandom.Next(0, users.Count)].Username;
+                VoteType voteType = (VoteType)votesRandom.Next(0, 2);
+                var vote = new ReplyVote() { Id = id, ReplyId = replyId, VoterUsername = userName, VoteType = voteType };
+                if (replyVotes.Any(r => r.VoterUsername == vote.VoterUsername && r.ReplyId == vote.ReplyId))
+                {
+                    continue;
+                }
+                replyVotes.Add(vote);
+            }
+
+            modelBuilder.Entity<ReplyVote>().HasData(replyVotes);
 
 
         }

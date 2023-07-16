@@ -1,6 +1,7 @@
 ﻿using ForumSystemTeamFour.Data;
 using ForumSystemTeamFour.Exceptions;
 using ForumSystemTeamFour.Models;
+using ForumSystemTeamFour.Models.Enums;
 using ForumSystemTeamFour.Models.Interfaces;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Repositories.Interfaces;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static ForumSystemTeamFour.Models.Enums.VoteType;
 
 namespace ForumSystemTeamFour.Repositories
 {
@@ -138,9 +140,10 @@ namespace ForumSystemTeamFour.Repositories
         {
             var threads = this.context.Threads
                             .Where(thread => !thread.IsDeleted)
-                            .Include(thread => thread.Replies)
+                            .Include(thread => thread.Replies.Where(reply => !reply.IsDeleted))
 							.ThenInclude(reply => reply.Author)
-							.Include(thread => thread.Author)                            
+							.Include(thread => thread.Author)  
+                            .Include(thread => thread.Votes)
                             .ToList();
             if (threads.Count == 0 || !threads.Any())
             {
@@ -149,16 +152,78 @@ namespace ForumSystemTeamFour.Repositories
 
             return threads;
         }
+		public Thread UpVote(int id, string loggedUserName)
+		{
+			var threadUpVote = Details(id);
+			var vote = new ThreadVote()
+			{
+				ThreadId = id,
+				VoterUsername = loggedUserName,
+				VoteType = VoteType.Like
+			};
+			threadUpVote.Votes.Add(vote);
 
-        public Thread Details(int id)
+			context.SaveChanges();
+
+			return threadUpVote;
+		}
+		public Thread DownVote(int id, string loggedUserName)
+		{
+			var threadToDownVote = Details(id);
+			var vote = new ThreadVote()
+			{
+				ThreadId = id,
+				VoterUsername = loggedUserName,
+				VoteType = VoteType.Dislike
+			};
+			threadToDownVote.Votes.Add(vote);
+
+			context.SaveChanges();
+
+			return threadToDownVote;
+		}
+
+		public Thread ChangeVote(int id, string loggedUserName)
+		{
+			var threadToChangeVote = Details(id);
+			var vote = threadToChangeVote.Votes.FirstOrDefault(v => v.VoterUsername == loggedUserName);
+
+			if (vote.VoteType == Like)
+			{
+				vote.VoteType = Dislike;
+			}
+			else
+			{
+				vote.VoteType = Like;
+			}
+
+			context.SaveChanges();
+
+			return threadToChangeVote;
+		}
+
+		public Thread RemoveVote(int id, string loggedUserName)
+		{
+			var threadToRemoveVote = Details(id);
+			var vote = threadToRemoveVote.Votes.FirstOrDefault(v => v.VoterUsername == loggedUserName);
+
+			threadToRemoveVote.Votes.Remove(vote);
+
+			context.SaveChanges();
+
+			return threadToRemoveVote;
+		}
+
+		public Thread Details(int id)
         {
                     var thread = this.context.Threads
                             .Where(thread => !thread.IsDeleted && thread.Id ==id)
-                            .Include(thread => thread.Replies)
+                            .Include(thread => thread.Replies.Where(reply => !reply.IsDeleted))
                             .ThenInclude (reply => reply.Votes)
-							.Include(thread => thread.Replies)
+							.Include(thread => thread.Replies.Where(reply => !reply.IsDeleted))
 							.ThenInclude(reply => reply.Author)
-                            .Include(thread => thread.Author)							
+                            .Include(thread => thread.Author)	
+                            .Include(thread => thread.Votes)
 							.FirstOrDefault();
 
             return thread ?? throw new EntityNotFoundException($"Thread with id={id} doesn't exist.");
@@ -176,8 +241,8 @@ namespace ForumSystemTeamFour.Repositories
             }
             return threads;
         }
-
-        private void Save()
+	
+		private void Save()
         {
             context.SaveChanges();
         }

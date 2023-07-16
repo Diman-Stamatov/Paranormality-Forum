@@ -350,7 +350,7 @@ namespace ForumSystemTeamFour.Tests
             mockRepliesRepository.Verify(repository => repository.UpVote(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
         }
         [TestMethod]
-        public void UpVote_ShoudThrow_WhenAlreadyVoted()
+        public void UpVote_ShoudRemoveVote_WhenAlreadyUpVoted()
         {
             // Arrange
             var loggedUserId = DefaultId;
@@ -362,9 +362,11 @@ namespace ForumSystemTeamFour.Tests
 
             var sut = new ReplyService(mockRepliesRepository.Object, mockReplyMapper, mockUserServices, mockValidSecurityServices, mockThreadRepository);
 
-            // Act and Assert
-            Assert.ThrowsException<DuplicateEntityException>(() => sut.UpVote(upvotedReply.Id, loggedUserId));
-            mockRepliesRepository.Verify(repository => repository.UpVote(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
+            // Act
+            _ = sut.UpVote(It.IsAny<int>(), It.IsAny<int>());
+
+            // Assert
+            mockRepliesRepository.Verify(repository => repository.RemoveVote(It.IsAny<int>(), It.IsAny<string>()), Times.Once);
         }
         [TestMethod]
         public void UpVote_ShoudChangeVote_WhenAlreadyDownVoted()
@@ -452,7 +454,7 @@ namespace ForumSystemTeamFour.Tests
             mockRepliesRepository.Verify(repository => repository.DownVote(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
         }
         [TestMethod]
-        public void DownVote_ShoudThrow_WhenAlreadyVoted()
+        public void DownVote_ShoudRemoveVote_WhenAlreadyDownVoted()
         {
             // Arrange
             var loggedUserId = DefaultId;
@@ -464,9 +466,11 @@ namespace ForumSystemTeamFour.Tests
 
             var sut = new ReplyService(mockRepliesRepository.Object, mockReplyMapper, mockUserServices, mockValidSecurityServices, mockThreadRepository);
 
-            // Act and Assert
-            Assert.ThrowsException<DuplicateEntityException>(() => sut.DownVote(downvotedReply.Id, loggedUserId));
-            mockRepliesRepository.Verify(repository => repository.DownVote(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
+            // Act
+            _ = sut.DownVote(downvotedReply.Id, loggedUserId);
+
+            // Assert
+            mockRepliesRepository.Verify(repository => repository.RemoveVote(It.IsAny<int>(), It.IsAny<string>()), Times.Once);
         }
         [TestMethod]
         public void DownVote_ShoudChangeVote_WhenAlreadyUpVoted()
