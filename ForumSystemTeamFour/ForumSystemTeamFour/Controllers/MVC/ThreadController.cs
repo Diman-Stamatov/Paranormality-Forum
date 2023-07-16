@@ -285,7 +285,9 @@ namespace ForumSystemTeamFour.Controllers.MVC
         }
         private void InitializeDropDownListsOfTags(ThreadCreateVM threadViewModel)
         {
-            threadViewModel.Tags = new SelectList(ThreadServices.GetAll(), "Id", "Name");
+            var x = ThreadServices.GetAllTags();
+
+            threadViewModel.TagsList = new SelectList(x, "Id", "Name");
         }
     }
 }

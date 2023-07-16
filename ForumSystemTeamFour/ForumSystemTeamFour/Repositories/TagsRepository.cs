@@ -56,8 +56,8 @@ namespace ForumSystemTeamFour.Repositories
 
         public bool TagExists(string tag)
         {
-            Tag x = GetByName(tag);
-            return x != null;
+            Tag foundTag = GetByName(tag);
+            return foundTag != null;
         }
     }
 }

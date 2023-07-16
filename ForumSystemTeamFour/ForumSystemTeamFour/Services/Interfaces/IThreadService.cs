@@ -22,5 +22,6 @@ namespace ForumSystemTeamFour.Services.Interfaces
         List<LargeThreadResponseDto> GetAllLarge();
 
         public LargeThreadResponseDto Details(int id);
+        public List<string> GetAllTags();
     }
 }

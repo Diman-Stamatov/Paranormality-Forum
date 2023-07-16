@@ -38,7 +38,8 @@
                         <div>
                             <label asp-for="Tags" class="form-label"></label>
                             <br />
-                            <select asp-items="@Model.Tags" asp-for="Tags" class="form-input"></select>
+                            <select asp-items="@Model.Tags" asp-for="SelectedTag" class="form-input"></select>
+
                             <br />
                             <span asp-validation-for="Tags" class="form-error"></span>
                         </div>

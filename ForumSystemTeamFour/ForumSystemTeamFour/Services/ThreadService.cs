@@ -112,13 +112,10 @@ namespace ForumSystemTeamFour.Services
             return threadResponseDto;
         }  
         
-        public List<string> GetAllTags(List<Tag> tags) 
+        public List<string> GetAllTags() 
         {
-            var listOfTags = new List<string>();
-            foreach (var tag in tags)
-            {
-                listOfTags.Add(tag.Name);
-            }
+            var allTags = this.tagServices.GetAll();
+            var listOfTags = this.tagMapper.Map(allTags);
             return listOfTags;
         }
     }
