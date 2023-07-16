@@ -78,6 +78,20 @@
 		}
 </style>
 
+@if (!loggedIn)
+{
+	<div style="position:fixed;top:5%;right:5%;">
+		<div>
+			<a asp-controller="Users" asp-action="Register"
+			   type="button" class="btn appBtn-outline" style="margin-bottom: 5px;text-decoration:none">Register</a>
+		</div>
+		<div>
+			<a asp-controller="Users" asp-action="Login"
+			   type="button" class="btn appBtn-outline" style="text-decoration:none">Login</a>
+		</div>
+	</div>
+}
+
 
 <form asp-controller="Thread" asp-action="Details" method="post" style="float:right">	
 	<table style="text-align:left;">	
@@ -171,8 +185,19 @@
 				
 			</td>
 			<td>
-				<div style="float:left; padding-left:20px;">
-					<div class="card border-0 bg-dark text-white flex-row">
+				<div style="float:left; padding-left:10px;">
+					@if (!loggedIn)
+							{
+								<div style=" float:left; padding-left:5px;">
+									<div style="display: inline-block; color:limegreen">⨇</div>
+							<div style="display: inline-block;">@threadLikes</div>
+									<div style="display: inline-block; color:red">⨈</div>
+									<div style="display: inline-block;">@threadDislikes</div>
+								</div>
+					}
+					else
+					{
+						<div class="card border-0 text-white flex-row" style="background-color:#3D3635">
 						<div class="votes">
 							<a class="upvote-symbol" asp-controller="Thread" asp-action="UpVote" asp-route-id="@Model.Thread.Id" asp-route-threadId="@threadId">⨇</a>
 							@{
@@ -216,7 +241,8 @@
 							}
 						</div>
 					</div>
-				</div>
+					}
+				</div>				
 				@{
 					if (threadWasEdited)
 					{
@@ -306,10 +332,10 @@
 						<a href="#top" style="float:left; padding-left:20px;text-decoration:none; font-size:14px">Top</a>
 					</td>
 					<td>
-						<div style="float:left; padding-left:20px;">
+						<div style="float:left; padding-left:10px;">
 						@if (!loggedIn)
 							{
-								<div style=" float:left; padding-left:20px;">
+								<div style=" float:left; padding-left:5px;">
 									<div style="display: inline-block; color:limegreen">⨇</div>
 									<div style="display: inline-block;">@reply.Likes.Count</div>
 									<div style="display: inline-block; color:red">⨈</div>
@@ -395,7 +421,7 @@
 				</tr>
 
 				<tr border="none">
-					<td colspan="2" style="background-color:none;height:5px"></td>
+					<td colspan="2" style="background-color:black;height:5px"></td>
 
 				</tr>
 

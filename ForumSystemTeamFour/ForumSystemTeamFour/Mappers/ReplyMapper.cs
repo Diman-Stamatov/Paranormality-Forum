@@ -60,7 +60,7 @@ namespace ForumSystemTeamFour.Mappers
                 Id = reply.Id,
                 ThreadId = (int)reply.ThreadId,
                 AuthorId = reply.AuthorId,
-                Author = new AuthorDto() { UserName = reply.Author.Username, Email = reply.Author.Email },
+                Author = new AuthorDto() { UserName = reply.Author.Username, TotalPosts = reply.Author.TotalPosts, Email = reply.Author.Email },
                 CreationDate = reply.CreationDate,
                 ModificationDate = reply.ModificationDate,
                 Content = reply.Content,

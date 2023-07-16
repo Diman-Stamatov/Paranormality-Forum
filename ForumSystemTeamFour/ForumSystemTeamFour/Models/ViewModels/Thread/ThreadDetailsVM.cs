@@ -9,7 +9,7 @@ namespace ForumSystemTeamFour.Models.ViewModels.Thread
 {
     public class ThreadDetailsVM
     {
-        public ThreadVM Thread { get; set; } //Change to VM later?       
+        public ThreadVM Thread { get; set; }        
         public ReplyQueryParametersVM QueryParameters { get; set; } 
 
         public ThreadDetailsVM()

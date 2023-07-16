@@ -53,7 +53,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 var allUsers = UserServices.FilterBy(defaultId, queryParameters);
                 int totalUsers = UserServices.GetCount();
                 var random = new Random();
-                var randomUsers = allUsers.OrderBy(user => random.Next()).Take(random.Next(5, totalUsers)).ToList();
+                var randomUsers = allUsers.OrderBy(user => random.Next()).Take(random.Next(10, totalUsers)).ToList();
                 var usernames = UserMapper.MapUsernameList(randomUsers);
                 homeVM.UsersOnline = usernames.Distinct().ToList();
                 homeVM.TotalUsers = totalUsers;
@@ -101,7 +101,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             var allUsers = UserServices.FilterBy(defaultId, queryParameters);
             int totalUsers = UserServices.GetCount();
             var random = new Random();
-            var randomUsers = allUsers.OrderBy(user => random.Next()).Take(random.Next(5, totalUsers)).ToList();
+            var randomUsers = allUsers.OrderBy(user => random.Next()).Take(random.Next(10, totalUsers)).ToList();
             var usernames = UserMapper.MapUsernameList(randomUsers);
             statsVM.UsersOnline = usernames.Distinct().ToList();
 
