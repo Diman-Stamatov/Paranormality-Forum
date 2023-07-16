@@ -2,7 +2,12 @@
 
 @{
 	bool loggedIn = User.Identity.IsAuthenticated;
-	string loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
+	string loggedUser = "anonymous";
+	if (loggedIn)
+	{
+		loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
+	}
+	
 
 	var sortParameters = new List<string> { "Username", "CreationDate", "Likes", "Dislikes" };
 	var sortOptions = new SelectList(sortParameters);
@@ -169,9 +174,7 @@
 		string replyAuthor = reply.Author.UserName;
 		string replyCreationDate = reply.CreationDate.ToString("g");
 		string replyContent = reply.Content;
-		bool replyWasEdited = reply.ModificationDate != DateTime.MinValue;
-		int replyLikes = reply.Likes;
-		int replyDislikes = reply.Dislikes;
+		bool replyWasEdited = reply.ModificationDate != DateTime.MinValue;		
 		int replyAuthorPosts = reply.Author.TotalPosts;
 
 		bool hasReplyPic = Directory.EnumerateFiles(profilePicDirectory, $"{replyAuthor}*").Any();
@@ -222,10 +225,50 @@
 					</td>
 					<td>
 						<div style="float:left; padding-left:20px;">
-							<div style="display: inline-block; color:limegreen">⨇</div>
-							<div style="display: inline-block;">@replyLikes</div>
-							<div style="display: inline-block; color:red">⨈</div>
-							<div style="display: inline-block;">@replyDislikes</div>
+							<div class="card border-0 bg-dark text-white flex-row">
+								<div class="votes">
+									<a class="upvote-symbol" asp-controller="Replies" asp-action="UpVote" asp-route-id="@reply.Id">⨇</a>
+									@{
+										if (reply.Likes.Any(v => v.VoterUsername == loggedUser))
+										{
+											<div>You </div>
+											if (reply.Likes.Count == 2)
+											{
+												<span>, 1 other</span>
+											}
+											else if (reply.Likes.Count > 2)
+											{
+												<span>, @(reply.Likes.Count - 1) others</span>
+											}
+										}
+										else
+										{
+											<div>@reply.Likes.Count</div>
+										}
+									}
+								</div>
+								<div class="votes">
+									<a class="downvote-symbol" asp-controller="Replies" asp-action="DownVote" asp-route-id="@reply.Id">⨈</a>
+									@{
+										if (reply.Dislikes.Any(v => v.VoterUsername == loggedUser))
+										{
+											<span>You </span>
+											if (reply.Dislikes.Count == 2)
+											{
+												<span>, 1 other</span>
+											}
+											else if (reply.Dislikes.Count > 2)
+											{
+												<span>, @(reply.Dislikes.Count - 1) others</span>
+											}
+										}
+										else
+										{
+											<div>@reply.Dislikes.Count</div>
+										}
+									}
+								</div>
+							</div>
 						</div >
 						@{
 							if (replyWasEdited)

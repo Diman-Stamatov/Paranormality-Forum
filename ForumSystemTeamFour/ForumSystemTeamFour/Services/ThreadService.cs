@@ -98,17 +98,17 @@ namespace ForumSystemTeamFour.Services
             return result;
         }
 
-        public List<LargeThreadResponseDto> GetAllLarge()
+        public List<ThreadVM> GetAllLarge()
         {
             var allThreads = this.threadRepositroy.GetAll();
-            var result = this.threadMapper.MapLargeList(allThreads);
+            var result = this.threadMapper.MapVMList(allThreads);
             return result;
         }
 
-        public LargeThreadResponseDto Details(int id)
+        public ThreadVM Details(int id)
         {
             var thread = this.threadRepositroy.Details(id);            
-            var threadResponseDto = this.threadMapper.MapLarge(thread);
+            var threadResponseDto = this.threadMapper.MapVM(thread);
             return threadResponseDto;
         }  
         

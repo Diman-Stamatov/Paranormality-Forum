@@ -48,9 +48,9 @@ namespace ForumSystemTeamFour.Mappers
                 Content = shortThreadResponseDto.Content,
             };
         }
-        public LargeThreadResponseDto MapLarge(Thread thread)
+        public ThreadVM MapVM(Thread thread)
         {
-            return new LargeThreadResponseDto
+            return new ThreadVM
             {
                 Id = thread.Id,
                 Title = thread.Title,
@@ -58,7 +58,7 @@ namespace ForumSystemTeamFour.Mappers
                 isDeleted = thread.IsDeleted,
                 CreationDate = thread.CreationDate,
                 ModificationDate = thread.ModificationDate,
-                Replies = ReplyMapper.Map(thread.Replies),
+                Replies = ReplyMapper.MapViewModelList(thread.Replies),
                 Tags = TagMapper.Map(thread.Tags),
                 Votes = ThreadVoteMapper.Map(thread.Votes),
                 Author = userMapper.MapResponseDto(thread.Author),
@@ -95,9 +95,9 @@ namespace ForumSystemTeamFour.Mappers
             return threads.Select(this.Map).ToList();
         }
 
-        public List<LargeThreadResponseDto> MapLargeList(List<Thread> threads)
+        public List<ThreadVM> MapVMList(List<Thread> threads)
         {
-            return threads.Select(this.MapLarge).ToList();
+            return threads.Select(this.MapVM).ToList();
         }
 
         public PaginatedList<ShortThreadResponseDto> Map(PaginatedList<Thread> threads)

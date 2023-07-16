@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using ForumSystemTeamFour.Models.DTOs.UserDTOs;
+using ForumSystemTeamFour.Models.ViewModels;
 
 namespace ForumSystemTeamFour.Models.DTOs.ThreadDTOs
 {
-    public class LargeThreadResponseDto
+    public class ThreadVM
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -17,7 +18,7 @@ namespace ForumSystemTeamFour.Models.DTOs.ThreadDTOs
 
         public DateTime ModificationDate { get; set; }
 
-        public List<ReplyReadDto> Replies { get; set; }
+        public List<ReplyViewModel> Replies { get; set; }
 
         public List<string> Tags { get; set; }
 

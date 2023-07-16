@@ -55,8 +55,14 @@ namespace ForumSystemTeamFour.Services
             List<ReplyReadDto> replyDtoList = replyMapper.Map(replies);
             return replyDtoList;
         }
+		public List<ReplyViewModel> FilterForVM(ReplyQueryParameters filterParameters)
+		{
+			var replies = repository.FilterBy(filterParameters);
+			List<ReplyViewModel> replyVMList = replyMapper.MapViewModelList(replies);
+			return replyVMList;
+		}
 
-        public ReplyReadDto GetById(int id)
+		public ReplyReadDto GetById(int id)
         {
             var reply = repository.GetById(id);
             ReplyReadDto replyDto = replyMapper.Map(reply);

@@ -22,5 +22,7 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
         Reply Map(Reply reply, ReplyUpdateDto replyUpdateDto);
         Reply MapViewModel(Reply reply, ReplyViewModel replyUpdateViewModel);
         ReplyQueryParameters MapViewQuery(ReplyQueryParametersVM queryVM);
-    }
+        List<ReplyViewModel> MapViewModelList(List<Reply> replies);
+
+	}
 }

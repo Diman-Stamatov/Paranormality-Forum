@@ -1,6 +1,7 @@
 ﻿using ForumSystemTeamFour.Mappers.Interfaces;
 using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs;
+using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 using ForumSystemTeamFour.Models.Interfaces;
 using ForumSystemTeamFour.Models.QueryParameters;
 using ForumSystemTeamFour.Models.ViewModels;
@@ -8,6 +9,7 @@ using ForumSystemTeamFour.Models.ViewModels.Reply;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using static ForumSystemTeamFour.Models.Enums.VoteType;
 
 namespace ForumSystemTeamFour.Mappers
@@ -96,5 +98,10 @@ namespace ForumSystemTeamFour.Mappers
             };
         }
 
-    }
+		public List<ReplyViewModel> MapViewModelList(List<Reply> replies)
+		{
+			return replies.Select(this.MapViewModel).ToList();
+		}
+
+	}
 }

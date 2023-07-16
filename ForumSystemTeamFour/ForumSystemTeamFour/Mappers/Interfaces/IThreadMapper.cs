@@ -11,7 +11,7 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
     {
         public Thread Map(ThreadCreateDto threadDto, User author);
 
-        public LargeThreadResponseDto MapLarge(Thread thread);
+        public ThreadVM MapVM(Thread thread);
 
         public Thread Map(Thread threadToUpdate, ThreadUpdateDto threadUpdateDto);
 
@@ -19,7 +19,7 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
 
         public PaginatedList<ShortThreadResponseDto> Map(PaginatedList<Thread> threads);
 
-        List<LargeThreadResponseDto> MapLargeList(List<Thread> threads);
+        List<ThreadVM> MapVMList(List<Thread> threads);
 
         public List<ShortThreadResponseDto> Map(List<Thread> thread);
 
