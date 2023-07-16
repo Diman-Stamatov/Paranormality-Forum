@@ -141,7 +141,7 @@ namespace ForumSystemTeamFour.Repositories
         {
             var threads = this.context.Threads
                             .Where(thread => !thread.IsDeleted)
-                            .Include(thread => thread.Replies)
+                            .Include(thread => thread.Replies.Where(reply => !reply.IsDeleted))
 							.ThenInclude(reply => reply.Author)
 							.Include(thread => thread.Author)  
                             .Include(thread => thread.Votes)
@@ -219,9 +219,9 @@ namespace ForumSystemTeamFour.Repositories
         {
                     var thread = this.context.Threads
                             .Where(thread => !thread.IsDeleted && thread.Id ==id)
-                            .Include(thread => thread.Replies)
+                            .Include(thread => thread.Replies.Where(reply => !reply.IsDeleted))
                             .ThenInclude (reply => reply.Votes)
-							.Include(thread => thread.Replies)
+							.Include(thread => thread.Replies.Where(reply => !reply.IsDeleted))
 							.ThenInclude(reply => reply.Author)
                             .Include(thread => thread.Author)	
                             .Include(thread => thread.Votes)

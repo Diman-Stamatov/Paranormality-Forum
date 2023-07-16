@@ -180,7 +180,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             {
                 var replyToDelete = replyService.Delete(replyViewModel.Id, GetLoggedUserId());
 
-                return RedirectToAction("Details", "Threads", new { id = replyToDelete.ThreadId });
+                return RedirectToAction("Details", "Thread", new { id = replyToDelete.ThreadId });
             }
             catch (EntityNotFoundException exception)
             {
