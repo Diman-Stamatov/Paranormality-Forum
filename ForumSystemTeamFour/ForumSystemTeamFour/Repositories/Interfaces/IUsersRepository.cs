@@ -18,6 +18,8 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
         User PromoteToAdmin(int idToPromote); 
         User DemoteFromAdmin(int idToDemote);
         User Delete(User userToDelete);
-        
-    }
+        int GetCount();
+
+
+	}
 }

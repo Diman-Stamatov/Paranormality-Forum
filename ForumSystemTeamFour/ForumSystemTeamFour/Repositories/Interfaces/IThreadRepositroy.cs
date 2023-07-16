@@ -21,5 +21,8 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
         public Thread Details(int id);
 
         public List<Thread> GetAllByUserId(int id);
-    }
+
+        int GetCount();
+
+	}
 }

@@ -19,9 +19,10 @@ namespace ForumSystemTeamFour.Services.Interfaces
 
         public List<ShortThreadResponseDto> GetAll();
 
-        List<ThreadVM> GetAllLarge();
+        List<ThreadVM> GetAllVM();
 
         public ThreadVM Details(int id);
         public List<string> GetAllTags();
-    }
+		int GetCount();
+	}
 }

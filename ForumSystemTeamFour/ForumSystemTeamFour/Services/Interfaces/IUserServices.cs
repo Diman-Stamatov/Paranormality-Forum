@@ -21,5 +21,7 @@ namespace ForumSystemTeamFour.Services.Interfaces
         UserResponseDto Unblock(int loggedUserId, int idToUnblock);
         UserResponseDto PromoteToAdmin(int loggedUserId, int idToPromote);
         UserResponseDto DemoteFromAdmin(int loggedUserId, int idToDemote);
-    }
+
+		int GetCount();
+	}
 }

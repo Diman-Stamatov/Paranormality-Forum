@@ -1,9 +1,14 @@
 ﻿
 @using ForumSystemTeamFour.Models.DTOs
-@model List<ThreadVM>
+@model AnonymousHomeVM
 
 @{
     Layout = null;
+    int totalUsers = Model.TotalUsers;
+    int totalThreads = Model.NumberOfThreads;
+    int totalPosts = Model.NumberOfPosts;
+    var usersOnline = string.Join(',', Model.UsersOnline);
+    var popularTags = string.Join(',', Model.TopTags);
 }
 
 <!DOCTYPE html>
@@ -34,6 +39,17 @@
                type="button" class="btn appBtn-outline" style="text-decoration:none">Login</a>
         </div>
     </div>
+
+    <div class="grid-menu" style="text-align:left; position:absolute; top:40%; padding-left:20px">
+        <div >Forum stats:</div><br />
+        <div>Registered users: @totalUsers</div>
+        <div >Total threads: @totalThreads</div>
+        <div >Total posts: @totalPosts</div>
+
+
+
+    </div>
+
     <div> 
         <div style="position: absolute;left: 50%;transform: translate(-50%, 0%);width:70%">
             <h3 style ="text-align:center;margin-top:15%;font-size:2vw">Popular discussions:</h3>
@@ -49,7 +65,7 @@
                 </thead>
                 <tbody style="font-size:1vw">
                     @{
-                        foreach (var thread in this.Model)
+                        foreach (var thread in this.Model.TopThreads)
                         {
                             var latestReply = thread.Replies.OrderByDescending(reply => reply.CreationDate).FirstOrDefault();
                             <tr>
@@ -70,7 +86,8 @@
                         }
                     }
                 </tbody>
-            </table>                
+            </table>
+            <div style="padding-top:20px;"><b>Who is online:</b> <div style="font-size:14px">@usersOnline</div></div>
         </div>
     </div>
 

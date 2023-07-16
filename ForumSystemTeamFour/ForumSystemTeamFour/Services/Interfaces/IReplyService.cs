@@ -21,5 +21,7 @@ namespace ForumSystemTeamFour.Services.Interfaces
         ReplyReadDto UpVote(int id, int loggedUserId);
         ReplyReadDto DownVote(int id, int loggedUserId);
         VotesDto GetReplyVotes(int id);
-    }
+        int GetCount();
+
+	}
 }

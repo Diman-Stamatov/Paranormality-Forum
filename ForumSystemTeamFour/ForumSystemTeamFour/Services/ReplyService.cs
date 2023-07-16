@@ -209,5 +209,10 @@ namespace ForumSystemTeamFour.Services
                 return false;
             }
         }
-    }
+
+		public int GetCount()
+		{
+			return this.repository.GetCount();
+		}
+	}
 }

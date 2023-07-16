@@ -187,6 +187,10 @@ namespace ForumSystemTeamFour.Repositories
         {
             return !string.IsNullOrEmpty(value);
         }
-        
-    }
+		public int GetCount()
+		{
+			return context.Threads.Count();
+		}
+
+	}
 }

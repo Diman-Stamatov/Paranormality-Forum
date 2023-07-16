@@ -20,5 +20,7 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
         Reply DownVote(int id, string loggedUserName);
         Reply ChangeVote(int id, string loggedUserName);
         Reply RemoveVote(int id, string loggedUserName);
-    }
+        int GetCount();
+
+	}
 }
