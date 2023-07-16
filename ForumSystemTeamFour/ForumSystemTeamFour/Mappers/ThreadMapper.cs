@@ -77,13 +77,15 @@ namespace ForumSystemTeamFour.Mappers
         {
             return new ShortThreadResponseDto
             {
+                Id = thread.Id,
                 Title = thread.Title,
                 Content = thread.Content,           
                 CreationDate = thread.CreationDate,
                 Replies = thread.Replies.Count,
                 Tags = TagMapper.Map(thread.Tags),
                 IsDeleted = thread.IsDeleted,
-                AuthorUserName = thread.Author.Username
+                AuthorUserName = thread.Author.Username,
+                AuthorId = thread.Author.Id
             };
         }
                
