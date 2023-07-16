@@ -3,10 +3,12 @@
 
 @{
 	bool loggedIn = User.Identity.IsAuthenticated;
+	bool isAdmin = false;
 	string loggedUser = "anonymous";
 	if (loggedIn)
 	{
 		loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
+		isAdmin = User.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin").Value == "True";
 	}
 	
 
@@ -380,6 +382,11 @@
 								{
 									<a asp-controller="Replies" asp-action="Edit" asp-route-id="@replyId"
 									   type="button" class="btn appBtnReply-outline appBtn-outline" style="text-decoration:none; padding-top:0px; padding-bottom:1px; margin-right:5px;">Edit</a>
+								}
+								if (loggedUser == replyAuthor || isAdmin)
+								{
+									<a asp-controller="Replies" asp-action="Delete" asp-route-id="@replyId"
+									   type="button" class="btn appBtnReply-outline appBtn-outline" style="text-decoration:none; padding-top:0px; padding-bottom:1px; margin-right:5px;">Delete</a>
 								}
 							}
 
