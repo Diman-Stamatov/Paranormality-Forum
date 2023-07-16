@@ -35,13 +35,7 @@
                             <input type="submit" value="@this.ViewData["Action"]" class="btn btn-primary" />
                             <a onclick="history.back()" class="btn btn-light">Back</a>
                         </div>
-                        <div>
-                            <label asp-for="Tags" class="form-label"></label>
-                            <br />
-                            <select asp-items="@Model.Tags" asp-for="Tags" class="form-input"></select>
-                            <br />
-                            <span asp-validation-for="Tags" class="form-error"></span>
-                        </div>
+                        
                     </div>
                 </div>
             </body>

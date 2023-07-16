@@ -258,10 +258,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
                 return this.View("Error404");
             }
-            
-
             return this.View("Details", detailsVM);
-
         }
 
         [AllowAnonymous]
@@ -283,11 +280,13 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 return this.View(detailsVM);
             }           
             return this.View("Details", detailsVM);
-
         }
+
         private void InitializeDropDownListsOfTags(ThreadCreateVM threadViewModel)
         {
-            threadViewModel.Tags = new SelectList(ThreadServices.GetAll(), "Id", "Name");
+            var allTags = ThreadServices.GetAllTags();
+
+            threadViewModel.TagsList = new SelectList(allTags, "Id", "Name");
         }
     }
 }

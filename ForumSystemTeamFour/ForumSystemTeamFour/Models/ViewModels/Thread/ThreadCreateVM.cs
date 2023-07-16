@@ -5,6 +5,7 @@ namespace ForumSystemTeamFour.Models.ViewModels.Thread
 {
     public class ThreadCreateVM : ThreadCreateDto
     {
-        public SelectList Tags { get; set; }
+        public SelectList TagsList  { get; set; }
+        public string SelectedTag { get; set; }
     }
 }
