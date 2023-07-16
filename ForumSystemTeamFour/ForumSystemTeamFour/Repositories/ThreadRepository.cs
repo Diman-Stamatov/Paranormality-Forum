@@ -143,7 +143,8 @@ namespace ForumSystemTeamFour.Repositories
                             .Where(thread => !thread.IsDeleted)
                             .Include(thread => thread.Replies)
 							.ThenInclude(reply => reply.Author)
-							.Include(thread => thread.Author)                            
+							.Include(thread => thread.Author)  
+                            .Include(thread => thread.Votes)
                             .ToList();
             if (threads.Count == 0 || !threads.Any())
             {
@@ -222,7 +223,8 @@ namespace ForumSystemTeamFour.Repositories
                             .ThenInclude (reply => reply.Votes)
 							.Include(thread => thread.Replies)
 							.ThenInclude(reply => reply.Author)
-                            .Include(thread => thread.Author)							
+                            .Include(thread => thread.Author)	
+                            .Include(thread => thread.Votes)
 							.FirstOrDefault();
 
             return thread ?? throw new EntityNotFoundException($"Thread with id={id} doesn't exist.");
