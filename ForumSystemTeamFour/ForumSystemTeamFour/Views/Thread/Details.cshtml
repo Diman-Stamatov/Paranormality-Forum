@@ -168,6 +168,21 @@
 						<div style="text-align:left; float:right">Edited on: @Model.Thread.ModificationDate.ToString("g")</div>
 					}
 				}
+				<div style="float:right">
+					@{
+						if (loggedIn)
+						{
+							<a asp-controller="Replies" asp-action="Create" asp-route-id="@threadId"
+					   type="button" class="btn appBtnReply-outline appBtn-outline" style="text-decoration:none; padding-top:0px; padding-bottom:1px; margin-right:5px;">Post reply</a>
+						}
+						if (loggedUser == Model.Thread.Author.Username.ToString())
+						{
+							<a asp-controller="Replies" asp-action="Edit" asp-route-id="@Model.Thread.Id"
+					   type="button" class="btn appBtnReply-outline appBtn-outline" style="text-decoration:none; padding-top:0px; padding-bottom:1px; margin-right:5px;">Edit</a>
+						}
+					}
+
+				</div>
 			</td>
 		</tr>
 
