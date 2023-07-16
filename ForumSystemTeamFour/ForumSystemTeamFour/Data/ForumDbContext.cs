@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using ForumSystemTeamFour.Models.Enums;
 using System.Linq;
+using ForumSystemTeamFour.Models.Comparers;
 
 namespace ForumSystemTeamFour.Data
 
@@ -2740,9 +2741,8 @@ namespace ForumSystemTeamFour.Data
                 string userName = users[votesRandom.Next(0, users.Count)].Username;
                 VoteType voteType = (VoteType)votesRandom.Next(0,2);
                 var vote = new ThreadVote() { Id = id, ThreadId = threadId, VoterUsername = userName, VoteType = voteType };
-                if (threadVotes.Contains(vote))
+                if (threadVotes.Any(t => t.VoterUsername == vote.VoterUsername && t.ThreadId == vote.ThreadId))
                 {
-                    i--;
                     continue;
                 }
                 threadVotes.Add(vote);
@@ -2752,8 +2752,8 @@ namespace ForumSystemTeamFour.Data
 
             // Reply Votes
             var replyVotes = new HashSet<ReplyVote>();
-            int totalPossibleReplyVoteCount = users.Count * threads.Count;
-            int replyVoteCount = votesRandom.Next((int)Math.Round(totalPossibleReplyVoteCount * 0.8), totalPossibleReplyVoteCount);
+            int totalPossibleReplyVoteCount = users.Count * replies.Count;
+            int replyVoteCount = votesRandom.Next((int)Math.Round(totalPossibleReplyVoteCount * 0.5), totalPossibleReplyVoteCount);
             for (int i = 1; i <= replyVoteCount; i++)
             {
                 int id = i;
@@ -2761,9 +2761,8 @@ namespace ForumSystemTeamFour.Data
                 string userName = users[votesRandom.Next(0, users.Count)].Username;
                 VoteType voteType = (VoteType)votesRandom.Next(0, 2);
                 var vote = new ReplyVote() { Id = id, ReplyId = replyId, VoterUsername = userName, VoteType = voteType };
-                if (replyVotes.Contains(vote))
+                if (replyVotes.Any(r => r.VoterUsername == vote.VoterUsername && r.ReplyId == vote.ReplyId))
                 {
-                    i--;
                     continue;
                 }
                 replyVotes.Add(vote);
