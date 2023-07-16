@@ -14,7 +14,8 @@ namespace ForumSystemTeamFour.Services.Interfaces
         ReplyViewModel GetViewModelById(int id);
         List<ReplyReadDto> GetByThreadId(int id);
         List<ReplyReadDto> FilterBy(ReplyQueryParameters filterParameters);
-        ReplyReadDto Update(int id, ReplyUpdateDto replyUpdateDto, int loggedUserId);
+        List<ReplyViewModel> FilterForVM(ReplyQueryParameters filterParameters);
+		ReplyReadDto Update(int id, ReplyUpdateDto replyUpdateDto, int loggedUserId);
         ReplyViewModel Update(int id, ReplyViewModel replyUpdateViewModel, int loggedUserId);
         ReplyReadDto Delete(int id, int loggedUserId);
         ReplyReadDto UpVote(int id, int loggedUserId);

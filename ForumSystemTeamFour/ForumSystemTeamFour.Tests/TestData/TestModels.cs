@@ -632,9 +632,9 @@ namespace ForumSystemTeamFour.Tests.TestData
             };
         }
 
-        public static LargeThreadResponseDto GetTestLargeThreadResponseDto()
+        public static ThreadVM GetTestLargeThreadResponseDto()
         {
-            return new LargeThreadResponseDto 
+            return new ThreadVM 
             {
                 
                 Title = ValidThreadTitle,
@@ -716,7 +716,7 @@ namespace ForumSystemTeamFour.Tests.TestData
                 .Returns(GetTestDefaultThread());
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<Models.Thread>()))
                 .Returns(GetTestShortThreadResponseDto());
-            mockMapper.Setup(mapper => mapper.MapLarge(It.IsAny<Models.Thread>()))
+            mockMapper.Setup(mapper => mapper.MapVM(It.IsAny<Models.Thread>()))
                .Returns(GetTestLargeThreadResponseDto());
             mockMapper.Setup(mapper => mapper.Map(It.IsAny<Models.Thread>(), It.IsAny<ThreadUpdateDto>()))
                 .Returns(GetTestDefaultThread());

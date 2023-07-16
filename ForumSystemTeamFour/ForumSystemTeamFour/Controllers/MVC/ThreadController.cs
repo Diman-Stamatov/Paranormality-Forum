@@ -213,7 +213,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
         [Authorize]
         [HttpPost]
-        public IActionResult Delete([FromRoute] int id, LargeThreadResponseDto threadUpdateDto)
+        public IActionResult Delete([FromRoute] int id, ThreadVM threadUpdateDto)
         {
             try
             {
@@ -270,7 +270,7 @@ namespace ForumSystemTeamFour.Controllers.MVC
             try
             {
 				detailsVM.Thread = ThreadServices.Details(id);
-				var sortedReplies = ReplyServices.FilterBy(queryParameters);
+				var sortedReplies = ReplyServices.FilterForVM(queryParameters);
                 detailsVM.Thread.Replies = sortedReplies;
             }
             catch (EntityNotFoundException exception)
