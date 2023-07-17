@@ -87,33 +87,17 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
         }
 
-
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult Details([FromRoute] int id)
-        {
-            var detailsVM = new ThreadDetailsVM();
-            try
-            {
-                detailsVM.Thread = ThreadServices.Details(id);
-            }
-            catch (EntityNotFoundException exception)
-            {
-
-                this.ViewData["ErrorMessage"] = exception.Message;
-                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                return this.View("Error404");
-            }
-            return this.View("Details", detailsVM);
-        }
-
         [Authorize]
         [HttpGet]
         public IActionResult FilterBy(string tag)
         {
             var threadIndexVM = new ThreadIndexVM();
-            return this.View("Index", threadIndexVM);
+            threadIndexVM.QueryParameters.Tags.Add(tag);
+			var listOfResponseDtos = this.ThreadServices.FilterForVM(threadIndexVM.QueryParameters);
+			threadIndexVM.Threads = listOfResponseDtos;
+			return this.View("Index", threadIndexVM);
         }
+
         [Authorize]
         [HttpPost]
         public IActionResult FilterBy(ThreadIndexVM threadIndexVM)
@@ -144,7 +128,27 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 return this.View("Index");
             }
         }
-        [AllowAnonymous]
+
+		[AllowAnonymous]
+		[HttpGet]
+		public IActionResult Details([FromRoute] int id)
+		{
+			var detailsVM = new ThreadDetailsVM();
+			try
+			{
+				detailsVM.Thread = ThreadServices.Details(id);
+			}
+			catch (EntityNotFoundException exception)
+			{
+
+				this.ViewData["ErrorMessage"] = exception.Message;
+				this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+				return this.View("Error404");
+			}
+			return this.View("Details", detailsVM);
+		} 
+
+		[AllowAnonymous]
         [HttpPost]
         public IActionResult Details([FromRoute] int id, ThreadDetailsVM detailsVM)
         {

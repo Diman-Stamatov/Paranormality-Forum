@@ -150,13 +150,18 @@
 				@{
 					if (loggedIn)
 					{
-						<div><a asp-controller="Users" asp-action="Profile" asp-route-id="@threadAuthor" style="font-size:16px; text-decoration:none">@threadAuthor</a></div>
+							<div><a asp-controller="Users" asp-action="Profile" asp-route-id="@threadAuthor" style="font-size:16px; 
+							text-decoration:none">@threadAuthor</a></div>
+						
 					}
 					else
 					{
-						<div style="font-size:16px">@threadAuthor</div>
+							<div style="font-size:16px">@threadAuthor</div>
+
+						
 					}
 				}
+				
 				
 			</td>
 			<td>
@@ -176,6 +181,32 @@
 				<div>
 					Posts: @threadAuthorPosts
 				</div>
+				<br />
+				@{
+						<div style="font-size:12px;">
+						<div>Tags:</div>
+						
+						@if (loggedIn)
+					{
+						 foreach (var tag in Model.Thread.Tags)
+							{
+									<div style="display: inline-block;background-color:#232323; border-radius: 
+									05px;margin-top:5px;align-content:start"><a asp-controller="Thread" asp-action="FilterBy" 
+								asp-route-tag="@tag" style="text-decoration:none; text-align:left">@tag</a></div>
+								<br />
+							}
+					}
+					else
+					{
+						foreach (var tag in Model.Thread.Tags)
+						{
+								<div style="display: inline-block;background-color:#232323; border-radius: 05px;margin-top:5px;														align-content:start">@tag</div>
+							<br />
+						}
+					}
+						</div>
+					
+				}
 			</td>
 			<td  style="text-align:justify; padding:30px">@threadContent</td>
 		</tr>
@@ -203,19 +234,19 @@
 							@{
 								if (Model.Thread.Votes.Where(vote=>vote.VoteType == "Like").Any(v => v.VoterUsername == loggedUser))
 								{
-									<div>You </div>
+										<div>You </div>
 									if (threadLikes == 2)
 									{
-										<span>, 1 other</span>
+											<span>, 1 other</span>
 									}
 									else if (threadLikes > 2)
 									{
-										<span>, @(threadLikes - 1) others</span>
+											<span>, @(threadLikes - 1) others</span>
 									}
 								}
 								else
 								{
-									<div>@threadLikes</div>
+										<div>@threadLikes</div>
 								}
 							}
 						</div>
@@ -224,19 +255,19 @@
 							@{
 								if (Model.Thread.Votes.Where(vote => vote.VoteType == "Dislike").Any(v => v.VoterUsername == loggedUser))
 								{
-									<span>You </span>
+										<span>You </span>
 									if (threadDislikes == 2)
 									{
-										<span>, 1 other</span>
+											<span>, 1 other</span>
 									}
 									else if (threadDislikes > 2)
 									{
-										<span>, @(threadDislikes - 1) others</span>
+											<span>, @(threadDislikes - 1) others</span>
 									}
 								}
 								else
 								{
-									<div>@threadDislikes</div>
+										<div>@threadDislikes</div>
 								}
 							}
 						</div>
@@ -246,19 +277,19 @@
 				@{
 					if (threadWasEdited)
 					{
-						<div style="text-align:left; float:right">Edited on: @Model.Thread.ModificationDate.ToString("g")</div>
+							<div style="text-align:left; float:right">Edited on: @Model.Thread.ModificationDate.ToString("g")</div>
 					}
 				}
 				<div style="float:right">
 					@{
 						if (loggedIn)
 						{
-							<a asp-controller="Replies" asp-action="Create" asp-route-id="@threadId"
+								<a asp-controller="Replies" asp-action="Create" asp-route-id="@threadId"
 					   type="button" class="btn appBtnReply-outline appBtn-outline" style="text-decoration:none; padding-top:0px; padding-bottom:1px; margin-right:5px;">Post reply</a>
 						}
 						if (loggedUser == Model.Thread.Author.Username.ToString())
 						{
-							<a asp-controller="Replies" asp-action="Edit" asp-route-id="@Model.Thread.Id"
+								<a asp-controller="Replies" asp-action="Edit" asp-route-id="@Model.Thread.Id"
 					   type="button" class="btn appBtnReply-outline appBtn-outline" style="text-decoration:none; padding-top:0px; padding-bottom:1px; margin-right:5px;">Edit</a>
 						}
 					}
@@ -289,143 +320,146 @@
 		var replydFileInfo = directory.GetFiles("*" + replyAuthor + "*.*");
 		string replyPicName = hasReplyPic ? $"{replydFileInfo[0].Name}" : "default.jpg";
 
-		<table class="postTable" style="width:100%">
-			<tbody>
-				<tr>
-					<td style="width:8vw;">
-						<div style="font-size:14px">Author:</div>
-						@{
+	<table class="postTable" style="width:100%">
+				<tbody>
+					<tr>
+						<td style="width:8vw;">
+							<div style="font-size:14px">Author:</div>
+							@{
 							if (loggedIn)
 							{
-								<div><a asp-controller="Users" asp-action="Profile" asp-route-id="@replyAuthor" style="font-size:16px; text-decoration:none">@replyAuthor</a></div>
+										<div><a asp-controller="Users" asp-action="Profile" asp-route-id="@replyAuthor" style="font-size:16px; 
+										text-decoration:none">@replyAuthor</a></div>
 							}
 							else
 							{
-								<div style="font-size:16px">@replyAuthor</div>
+										<div style="font-size:16px">@replyAuthor</div>
 							}
-						}
+							}
 
-					</td>
-					<td>
-						<div style="font-size:12px;float:left;">Re: @threadTitle</div>
-						<div style="float:right; font-size:12px;padding-right:20px">
-							Posted: @replyCreationDate
-						</div>
-					</td>
-				</tr>
+						</td>
+						<td>
+							<div style="font-size:12px;float:left;">Re: @threadTitle</div>
+							<div style="float:right; font-size:12px;padding-right:20px">
+								Posted: @replyCreationDate
+							</div>
+						</td>
+					</tr>
 
-				<tr>
-					<td style="vertical-align:top; padding-top:20px">
-						<div>
-							<img style="width:100px;height:100px;vertical-align:top"
-								 src="/ProfilePictures/@replyPicName" />
-						</div>
-						<div>
-							Posts: @replyAuthorPosts
-						</div>
-					</td>
-					<td style="text-align:justify; padding:30px">@replyContent</td>
-				</tr>
+					<tr>
+						<td style="vertical-align:top; padding-top:20px">
+							<div>
+								<img style="width:100px;height:100px;vertical-align:top"
+								 	src="/ProfilePictures/@replyPicName" />
+							</div>
+							<div>
+								Posts: @replyAuthorPosts
+							</div>
+						</td>
+						<td style="text-align:justify; padding:30px">@replyContent</td>
+					</tr>
 
-				<tr>
-					<td>
-						<a href="#top" style="float:left; padding-left:20px;text-decoration:none; font-size:14px">Top</a>
-					</td>
-					<td>
-						<div style="float:left; padding-left:10px;">
-						@if (!loggedIn)
+					<tr>
+						<td>
+							<a href="#top" style="float:left; padding-left:20px;text-decoration:none; font-size:14px">Top</a>
+						</td>
+						<td>
+							<div style="float:left; padding-left:10px;">
+							@if (!loggedIn)
 							{
-								<div style=" float:left; padding-left:5px;">
-									<div style="display: inline-block; color:limegreen">⨇</div>
-									<div style="display: inline-block;">@reply.Likes.Count</div>
-									<div style="display: inline-block; color:red">⨈</div>
-									<div style="display: inline-block;">@reply.Dislikes.Count</div>
-								</div>
+									<div style=" float:left; padding-left:5px;">
+										<div style="display: inline-block; color:limegreen">⨇</div>
+										<div style="display: inline-block;">@reply.Likes.Count</div>
+										<div style="display: inline-block; color:red">⨈</div>
+										<div style="display: inline-block;">@reply.Dislikes.Count</div>
+									</div>
 							}
 							else
 							{
-								<div class="card border-0 bg-dark text-white flex-row">
-									<div class="votes">
-										<a class="upvote-symbol" asp-controller="Replies" asp-action="UpVote" asp-route-id="@reply.Id" asp-route-threadId="@threadId">⨇</a>
-										@{
+									<div class="card border-0 bg-dark text-white flex-row">
+										<div class="votes">
+											<a class="upvote-symbol" asp-controller="Replies" asp-action="UpVote" asp-route-id="@reply.Id" 
+										asp-route-threadId="@threadId">⨇</a>
+											@{
 											if (reply.Likes.Any(v => v.VoterUsername == loggedUser))
 											{
-												<div>You </div>
+														<div>You </div>
 												if (reply.Likes.Count == 2)
 												{
-													<span>, 1 other</span>
+															<span>, 1 other</span>
 												}
 												else if (reply.Likes.Count > 2)
 												{
-													<span>, @(reply.Likes.Count - 1) others</span>
+															<span>, @(reply.Likes.Count - 1) others</span>
 												}
 											}
 											else
 											{
-												<div>@reply.Likes.Count</div>
+														<div>@reply.Likes.Count</div>
 											}
-										}
-									</div>
-									<div class="votes">
-										<a class="downvote-symbol" asp-controller="Replies" asp-action="DownVote" asp-route-id="@reply.Id" asp-route-threadId="@threadId">⨈</a>
-										@{
+											}
+										</div>
+										<div class="votes">
+											<a class="downvote-symbol" asp-controller="Replies" asp-action="DownVote" asp-route-id="@reply.Id" 
+										asp-route-threadId="@threadId">⨈</a>
+											@{
 											if (reply.Dislikes.Any(v => v.VoterUsername == loggedUser))
 											{
-												<span>You </span>
+														<span>You </span>
 												if (reply.Dislikes.Count == 2)
 												{
-													<span>, 1 other</span>
+															<span>, 1 other</span>
 												}
 												else if (reply.Dislikes.Count > 2)
 												{
-													<span>, @(reply.Dislikes.Count - 1) others</span>
+															<span>, @(reply.Dislikes.Count - 1) others</span>
 												}
 											}
 											else
 											{
-												<div>@reply.Dislikes.Count</div>
+														<div>@reply.Dislikes.Count</div>
 											}
-										}
+											}
+										</div>
 									</div>
-								</div>
 							}
-							
-						</div >
-						@{
+								
+							</div >
+							@{
 							if (replyWasEdited)
 							{
-								<div style="text-align:left; font-size:12px; float:right; vertical-align:central">Edited on: @reply.ModificationDate.ToString("g")</div>
+										<div style="text-align:left; font-size:12px; float:right; vertical-align:central">Edited on: @reply.ModificationDate.ToString("g")</div>
 							}
-						}
-						<div style="float:right">
-							@{
+							}
+							<div style="float:right">
+								@{
 								if (loggedIn)
 								{
-									<a asp-controller="Replies" asp-action="Create" asp-route-id="@threadId" 
+											<a asp-controller="Replies" asp-action="Create" asp-route-id="@threadId" 
 									   type="button" class="btn appBtnReply-outline appBtn-outline" style="text-decoration:none; padding-top:0px; padding-bottom:1px; margin-right:5px;">Post reply</a>
 								}
 								if (loggedUser == replyAuthor)
 								{
-									<a asp-controller="Replies" asp-action="Edit" asp-route-id="@replyId"
+											<a asp-controller="Replies" asp-action="Edit" asp-route-id="@replyId"
 									   type="button" class="btn appBtnReply-outline appBtn-outline" style="text-decoration:none; padding-top:0px; padding-bottom:1px; margin-right:5px;">Edit</a>
 								}
 								if (loggedUser == replyAuthor || isAdmin)
 								{
-									<a asp-controller="Replies" asp-action="Delete" asp-route-id="@replyId"
+											<a asp-controller="Replies" asp-action="Delete" asp-route-id="@replyId"
 									   type="button" class="btn appBtnReply-outline appBtn-outline" style="text-decoration:none; padding-top:0px; padding-bottom:1px; margin-right:5px;">Delete</a>
 								}
-							}
+								}
 
-						</div>
-					</td>
-				</tr>
+							</div>
+						</td>
+					</tr>
 
-				<tr border="none">
-					<td colspan="2" style="background-color:black;height:5px"></td>
+					<tr border="none">
+						<td colspan="2" style="background-color:black;height:5px"></td>
 
-				</tr>
+					</tr>
 
-			</tbody>
-		</table>
+				</tbody>
+	</table>
 	}
 }
