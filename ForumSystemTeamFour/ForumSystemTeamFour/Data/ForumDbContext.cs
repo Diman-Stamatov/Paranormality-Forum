@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using ForumSystemTeamFour.Models.Enums;
 using System.Linq;
-using ForumSystemTeamFour.Models.Comparers;
 
 namespace ForumSystemTeamFour.Data
 
