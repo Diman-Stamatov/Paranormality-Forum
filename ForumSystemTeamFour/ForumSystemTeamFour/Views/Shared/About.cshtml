@@ -1,6 +1,8 @@
 ﻿@model AnonymousHomeVM
 @{
-    this.ViewData["Title"] = "About";  
+    this.ViewData["Title"] = "About";
+    bool loggedIn = User.Identity.IsAuthenticated;
+
     int totalUsers = Model.TotalUsers;
     int totalThreads = Model.NumberOfThreads;
     int totalPosts = Model.NumberOfPosts;
@@ -17,6 +19,7 @@
         Some of these lists are still a work in progress, as of this writing:
     </div>
     <br />
+
     <div>
         <div><a href="https://pastebin.com/w3z3CCGR" style="text-decoration:none">Film Recommendations</a> </div>
 
@@ -53,13 +56,23 @@
     <div style="text-align:left;padding-right:20vw; float:right">
         <div><b>Popular Tags:</b></div>
         @{
-            foreach (var tag in Model.TopTags)
+            if (loggedIn)
             {
-                <div style="display: inline-block;background-color:#52595D; border-radius: 05px;margin-top:5px; align-content:start"><a asp-controller="Thread" asp-action="FilterBy" asp-route-tag="@tag" style="text-decoration:none; text-align:left">@tag</a></div>
-
-                <br />
-
+                foreach (var tag in Model.TopTags)
+                {
+                    <div style="display: inline-block;background-color:#52595D; border-radius: 05px;margin-top:5px; align-                      content:start"><a asp-controller="Thread" asp-action="FilterBy" asp-route-tag="@tag" style="text-                             decoration:none; text-align:left">@tag</a></div>
+                    <br />
+                }
             }
+            else
+            {
+                foreach (var tag in Model.TopTags)
+                {
+                    <div style="display: inline-block;background-color:#52595D; border-radius: 05px;margin-top:5px; align-                      content:start">@tag</div>
+                    <br />
+                }
+            }
+            
         }
     </div>
     

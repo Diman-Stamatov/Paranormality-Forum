@@ -351,6 +351,7 @@ namespace ForumSystemTeamFour.Repositories
 							.ThenInclude(reply => reply.Author)
                             .Include(thread => thread.Author)	
                             .Include(thread => thread.Votes)
+							.Include(thread => thread.Tags)
 							.FirstOrDefault();
 
             return thread ?? throw new EntityNotFoundException($"Thread with id={id} doesn't exist.");

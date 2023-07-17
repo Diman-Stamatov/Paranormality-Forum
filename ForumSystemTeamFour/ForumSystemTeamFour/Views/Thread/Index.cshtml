@@ -105,7 +105,14 @@
 <form asp-controller="Thread" asp-action="FilterBy" method="post" style="float:right">
     <table style="text-align:left;">
         <tbody style="font-size:0.8vw">
-
+            <td style="color: #FFFF33;text-align:center">
+					@if (ViewData["ErrorMessage"] != null)
+					{
+						@ViewData["ErrorMessage"]
+						;
+						<br />
+					}
+				</td>
             <tr>                
                 <td>
                     <label asp-for="QueryParameters.UserName">By author:</label><br>
