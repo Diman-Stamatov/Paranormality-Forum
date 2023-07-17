@@ -24,18 +24,21 @@ namespace ForumSystemTeamFour.Controllers.MVC
         private readonly IThreadMapper ThreadMapper;
         private readonly IReplyService ReplyServices;
         private readonly IReplyMapper ReplyMapper;
+        private readonly ITagServices TagServices;
 
         public ThreadController(IThreadService threadServices,
                                 ISecurityServices securityServices,
                                 IThreadMapper threadMapper,
                                 IReplyService replyServices,
-                                IReplyMapper replyMapper)
+                                IReplyMapper replyMapper,
+                                ITagServices tagServices)
         {
             this.ThreadServices = threadServices;
             this.SecurityServices = securityServices;
             this.ThreadMapper = threadMapper;
             this.ReplyServices = replyServices;
             this.ReplyMapper = replyMapper;
+            this.TagServices = tagServices;
         }
 
 
@@ -68,10 +71,11 @@ namespace ForumSystemTeamFour.Controllers.MVC
         [HttpGet]
         public IActionResult Create()
         {
-            var threadCreateDto = new ThreadCreateVM();
-            this.InitializeDropDownListsOfTags(threadCreateDto);
-            threadCreateDto.AuthorId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
-            return this.View("Create", threadCreateDto);
+            var threadCreateVM = new ThreadCreateVM();
+            var allTags = TagServices.GetAll();
+            threadCreateVM.TagsList = new SelectList(allTags, "Id", "Name");
+            threadCreateVM.AuthorId = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
+            return this.View("Create", threadCreateVM);
         }
         [Authorize]
         [HttpPost]

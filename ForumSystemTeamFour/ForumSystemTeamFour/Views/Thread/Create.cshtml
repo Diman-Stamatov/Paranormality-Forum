@@ -11,7 +11,7 @@
 @model ThreadCreateVM
 
 <div style="margin: 0 auto; width:100%">
-    <h3 style="text-align:center;margin-top:5%;font-size:2vw">Create new topic</h3>
+    <h3 style="text-align:center;margin-top:5%;font-size:1.5vw">Create new topic</h3>
     <form asp-controller="Thread" asp-action="Create" method="post">
         <table style="text-align: left;" class="table appTable table-hover table-dark">
             @*ToDo Make each thread title link to the Thread in the table*@
@@ -20,20 +20,27 @@
                     <div class="card- border-0 bg-dark text-white">
 
 
-                        <div class="form-group" style="text-align:left; font-size: 2vw; ">
+                        <div class="form-group" style="text-align:left; font-size: 1vw; ">
                             <label asp-for="Title">Title</label>
                             <textarea class="form-control" asp-for="Title" type="text" rows="1" style="background-color: #E6FFE5;"></textarea>
                             <span asp-validation-for="Title" class="form-error"></span>
                         </div>
                         <br />
-                        <div class="form-group" form-group" style="text-align:left; font-size: 2vw; ">
+                        <div class="form-group" form-group" style="text-align:left; font-size: 1vw; ">
                             <label asp-for="Content">Content</label>
                             <textarea class="form-control" asp-for="Content" type="text" rows="3" style="background-color: #E6FFE5;"></textarea>
                             <span asp-validation-for="Content" class="form-error"></span>
                         </div>
+                      @*   <div class="form-group" style="text-align:left; font-size: 1vw; ">
+                            <label asp-for="TagsList">TagList </label>
+                              <br />
+                            <select asp-items="@Model.TagsList" asp-for="TagsList" type="from-input" ></select>
+                           
+
+                        </div>*@
                         <div>
-                            <input type="submit" value="@this.ViewData["Action"]" class="btn btn-primary" />
-                            <a onclick="history.back()" class="btn btn-light">Back</a>
+                            <input type="submit" value="@this.ViewData["Action"]" class="btn appBtn-outline" style="text-decoration:none; padding:3px; display:flex;align-items:left" />
+                            <a onclick="history.back()" class="btn btn-light" style="text-decoration:none; padding:3px; align-items:left">Back</a>
                         </div>
                         
                     </div>

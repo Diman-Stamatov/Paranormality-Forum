@@ -11,7 +11,8 @@ namespace ForumSystemTeamFour.Models.ViewModels.Thread
 {
 	public class ThreadIndexVM
 	{
-		public List<ShortThreadResponseDto> Threads { get; set; }
+        public string SelectedTag { get; set; }
+        public List<ShortThreadResponseDto> Threads { get; set; }
 		public ThreadQueryParameters QueryParameters { get; set; }
 
 		public ThreadIndexVM()
