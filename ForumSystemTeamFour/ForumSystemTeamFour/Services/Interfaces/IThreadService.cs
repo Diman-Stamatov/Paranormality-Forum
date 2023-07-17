@@ -22,6 +22,7 @@ namespace ForumSystemTeamFour.Services.Interfaces
         public List<ShortThreadResponseDto> GetAll();
 
         List<ThreadVM> GetAllVM();
+        public List<ShortThreadResponseDto> FilterForVM(ThreadQueryParameters threadQueryParameters);
 
         public ThreadVM Details(int id);
 

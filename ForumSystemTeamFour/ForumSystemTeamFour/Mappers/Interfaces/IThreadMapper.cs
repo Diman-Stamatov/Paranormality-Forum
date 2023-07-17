@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using ForumSystemTeamFour.Models.Enums;
 using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
+using ForumSystemTeamFour.Models.ViewModels.Thread;
 
 namespace ForumSystemTeamFour.Mappers.Interfaces
 {
@@ -22,8 +23,10 @@ namespace ForumSystemTeamFour.Mappers.Interfaces
         List<ThreadVM> MapVMList(List<Thread> threads);
 
         public List<ShortThreadResponseDto> Map(List<Thread> thread);
+        public ThreadIndexVM MapVM(List<ShortThreadResponseDto> list);
 
-       
+
+
     }
 }
 

@@ -20,6 +20,8 @@ namespace ForumSystemTeamFour.Repositories.Interfaces
 
         public Thread Details(int id);
 
+        public List<Thread> FilterByMV(ThreadQueryParameters filter);
+
         public List<Thread> GetAllByUserId(int id);
 
         public Thread UpVote(int id, string loggedUserName);

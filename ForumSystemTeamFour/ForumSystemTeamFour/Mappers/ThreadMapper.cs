@@ -3,6 +3,7 @@ using ForumSystemTeamFour.Models;
 using ForumSystemTeamFour.Models.DTOs.ThreadDTOs;
 using ForumSystemTeamFour.Models.Enums;
 using ForumSystemTeamFour.Models.Interfaces;
+using ForumSystemTeamFour.Models.ViewModels.Thread;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,7 +69,16 @@ namespace ForumSystemTeamFour.Mappers
 			};
 		}
 
-		public Thread Map(Thread threadToUpdate, ThreadUpdateDto threadUpdateDto)
+		public ThreadIndexVM MapVM(List<ShortThreadResponseDto> list)
+		{
+			return new ThreadIndexVM
+			{
+				Threads = list,
+            };
+
+        }
+
+        public Thread Map(Thread threadToUpdate, ThreadUpdateDto threadUpdateDto)
 		{
 			threadToUpdate.Title = threadUpdateDto.Title ?? threadToUpdate.Title;
 			threadToUpdate.Content = threadUpdateDto.Content ?? threadToUpdate.Content;

@@ -85,7 +85,12 @@ namespace ForumSystemTeamFour.Services
             throw new UnauthorizedOperationException(UnauthorizedErrorMessage);
         }
 
-
+        public List<ShortThreadResponseDto> FilterForVM(ThreadQueryParameters threadQueryParameters)
+        {
+            var threads = threadRepositroy.FilterByMV(threadQueryParameters);
+            var listOfShortThreadResponseDtos = this.threadMapper.Map(threads);
+            return listOfShortThreadResponseDtos;
+        }
         public PaginatedList<ShortThreadResponseDto> FilterBy(int loggedUserId, ThreadQueryParameters filterParameters)
         {
             var loggedUser = this.userServices.GetById(loggedUserId);            

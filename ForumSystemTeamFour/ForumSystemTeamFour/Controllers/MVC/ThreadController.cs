@@ -52,7 +52,8 @@ namespace ForumSystemTeamFour.Controllers.MVC
                     throw new EntityNotFoundException("No threads found. Be the first to create a thread!");
                 }
 
-                return this.View(threads);
+                var threadIndexVM = this.ThreadMapper.MapVM(threads);
+                return this.View(threadIndexVM);
             }
             catch (EntityNotFoundException exception)
             {
@@ -86,39 +87,56 @@ namespace ForumSystemTeamFour.Controllers.MVC
 
         }
 
-        [Authorize]
+
+        [AllowAnonymous]
         [HttpGet]
-        public IActionResult FilterBy( string tag)
+        public IActionResult Details([FromRoute] int id)
         {
-			var loggedUser = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
-			var threadQueryParameters = new ThreadQueryParameters();
-            threadQueryParameters.Tags.Add(tag);
-			var listOfResponseDtos = this.ThreadServices.FilterBy(loggedUser, threadQueryParameters);
-			return this.View("Index", listOfResponseDtos);
+            var detailsVM = new ThreadDetailsVM();
+            try
+            {
+                detailsVM.Thread = ThreadServices.Details(id);
+            }
+            catch (EntityNotFoundException exception)
+            {
+
+                this.ViewData["ErrorMessage"] = exception.Message;
+                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                return this.View("Error404");
+            }
+            return this.View("Details", detailsVM);
         }
 
         [Authorize]
+        [HttpGet]
+        public IActionResult FilterBy(string tag)
+        {
+            var threadIndexVM = new ThreadIndexVM();
+            return this.View("Index", threadIndexVM);
+        }
+        [Authorize]
         [HttpPost]
-        public IActionResult FilterBy(ThreadQueryParameters threadQueryParameters)
+        public IActionResult FilterBy(ThreadIndexVM threadIndexVM)
         {
             var loggedUser = int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
             string loggedAdmin = User.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin").Value;
 
             try
             {
-                if (threadQueryParameters.Email != null && loggedAdmin != "True")
+                if (loggedAdmin != "True" && threadIndexVM.QueryParameters.Email != null)
                 {
                     throw new UnauthorizedAccessException("You are not authorized to search by email.");
                 }
-                var listOfResponseDtos = this.ThreadServices.FilterBy(loggedUser, threadQueryParameters);
-                return this.View("Index", listOfResponseDtos);
+                var listOfResponseDtos = this.ThreadServices.FilterForVM(threadIndexVM.QueryParameters);
+                threadIndexVM.Threads = listOfResponseDtos;
+                return this.View("Index", threadIndexVM);
             }
             catch (EntityNotFoundException exception)
             {
                 this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
                 this.ViewData["ErrorMessage"] = exception.Message;
                 return this.View("Error404");
-            }      
+            }
             catch (UnauthorizedAccessException exception)
             {
                 this.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -126,7 +144,36 @@ namespace ForumSystemTeamFour.Controllers.MVC
                 return this.View("Index");
             }
         }
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult Details([FromRoute] int id, ThreadDetailsVM detailsVM)
+        {
+            var queryParameters = ReplyMapper.MapViewQuery(detailsVM.QueryParameters);
 
+            try
+            {
+                detailsVM.Thread = ThreadServices.Details(id);
+                var sortedReplies = ReplyServices.FilterForVM(queryParameters);
+                detailsVM.Thread.Replies = sortedReplies;
+            }
+            catch (EntityNotFoundException exception)
+            {
+                this.ViewData["ErrorMessage"] = exception.Message + " Displaying the original replies.";
+                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                return this.View(detailsVM);
+            }
+            return this.View("Details", detailsVM);
+        }
+        private int GetLoggedUserId()
+        {
+            return int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
+        }
+        private void InitializeDropDownListsOfTags(ThreadCreateVM threadViewModel)
+        {
+            var allTags = ThreadServices.GetAllTags();
+
+            threadViewModel.TagsList = new SelectList(allTags, "Id", "Name");
+        }
 
         [Authorize]
         [HttpGet]
@@ -180,73 +227,73 @@ namespace ForumSystemTeamFour.Controllers.MVC
             }
         }
 
-		[Authorize]
-		public IActionResult Upvote(int id, int threadId)
-		{
-			try
-			{
-				var threadToUpvote = ThreadServices.UpVote(id, GetLoggedUserId());
+        [Authorize]
+        public IActionResult Upvote(int id, int threadId)
+        {
+            try
+            {
+                var threadToUpvote = ThreadServices.UpVote(id, GetLoggedUserId());
 
-				return RedirectToAction("Details", "Thread", new { id = threadToUpvote.Id });
-			}
-			catch (EntityNotFoundException exception)
-			{
-				this.Response.StatusCode = StatusCodes.Status404NotFound;
-				this.ViewData["ErrorMessage"] = exception.Message;
+                return RedirectToAction("Details", "Thread", new { id = threadToUpvote.Id });
+            }
+            catch (EntityNotFoundException exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status404NotFound;
+                this.ViewData["ErrorMessage"] = exception.Message;
 
-				return this.View("Error404");
-			}
-			catch (UnauthorizedAccessException exception)
-			{
-				this.Response.StatusCode = StatusCodes.Status401Unauthorized;
-				this.ViewData["ErrorMessage"] = exception.Message;
+                return this.View("Error404");
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                this.ViewData["ErrorMessage"] = exception.Message;
 
-				return this.View("Error401");
-			}
-			catch (Exception exception)
-			{
-				this.Response.StatusCode = StatusCodes.Status500InternalServerError;
-				this.ViewData["ErrorMessage"] = exception.Message;
+                return this.View("Error401");
+            }
+            catch (Exception exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                this.ViewData["ErrorMessage"] = exception.Message;
 
-				return this.View("Error500");
-			}
-		}
-		public IActionResult DownVote(int id, int threadId)
-		{
-			try
-			{
-				var threadToDownvote = ThreadServices.DownVote(id, GetLoggedUserId());
+                return this.View("Error500");
+            }
+        }
+        public IActionResult DownVote(int id, int threadId)
+        {
+            try
+            {
+                var threadToDownvote = ThreadServices.DownVote(id, GetLoggedUserId());
 
-				//if (threadId != 0)
-				//{
-				//	return RedirectToAction("Details", "Thread", new { id = threadId });
-				//}
-				return RedirectToAction("Details", "Thread", new { id = threadToDownvote.Id });
+                //if (threadId != 0)
+                //{
+                //	return RedirectToAction("Details", "Thread", new { id = threadId });
+                //}
+                return RedirectToAction("Details", "Thread", new { id = threadToDownvote.Id });
 
-			}
-			catch (EntityNotFoundException exception)
-			{
-				this.Response.StatusCode = StatusCodes.Status404NotFound;
-				this.ViewData["ErrorMessage"] = exception.Message;
+            }
+            catch (EntityNotFoundException exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status404NotFound;
+                this.ViewData["ErrorMessage"] = exception.Message;
 
-				return this.View("Error404");
-			}
-			catch (UnauthorizedAccessException exception)
-			{
-				this.Response.StatusCode = StatusCodes.Status401Unauthorized;
-				this.ViewData["ErrorMessage"] = exception.Message;
+                return this.View("Error404");
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                this.ViewData["ErrorMessage"] = exception.Message;
 
-				return this.View("Error401");
-			}
-			catch (Exception exception)
-			{
-				this.Response.StatusCode = StatusCodes.Status500InternalServerError;
-				this.ViewData["ErrorMessage"] = exception.Message;
+                return this.View("Error401");
+            }
+            catch (Exception exception)
+            {
+                this.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                this.ViewData["ErrorMessage"] = exception.Message;
 
-				return this.View("Error500");
-			}
-		}
-		[Authorize]
+                return this.View("Error500");
+            }
+        }
+        [Authorize]
         [HttpGet]
         public IActionResult Delete([FromRoute] int id)
         {
@@ -311,54 +358,5 @@ namespace ForumSystemTeamFour.Controllers.MVC
             }
         }
 
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult Details([FromRoute] int id)
-        {
-            var detailsVM = new ThreadDetailsVM();
-            try
-            {
-                detailsVM.Thread = ThreadServices.Details(id);
-            }
-            catch (EntityNotFoundException exception)
-            {
-
-                this.ViewData["ErrorMessage"] = exception.Message;
-                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                return this.View("Error404");
-            }
-            return this.View("Details", detailsVM);
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        public IActionResult Details([FromRoute]int id, ThreadDetailsVM detailsVM)
-        {
-            var queryParameters = ReplyMapper.MapViewQuery(detailsVM.QueryParameters);
-            
-            try
-            {
-				detailsVM.Thread = ThreadServices.Details(id);
-				var sortedReplies = ReplyServices.FilterForVM(queryParameters);
-                detailsVM.Thread.Replies = sortedReplies;
-            }
-            catch (EntityNotFoundException exception)
-            {
-                this.ViewData["ErrorMessage"] = exception.Message + " Displaying the original replies.";
-                this.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                return this.View(detailsVM);
-            }           
-            return this.View("Details", detailsVM);
-        }
-		private int GetLoggedUserId()
-		{
-			return int.Parse(User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value);
-		}
-		private void InitializeDropDownListsOfTags(ThreadCreateVM threadViewModel)
-        {
-            var allTags = ThreadServices.GetAllTags();
-
-            threadViewModel.TagsList = new SelectList(allTags, "Id", "Name");
-        }
     }
 }

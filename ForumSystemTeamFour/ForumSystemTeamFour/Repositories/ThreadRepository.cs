@@ -47,6 +47,133 @@ namespace ForumSystemTeamFour.Repositories
             return thread;
         }
 
+        public List<Thread> FilterByMV(ThreadQueryParameters filter)
+        {
+            // Filter for soft deleted.
+            IEnumerable<Thread> result = context.Threads
+                .Where(thread => thread.IsDeleted == false)
+                .Include(thread => thread.Author)
+                 .Include(thread => thread.Tags)
+                .Include(thread => thread.Votes).ToList();
+
+            if (filter.Tags != null && filter.Tags.Any())
+            {
+                foreach (var tag in filter.Tags)
+                {
+                    result = result
+                        .Where(thread => thread.Tags.Any(t => t.Name == tag));
+                  
+                }
+            }
+            if (filter.ThreadId != 0)
+            {
+                result = result.Where(thread => thread.Id == filter.ThreadId);
+            }
+            // Filter by attributes
+            result = FilterByUserAttribute(result, filter.UserName, filter.Email);
+
+            // Filter by date
+            result = FilterByCreationDate(result, filter.CreationDate);
+            result = FilterByDateRange(result, filter.CreatedAfter, filter.CreatedBefore, filter.ModifiedAfter, filter.ModifiedBefore);
+
+            // Sort and order
+            if (result.Count() == 0)
+            {
+                throw new EntityNotFoundException("No threads with the specified filter parameters were found.");
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(filter.SortBy))
+                {
+                    result = SortBy(result, filter.SortBy);
+                }
+                if (!string.IsNullOrWhiteSpace(filter.SortOrder))
+                {
+                    result = SortOrder(result, filter.SortOrder);
+                }
+            }
+
+            return result.ToList();
+        }
+        private IEnumerable<Thread> FilterByUserAttribute(IEnumerable<Thread> threads, string userName, string email)
+        {
+            if (!string.IsNullOrWhiteSpace(userName))
+            {
+                return FilterByUserName(threads, userName);
+            }
+            else if (!string.IsNullOrWhiteSpace(email))
+            {
+                return FilterByEmail(threads, email);
+            }
+            return threads;
+        }
+        private IEnumerable<Thread> FilterByUserName(IEnumerable<Thread> threads, string userName)
+        {
+            return threads.Where(thread => thread.Author.Username == userName);
+        }
+        private IEnumerable<Thread> FilterByEmail(IEnumerable<Thread> replies, string email)
+        {
+            return replies.Where(r => r.Author.Email == email);
+        }
+        private IEnumerable<Thread> FilterByCreationDate(IEnumerable<Thread> replies, string date)
+        {
+            if (DateTime.TryParse(date, out DateTime creationDate))
+            {
+                DateTime dateToCompare = creationDate;
+                string datePattern = "yyyy-MM-dd";
+                return replies.Where(r => r.CreationDate.ToString(datePattern) == dateToCompare.ToString(datePattern));
+            }
+            return replies;
+        }
+        private IEnumerable<Thread> FilterByDateRange(IEnumerable<Thread> replies, string createdAfter, string createdBefore, string modifiedAfter, string modifiedBefore)
+        {
+            replies = FilterByAfterDate(replies, createdAfter, d => d.CreationDate);
+            replies = FilterByBeforeDate(replies, createdBefore, d => d.CreationDate);
+
+            replies = FilterByAfterDate(replies, modifiedAfter, d => d.ModificationDate);
+            replies = FilterByBeforeDate(replies, modifiedBefore, d => d.ModificationDate);
+
+            return replies;
+        }
+        private IEnumerable<Thread> FilterByAfterDate(IEnumerable<Thread> replies, string after, Func<Thread, DateTime> properySelector)
+        {
+            if (DateTime.TryParse(after, out DateTime afterDate))
+            {
+                replies = replies.Where(d => properySelector(d) >= afterDate);
+            }
+            return replies;
+        }
+        private IEnumerable<Thread> FilterByBeforeDate(IEnumerable<Thread> replies, string before, Func<Thread, DateTime> properySelector)
+        {
+            if (DateTime.TryParse(before, out DateTime beforeDate))
+            {
+                replies = replies.Where(d => properySelector(d) <= beforeDate);
+            }
+            return replies;
+        }
+        private IEnumerable<Thread> SortBy(IEnumerable<Thread> threads, string sortCriteria)
+        {
+            switch (sortCriteria.ToLower())
+            {
+                case "username":
+                    return threads.OrderBy(thread => thread.Author.Username);
+                case "email":
+                    return threads.OrderBy(thread => thread.Author.Email);
+                case "creationdate":
+                    return threads.OrderBy(thread => thread.CreationDate);
+                case "likes":
+                    return threads.OrderBy(thread => thread.Votes.Where(vote => vote.VoteType == VoteType.Like).Count());
+                case "dislikes":
+                    return threads.OrderBy(thread => thread.Votes.Where(vote => vote.VoteType == VoteType.Dislike).Count());
+                // The following handles null or empty strings
+                default:
+                    return threads;
+            }
+        }
+        private IEnumerable<Thread> SortOrder(IEnumerable<Thread> threads, string sortOrder)
+        {
+            return (sortOrder.ToLower() == "desc" || sortOrder.ToLower() == "descending") ? threads.Reverse() : threads;
+        }
         public PaginatedList<Thread> FilterBy(User loggedUser, ThreadQueryParameters filterParameters)
         {
             var filteredThreads = context.Threads

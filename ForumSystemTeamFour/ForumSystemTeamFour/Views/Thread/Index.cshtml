@@ -7,9 +7,141 @@
         loggedUserId = User.Claims.FirstOrDefault(claim => claim.Type == "LoggedUserId").Value;
     }
 }
-@model List<ShortThreadResponseDto>
+@model ThreadIndexVM
 
-@if (this.Model.Count() == 0)
+
+@{
+    bool loggedIn = User.Identity.IsAuthenticated;
+    bool isAdmin = false;
+    string loggedUser = "anonymous";
+    if (loggedIn)
+    {
+        loggedUser = User.Claims.FirstOrDefault(claim => claim.Type == "Username").Value;
+        isAdmin = User.Claims.FirstOrDefault(claim => claim.Type == "IsAdmin").Value == "True";
+    }
+
+
+    var sortParameters = new List<string> { "Username", "CreationDate", "Likes", "Dislikes" };
+    var sortOptions = new SelectList(sortParameters);
+    var orderParameters = new List<string> { "Ascending", "Descending" };
+    var orderOptions = new SelectList(orderParameters);
+
+    //this.ViewData["Title"] = Model.Thread.Title;
+
+    //int threadId = Model.Thread.Id;
+    //string threadAuthor = Model.Thread.Author.Username;
+    //string threadTitle = Model.Thread.Title;
+    //string threadCreationDate = Model.Thread.CreationDate.ToString("g");
+    //string threadContent = Model.Thread.Content;
+    //bool threadWasEdited = Model.Thread.ModificationDate != DateTime.MinValue;
+    //int threadLikes = Model.Thread.Votes.Where(vote => vote.VoteType == "Like").Count();
+    //int threadDislikes = Model.Thread.Votes.Where(vote => vote.VoteType == "Dislike").Count();
+    //int threadAuthorPosts = Model.Thread.Author.TotalPosts;
+
+    //string profilePicDirectory = "wwwroot/ProfilePictures";
+    //bool hasThreadPic = Directory.EnumerateFiles(profilePicDirectory, $"{threadAuthor}*").Any();
+    //var directory = new DirectoryInfo(@"wwwroot/ProfilePictures");
+    //var threadFileInfo = directory.GetFiles("*" + threadAuthor + "*.*");
+    //string threadPicName = hasThreadPic ? $"{threadFileInfo[0].Name}" : "default.jpg";
+}
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        var scrollpos = sessionStorage.getItem('scrollpos');
+        if (scrollpos) window.scrollTo(0, scrollpos);
+        sessionStorage.removeItem('scrollpos');
+    });
+
+    window.onbeforeunload = function (e) {
+        sessionStorage.setItem('scrollpos', window.scrollY);
+    };
+</script>
+
+<style>
+    html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .threadTable {
+        width: 100%;
+        height: auto;
+        background-color: #3D3635;
+        border: 3px solid black;
+        border-radius: 10px;
+    }
+
+        .threadTable td {
+            border: 2px solid black;
+        }
+
+    .postTable {
+        width: 100%;
+        height: auto;
+        background-color: #232323;
+        border: 3px solid black;
+        border-radius: 10px;
+    }
+
+        .postTable td {
+            border: 2px solid black;
+        }
+</style>
+
+@if (!loggedIn)
+{
+    <div style="position:fixed;top:5%;right:5%;">
+        <div>
+            <a asp-controller="Users" asp-action="Register"
+           type="button" class="btn appBtn-outline" style="margin-bottom: 5px;text-decoration:none">Register</a>
+        </div>
+        <div>
+            <a asp-controller="Users" asp-action="Login"
+           type="button" class="btn appBtn-outline" style="text-decoration:none">Login</a>
+        </div>
+    </div>
+}
+
+
+<form asp-controller="Thread" asp-action="FilterBy" method="post" style="float:right">
+    <table style="text-align:left;">
+        <tbody style="font-size:0.8vw">
+
+            <tr>                
+                <td>
+                    <label asp-for="QueryParameters.UserName">By author:</label><br>
+                    <input asp-for="QueryParameters.UserName" type="text" value="@Model.QueryParameters.UserName" >
+                </td>
+
+                <td>
+                    <label asp-for="QueryParameters.CreatedAfter">Created after:</label><br>
+                    <input asp-for="QueryParameters.CreatedAfter" type="text" value="@Model.QueryParameters.CreatedAfter" >
+                </td>
+
+                <td>
+                    <label asp-for="QueryParameters.CreatedBefore">Created before:</label><br>
+                    <input asp-for="QueryParameters.CreatedBefore" type="text" value="@Model.QueryParameters.CreatedBefore" >
+                </td>
+
+                <td>
+                    <label asp-for="QueryParameters.SortBy">Order by:</label><br>
+                    <select asp-items="@sortOptions" asp-for="QueryParameters.SortBy"></select>
+                </td>
+
+                <td>
+                    <label asp-for="QueryParameters.SortOrder">Sort by:</label><br>
+                    <select asp-items="@orderOptions" asp-for="QueryParameters.SortOrder"></select>
+                </td>
+                <td>
+                    <input type="submit" value="Filter replies"
+                           class="btn appBtn-outline" style="text-decoration:none; padding:3px; display:flex;align-items:center">
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+@if (this.Model.Threads.Count() == 0)
 {
     <p>
         <i>No threads found 😔</i>
@@ -34,7 +166,7 @@ else
             </thead>
             <tbody style="font-size:1vw;  vertical-align: middle;">
                 @{
-                    foreach (var thread in this.Model)
+                    foreach (var thread in this.Model.Threads)
                     {
                         <tr>
                             <td style="padding: 0;">
