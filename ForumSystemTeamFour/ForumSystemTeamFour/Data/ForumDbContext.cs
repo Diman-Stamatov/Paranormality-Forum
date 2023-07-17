@@ -11,7 +11,7 @@ namespace ForumSystemTeamFour.Data
 {
     public class ForumDbContext : DbContext
     {
-        public ForumDbContext(DbContextOptions<ForumDbContext> options) 
+        public ForumDbContext(DbContextOptions<ForumDbContext> options)
             : base(options) { }
         public ForumDbContext()
             : base() { }
@@ -27,13 +27,13 @@ namespace ForumSystemTeamFour.Data
             base.OnModelCreating(modelBuilder);
 
 
-            Random random = new Random();                       
+            Random random = new Random();
             int nextUserId = 1;
             int nextThreadId = 1;
             int nextReplyId = 1;
             int nextTagId = 1;
 
-            var users = new List<User>() 
+            var users = new List<User>()
             {
                 new User {
                 Id = nextUserId++,
@@ -43,7 +43,7 @@ namespace ForumSystemTeamFour.Data
                 Email = "FirstnameOne@Lastname.com",
                 Password = "cGFzc3dvcmRPbmU=", //passwordOne in plain text
                 TotalPosts = random.Next(10,20),
-                IsAdmin = true 
+                IsAdmin = true
                 },
                 new User {
                 Id = nextUserId++,
@@ -53,7 +53,7 @@ namespace ForumSystemTeamFour.Data
                 Email = "FirstnameTwo@Lastname.com",
                 Password = "RGFtYmFsbGE=", //passwordTwo in plain text
                 TotalPosts = random.Next(10,20),
-				IsBlocked = true 
+                IsBlocked = true
                 },
                 new User {
                 Id = nextUserId++,
@@ -80,259 +80,259 @@ namespace ForumSystemTeamFour.Data
                 Username = "Sasquatch",
                 Email = "FirstnameFive@Lastname.com",
                 Password = "U2FzcXVhdGNo",
-				TotalPosts = random.Next(10,20),
-				}, 
-                new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameSix",
-				LastName = "LastNameSix",
-				Username = "Svenghouli",
-				Email = "FirstnameSix@Lastname.com",
-				Password = "U3Zlbmdob3VsaQ==", 
                 TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
+                },
                 new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameSeven",
-				LastName = "LastNameSeven",
-				Username = "Gunther",
-				Email = "FirstnameSeven@Lastname.com",
-				Password = "R3VudGhlcg==",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-				 new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameEight",
-				LastName = "LastNameEight",
-				Username = "Lucius",
-				Email = "FirstnameEight@Lastname.com",
-				Password = "THVjaXVz",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-				  new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameNine",
-				LastName = "LastNameNine",
-				Username = "Adramalech",
-				Email = "FirstnameNine@Lastname.com",
-				Password = "QWRyYW1hbGVjaA==",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-				   new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameTen",
-				LastName = "LastNameTen",
-				Username = "Azazel",
-				Email = "FirstnameTen@Lastname.com",
-				Password = "QXphemVs",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-					new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameEleven",
-				LastName = "LastNameEleven",
-				Username = "Baphomet",
-				Email = "FirstnameEleven@Lastname.com",
-				Password = "QmFwaG9tZXQ=",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-					 new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameTwelve",
-				LastName = "LastNameTwelve",
-				Username = "Euronymous",
-				Email = "FirstnameTwelve@Lastname.com",
-				Password = "RXVyb255bW91cw==",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-					  new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameThirteen",
-				LastName = "LastNameThirteen",
-				Username = "Fenriz",
-				Email = "FirstnameThirteen@Lastname.com",
-				Password = "RmVucml6",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-					   new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameFourteen",
-				LastName = "LastNameFourteen",
-				Username = "Mastema",
-				Email = "FirstnameFourteen@Lastname.com",
-				Password = "TWFzdGVtYQ==",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-						new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameFifteen",
-				LastName = "LastNameFifteen",
-				Username = "Naamah",
-				Email = "FirstnameFifteen@Lastname.com",
-				Password = "TmFhbWFo",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-						 new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameSixteen",
-				LastName = "LastNameSixteen",
-				Username = "Mantus",
-				Email = "FirstnameSixteen@Lastname.com",
-				Password = "TWFudHVz",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-						  new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameSeventeen",
-				LastName = "LastNameSeventeen",
-				Username = "Mephistopheles",
-				Email = "FirstnameSeventeen@Lastname.com",
-				Password = "TWVwaGlzdG9waGVsZXM=",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-						   new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameEighteen",
-				LastName = "LastNameEighteen",
-				Username = "Proserpine",
-				Email = "FirstnameEighteen@Lastname.com",
-				Password = "UHJvc2VycGluZQ==",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-							new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameNineteen",
-				LastName = "LastNameNineteen",
-				Username = "Toshio",
-				Email = "FirstnameNineteen@Lastname.com",
-				Password = "VG9zaGlv",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-							 new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameTwentyOne",
-				LastName = "LastNameTwentyOne",
-				Username = "Rubeus",
-				Email = "FirstnameTwentyOne@Lastname.com",
-				Password = "UnViZXVz",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-							  new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameTwentyTwo",
-				LastName = "LastNameTwentyTwo",
-				Username = "Xiomar",
-				Email = "FirstnameTwentyTwo@Lastname.com",
-				Password = "WGlvbWFy",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-							   new User {
-				Id = nextUserId++,
-				FirstName = "FirstNamTwentyThree",
-				LastName = "LastNameTwentyThree",
-				Username = "Decapiclops",
-				Email = "FirstnameTwentyThree@Lastname.com",
-				Password = "RGVjYXBpY2xvcHM=",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-								new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameTwentyFour",
-				LastName = "LastNameTwentyFour",
-				Username = "Forneus",
-				Email = "FirstnameTwentyFour@Lastname.com",
-				Password = "Rm9ybmV1cw==",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-								 new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameTwentyFive",
-				LastName = "LastNameTwentyFive",
-				Username = "Sabazios",
-				Email = "FirstnameTwentyFive@Lastname.com",
-				Password = "U2FiYXppb3M=",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-								  new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameTwentySix",
-				LastName = "LastNameTwentySix",
-				Username = "Ishtar",
-				Email = "FirstnameTwentySix@Lastname.com",
-				Password = "SXNodGFy",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-								   new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameTwentySeven",
-				LastName = "LastNameTwentySeven",
-				Username = "Micitian",
-				Email = "FirstnameTwentySeven@Lastname.com",
-				Password = "TWljaXRpYW4=",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-									new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameTwentyEight",
-				LastName = "LastNameTwentyEight",
-				Username = "Ravana",
-				Email = "FirstnameTwentyEight@Lastname.com",
-				Password = "UmF2YW5h",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-									 new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameTwentyNine",
-				LastName = "LastNameTwentyNine",
-				Username = "Hecate",
-				Email = "FirstnameTwentyNine@Lastname.com",
-				Password = "SGVjYXRl",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-									  new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameThirty",
-				LastName = "LastNameThirty",
-				Username = "Hexxus",
-				Email = "FirstnameThirty@Lastname.com",
-				Password = "SGV4eHVz",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-									   new User {
-				Id = nextUserId++,
-				FirstName = "FirstNameThirtyOne",
-				LastName = "LastNameThirtyOne",
-				Username = "Desdemona",
-				Email = "FirstnameThirtyOne@Lastname.com",
-				Password = "RGVzZGVtb25h",
-				TotalPosts = random.Next(10,20),
-				IsAdmin = true
-				},
-			};            
+                Id = nextUserId++,
+                FirstName = "FirstNameSix",
+                LastName = "LastNameSix",
+                Username = "Svenghouli",
+                Email = "FirstnameSix@Lastname.com",
+                Password = "U3Zlbmdob3VsaQ==",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameSeven",
+                LastName = "LastNameSeven",
+                Username = "Gunther",
+                Email = "FirstnameSeven@Lastname.com",
+                Password = "R3VudGhlcg==",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                 new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameEight",
+                LastName = "LastNameEight",
+                Username = "Lucius",
+                Email = "FirstnameEight@Lastname.com",
+                Password = "THVjaXVz",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                  new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameNine",
+                LastName = "LastNameNine",
+                Username = "Adramalech",
+                Email = "FirstnameNine@Lastname.com",
+                Password = "QWRyYW1hbGVjaA==",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                   new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameTen",
+                LastName = "LastNameTen",
+                Username = "Azazel",
+                Email = "FirstnameTen@Lastname.com",
+                Password = "QXphemVs",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                    new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameEleven",
+                LastName = "LastNameEleven",
+                Username = "Baphomet",
+                Email = "FirstnameEleven@Lastname.com",
+                Password = "QmFwaG9tZXQ=",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                     new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameTwelve",
+                LastName = "LastNameTwelve",
+                Username = "Euronymous",
+                Email = "FirstnameTwelve@Lastname.com",
+                Password = "RXVyb255bW91cw==",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                      new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameThirteen",
+                LastName = "LastNameThirteen",
+                Username = "Fenriz",
+                Email = "FirstnameThirteen@Lastname.com",
+                Password = "RmVucml6",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                       new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameFourteen",
+                LastName = "LastNameFourteen",
+                Username = "Mastema",
+                Email = "FirstnameFourteen@Lastname.com",
+                Password = "TWFzdGVtYQ==",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                        new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameFifteen",
+                LastName = "LastNameFifteen",
+                Username = "Naamah",
+                Email = "FirstnameFifteen@Lastname.com",
+                Password = "TmFhbWFo",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                         new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameSixteen",
+                LastName = "LastNameSixteen",
+                Username = "Mantus",
+                Email = "FirstnameSixteen@Lastname.com",
+                Password = "TWFudHVz",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                          new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameSeventeen",
+                LastName = "LastNameSeventeen",
+                Username = "Mephistopheles",
+                Email = "FirstnameSeventeen@Lastname.com",
+                Password = "TWVwaGlzdG9waGVsZXM=",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                           new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameEighteen",
+                LastName = "LastNameEighteen",
+                Username = "Proserpine",
+                Email = "FirstnameEighteen@Lastname.com",
+                Password = "UHJvc2VycGluZQ==",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                            new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameNineteen",
+                LastName = "LastNameNineteen",
+                Username = "Toshio",
+                Email = "FirstnameNineteen@Lastname.com",
+                Password = "VG9zaGlv",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                             new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameTwentyOne",
+                LastName = "LastNameTwentyOne",
+                Username = "Rubeus",
+                Email = "FirstnameTwentyOne@Lastname.com",
+                Password = "UnViZXVz",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                              new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameTwentyTwo",
+                LastName = "LastNameTwentyTwo",
+                Username = "Xiomar",
+                Email = "FirstnameTwentyTwo@Lastname.com",
+                Password = "WGlvbWFy",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                               new User {
+                Id = nextUserId++,
+                FirstName = "FirstNamTwentyThree",
+                LastName = "LastNameTwentyThree",
+                Username = "Decapiclops",
+                Email = "FirstnameTwentyThree@Lastname.com",
+                Password = "RGVjYXBpY2xvcHM=",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                                new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameTwentyFour",
+                LastName = "LastNameTwentyFour",
+                Username = "Forneus",
+                Email = "FirstnameTwentyFour@Lastname.com",
+                Password = "Rm9ybmV1cw==",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                                 new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameTwentyFive",
+                LastName = "LastNameTwentyFive",
+                Username = "Sabazios",
+                Email = "FirstnameTwentyFive@Lastname.com",
+                Password = "U2FiYXppb3M=",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                                  new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameTwentySix",
+                LastName = "LastNameTwentySix",
+                Username = "Ishtar",
+                Email = "FirstnameTwentySix@Lastname.com",
+                Password = "SXNodGFy",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                                   new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameTwentySeven",
+                LastName = "LastNameTwentySeven",
+                Username = "Micitian",
+                Email = "FirstnameTwentySeven@Lastname.com",
+                Password = "TWljaXRpYW4=",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                                    new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameTwentyEight",
+                LastName = "LastNameTwentyEight",
+                Username = "Ravana",
+                Email = "FirstnameTwentyEight@Lastname.com",
+                Password = "UmF2YW5h",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                                     new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameTwentyNine",
+                LastName = "LastNameTwentyNine",
+                Username = "Hecate",
+                Email = "FirstnameTwentyNine@Lastname.com",
+                Password = "SGVjYXRl",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                                      new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameThirty",
+                LastName = "LastNameThirty",
+                Username = "Hexxus",
+                Email = "FirstnameThirty@Lastname.com",
+                Password = "SGV4eHVz",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+                                       new User {
+                Id = nextUserId++,
+                FirstName = "FirstNameThirtyOne",
+                LastName = "LastNameThirtyOne",
+                Username = "Desdemona",
+                Email = "FirstnameThirtyOne@Lastname.com",
+                Password = "RGVzZGVtb25h",
+                TotalPosts = random.Next(10,20),
+                IsAdmin = true
+                },
+            };
             modelBuilder.Entity<User>().HasData(users);
 
             modelBuilder.Entity<User>()
@@ -347,7 +347,7 @@ namespace ForumSystemTeamFour.Data
                 .HasForeignKey(reply => reply.AuthorId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-           
+
             var threads = new List<Thread>()
             {
                 new Thread {
@@ -1454,7 +1454,7 @@ namespace ForumSystemTeamFour.Data
                 ThreadId = 11,
                 CreationDate = DateTime.Now.AddMinutes(random.Next(-87000, 0)),
                 Content = "Are you sure you want to know?"
-                },                  
+                },
                    new Reply{
                 Id = nextReplyId++,
                 AuthorId = random.Next(1,30),
@@ -2985,11 +2985,14 @@ namespace ForumSystemTeamFour.Data
             int threadVoteCount = votesRandom.Next((int)Math.Round(totalPossibleThreadVoteCount * 0.8), totalPossibleThreadVoteCount);
             for (int i = 1; i <= threadVoteCount; i++)
             {
-                int id = i;
-                int threadId = votesRandom.Next(1, threads.Count);
-                string userName = users[votesRandom.Next(0, users.Count)].Username;
-                VoteType voteType = (VoteType)votesRandom.Next(0,2);
-                var vote = new ThreadVote() { Id = id, ThreadId = threadId, VoterUsername = userName, VoteType = voteType };
+                var vote = new ThreadVote()
+                {
+                    Id = i,
+                    ThreadId = votesRandom.Next(1, threads.Count),
+                    VoterUsername = users[votesRandom.Next(0, users.Count)].Username,
+                    VoteType = (VoteType)votesRandom.Next(0, 2)
+                };
+
                 if (threadVotes.Any(t => t.VoterUsername == vote.VoterUsername && t.ThreadId == vote.ThreadId))
                 {
                     continue;
@@ -3002,14 +3005,17 @@ namespace ForumSystemTeamFour.Data
             // Reply Votes
             var replyVotes = new HashSet<ReplyVote>();
             int totalPossibleReplyVoteCount = users.Count * replies.Count;
-            int replyVoteCount = votesRandom.Next((int)Math.Round(totalPossibleReplyVoteCount * 0.5), totalPossibleReplyVoteCount);
+            int replyVoteCount = votesRandom.Next((int)Math.Round(totalPossibleReplyVoteCount * 0.3), (int)Math.Round(totalPossibleReplyVoteCount * 0.8));
             for (int i = 1; i <= replyVoteCount; i++)
             {
-                int id = i;
-                int replyId = votesRandom.Next(1, replies.Count);
-                string userName = users[votesRandom.Next(0, users.Count)].Username;
-                VoteType voteType = (VoteType)votesRandom.Next(0, 2);
-                var vote = new ReplyVote() { Id = id, ReplyId = replyId, VoterUsername = userName, VoteType = voteType };
+                var vote = new ReplyVote()
+                {
+                    Id = i,
+                    ReplyId = votesRandom.Next(1, replies.Count),
+                    VoterUsername = users[votesRandom.Next(0, users.Count)].Username,
+                    VoteType = (VoteType)votesRandom.Next(0, 2)
+                };
+
                 if (replyVotes.Any(r => r.VoterUsername == vote.VoterUsername && r.ReplyId == vote.ReplyId))
                 {
                     continue;
@@ -3018,8 +3024,6 @@ namespace ForumSystemTeamFour.Data
             }
 
             modelBuilder.Entity<ReplyVote>().HasData(replyVotes);
-
-
         }
     }
 }
